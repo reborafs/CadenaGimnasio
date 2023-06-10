@@ -67,6 +67,16 @@ public class CadenaGimnasio {
 		throw new GymException("User Not Found.");
     }
     
+    
+    public String getNombre() {
+    	return this.nombre;
+    }
+    
+    /* =======================================================
+     *                     METODOS DE SEDE 
+     * =======================================================
+     */
+    
     private boolean sedeYaExiste(String ubicacion) {
     	boolean flagSedeFound = false;
     	for (Sede sede: sedes) 
@@ -88,19 +98,26 @@ public class CadenaGimnasio {
     public ArrayList<Sede> getListaSedes() {
     	return this.sedes;
     }
-
-    public String getStringListaSedes() {
-    	return Arrays.toString(this.sedes.toArray());
-    }
-    
-    public ArrayList<Sede> getListaUbicacionSedes() {
-    	return this.sedes;
-    }
     
     public Sede getSede(String ubicacion) {
     	for (Sede sede: sedes) 
-    		if (sede.getUbicacion() == ubicacion.toLowerCase())
+    		if (sede.getUbicacion().equals(ubicacion.toLowerCase())) 
     			return sede;
+    	
     	return null;
     }
+    
+    /* =======================================================
+     *                    METODOS DE CLASES 
+     * =======================================================
+     */
+    
+    //public String getListaClases(Sede sede) {
+    //	return this.sede.getClases();
+    //}
+    
+    //public String getStringListaClases() {
+    //	return Arrays.toString(this.sedes.toArray());
+    //}
+    
 }

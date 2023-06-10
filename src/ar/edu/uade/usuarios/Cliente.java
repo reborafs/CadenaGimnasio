@@ -10,7 +10,11 @@ public class Cliente extends Usuario {
     	super(nombre);
     	this.tipoNivel = nivel;
     }
-
+    
+    public TipoNivel getTipoNivel() {
+    	return this.tipoNivel;
+    }
+    
     public int getPagoMensual() {
         // Code for calculating monthly payment
         return 0;

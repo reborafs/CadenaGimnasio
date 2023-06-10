@@ -12,18 +12,32 @@ public class Clase {
     private Ejercicio ejercicio;
     private EstadoClase estado;
     private ArrayList<Cliente> listaAlumnos;
-    
+    private TipoEmplazamiento tipoEmplazamiento;
+    private ArrayList<Articulo> listaArticulos;
     private boolean esVirtual = false;
     private boolean profesorDisponible;
-    private TipoEmplazamiento tipoEmplazamiento;
-    private ArrayList<Articulo> articulo;
-    
-    public Clase(Profesor profesor, Ejercicio ejercicio) {
+
+    public Clase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, 
+    		TipoEmplazamiento tipoEmplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) {
     	this.profesorAsignado = profesor;
     	this.profesorDisponible = true;
+        this.ejercicio = ejercicio;
+        this.estado = EstadoClase.AGENDADA;
+        this.tipoEmplazamiento = tipoEmplazamiento;
+        this.esVirtual = esVirtual;
+
+        if (listaAlumnos == null)
+        	this.listaAlumnos = new ArrayList<Cliente>();
+        else
+        	this.listaAlumnos = listaAlumnos;
+        
+        if (listaArticulos == null)
+        	this.listaArticulos = new ArrayList<Articulo>();
+        else
+        	this.listaArticulos = listaArticulos;
     }
 
-    public Clase(Ejercicio ejercicio) {
+    public void agregarAlumnos(ArrayList<Cliente> listaAlumnos) {
     	this.profesorDisponible = false;
     }
     
@@ -38,5 +52,17 @@ public class Clase {
     
     public void agregarAlumno(Cliente alumno) {
     	this.listaAlumnos.add(alumno);
+    }
+    
+    @Override
+    public String toString() {
+    	return "{" +
+    			"Profesor: " + this.profesorAsignado + ", " +
+    			"Ejercicio: " + this.ejercicio + ", " +
+    			"Estado: " + this.estado + ", " +
+    			"CantidadAlumnos: " + this.listaAlumnos.size() + ", " +
+    			"TipoEmplazamiento: " + this.tipoEmplazamiento + ", " +
+    			"esVirtual: " + this.esVirtual + 
+    			"}";
     }
 }

@@ -1,14 +1,18 @@
 package ar.edu.uade.gym;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import ar.edu.uade.articulos.Articulo;
+import ar.edu.uade.usuarios.Cliente;
+import ar.edu.uade.usuarios.Profesor;
 
 public class Sede {
     private String ubicacion;
     private TipoNivel tipoNivel;
     private ArrayList<Articulo> stockArticulos;
     private ArrayList<Emplazamiento> emplazamientosDisponibles;
-    private ArrayList<Clase> ArrayListaClases;
+    private ArrayList<Clase> listaClases;
     private ArrayList<Ejercicio> ejerciciosDisponibles;
 
     public Sede(String ubicacion, TipoNivel tipoNivel, ArrayList<Emplazamiento> emplazamientos, ArrayList<Ejercicio> ejercicios) {
@@ -16,6 +20,42 @@ public class Sede {
     	this.tipoNivel = tipoNivel;
     	this.emplazamientosDisponibles = emplazamientos;
     	this.ejerciciosDisponibles = ejercicios;
+    	this.listaClases = new ArrayList<Clase>();
+    	this.stockArticulos = new ArrayList<Articulo>();
+    }
+    
+    
+    public void agregarClase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, 
+    		TipoEmplazamiento tipoEmplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
+    	ArrayList<Cliente> alumnosHabilitados = new ArrayList<Cliente>();
+    	ArrayList<Cliente> alumnosInhabilitados = new ArrayList<Cliente>();
+    	
+    	if (listaAlumnos != null) {
+        	if (!listaAlumnos.isEmpty()) {
+
+	        	for  (Cliente alumno: listaAlumnos) 
+	        		if (alumno.getTipoNivel().getValue() >= this.tipoNivel.getValue()) {
+	        			alumnosHabilitados.add(alumno);
+	        		} else {
+	        			alumnosInhabilitados.add(alumno);
+	        		}
+	        	
+	        	if (!alumnosInhabilitados.isEmpty()) {
+	        		throw new GymException("No se puede agendar la clase ya que hay alumnos de menor nivel al necesario. "
+	        				+ "Los alumnos son: " + alumnosInhabilitados.toString());
+	        	}
+	        	
+	        	if (alumnosHabilitados.size() >= 30) {
+	        		throw new GymException("No es posible agendar la clase debido a que el maximo de alumnos es 30.");
+	        	}
+	        	// CHEQUEAR CAPACIDAD DEL EMPLAZAMIENTO
+	        	//if (alumnosHabilitados.size() >= 30) {
+	        	//	throw new GymException("No es posible agendar la clase debido a que el maximo de alumnos es 30.");
+	        	//}
+        	}
+    	}    	
+    	Clase newClase = new Clase(profesor, ejercicio, listaAlumnos, tipoEmplazamiento, listaArticulos, esVirtual);
+    	this.listaClases.add(newClase);
     }
     
     public int calcularRentabilidad() {
@@ -36,8 +76,16 @@ public class Sede {
         return this.tipoNivel;
     }
     
+    public ArrayList<Clase> getListaClases() {
+        return this.listaClases;
+    }
+    
+    
     @Override
     public String toString() {
     	return "["+this.ubicacion+","+this.tipoNivel.toString()+"]";
     }
+
+
+
 }
