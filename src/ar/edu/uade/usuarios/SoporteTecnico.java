@@ -34,4 +34,8 @@ public class SoporteTecnico extends Usuario {
         // Code for modifying an administrative user
     }
 
+    @Override
+    public boolean soySoporteTecnico() {
+    	return true;
+    }
 }

@@ -13,4 +13,14 @@ public class Profesor extends Usuario {
         // Code for getting assigned classes
         return null;
     }
+	
+	@Override
+	public String toString() {
+		return this.getNombre();
+	}
+	
+	@Override
+    public boolean soyProfesor() {
+    	return true;
+    }
 }

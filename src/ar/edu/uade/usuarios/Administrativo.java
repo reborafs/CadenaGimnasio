@@ -67,4 +67,10 @@ public class Administrativo extends Usuario {
     public void modificarProfesor(Profesor profesor) {
         // Code for modifying a professor
     }
+    
+    @Override
+    public boolean soyAdministrativo() {
+    	return true;
+    }
+    
 }
