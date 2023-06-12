@@ -27,33 +27,7 @@ public class Sede {
     
     public void agregarClase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, 
     		TipoEmplazamiento tipoEmplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
-    	ArrayList<Cliente> alumnosHabilitados = new ArrayList<Cliente>();
-    	ArrayList<Cliente> alumnosInhabilitados = new ArrayList<Cliente>();
     	
-    	if (listaAlumnos != null) {
-        	if (!listaAlumnos.isEmpty()) {
-
-	        	for  (Cliente alumno: listaAlumnos) 
-	        		if (alumno.getTipoNivel().getValue() >= this.tipoNivel.getValue()) {
-	        			alumnosHabilitados.add(alumno);
-	        		} else {
-	        			alumnosInhabilitados.add(alumno);
-	        		}
-	        	
-	        	if (!alumnosInhabilitados.isEmpty()) {
-	        		throw new GymException("No se puede agendar la clase ya que hay alumnos de menor nivel al necesario. "
-	        				+ "Los alumnos son: " + alumnosInhabilitados.toString());
-	        	}
-	        	
-	        	if (alumnosHabilitados.size() >= 30) {
-	        		throw new GymException("No es posible agendar la clase debido a que el maximo de alumnos es 30.");
-	        	}
-	        	// CHEQUEAR CAPACIDAD DEL EMPLAZAMIENTO
-	        	//if (alumnosHabilitados.size() >= 30) {
-	        	//	throw new GymException("No es posible agendar la clase debido a que el maximo de alumnos es 30.");
-	        	//}
-        	}
-    	}    	
     	Clase newClase = new Clase(profesor, ejercicio, listaAlumnos, tipoEmplazamiento, listaArticulos, esVirtual);
     	this.listaClases.add(newClase);
     }
@@ -80,6 +54,10 @@ public class Sede {
         return this.listaClases;
     }
     
+	public void agregarArticulo(Articulo newArticulo) {
+		this.stockArticulos.add(newArticulo);
+	}
+
     
     @Override
     public String toString() {
@@ -87,5 +65,8 @@ public class Sede {
     }
 
 
+	public ArrayList<Articulo> getListaArticulos() {
+		return this.stockArticulos;
+	}
 
 }

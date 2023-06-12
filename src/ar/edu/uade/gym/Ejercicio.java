@@ -1,6 +1,7 @@
 package ar.edu.uade.gym;
 
 import java.util.ArrayList;
+
 import ar.edu.uade.articulos.TipoArticulo;
 
 public class Ejercicio {
@@ -8,19 +9,14 @@ public class Ejercicio {
     private boolean puedeSerVirtual = false;
     private ArrayList<TipoArticulo> listaArticulosNecesarios;
 
-    public Ejercicio(String nombre) {
-    	this.nombre = nombre;
-    }
-    
-    public Ejercicio(String nombre, boolean puedeSerVirtual) {
-    	this.nombre = nombre;
-    	this.puedeSerVirtual = true;
-    }
 
     public Ejercicio(String nombre, boolean puedeSerVirtual, ArrayList<TipoArticulo> listaArticulosNecesarios) {
-    	this.nombre = nombre;
-    	this.puedeSerVirtual = true;
-    	this.listaArticulosNecesarios = listaArticulosNecesarios;
+    	this.nombre = nombre.toLowerCase();
+    	this.puedeSerVirtual = puedeSerVirtual;    	
+        if (listaArticulosNecesarios == null)
+        	this.listaArticulosNecesarios = new ArrayList<TipoArticulo>();
+        else
+        	this.listaArticulosNecesarios = listaArticulosNecesarios;
     }
     
     public void setArticulosNecesarios(ArrayList<TipoArticulo> listaArticulosNecesarios) {
@@ -38,5 +34,8 @@ public class Ejercicio {
     public boolean isVirtual() {
     	return this.puedeSerVirtual;
     }
-
+    
+    public String toString() {
+    	return "{nombre: " + this.nombre + ", " + "esVirtual: " + this.puedeSerVirtual + "}";
+    }
 }
