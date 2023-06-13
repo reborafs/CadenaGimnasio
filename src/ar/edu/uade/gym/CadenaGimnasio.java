@@ -44,21 +44,37 @@ public class CadenaGimnasio {
         return instancia;
     }
 
+    public String getNombre() {
+    	return this.nombre;
+    }
+
     public void eliminarClasesVirtualesAntiguas() {
         // TO-DO Codigo que limpia las clases viejas de la bbdd.
     }
-    
-    public void agregarUsuario(Usuario usuario) {
-    	
-    }
+   
+    /* =======================================================
+     *                     METODOS DE USUARIOS 
+     * =======================================================
+     */
     
     public ArrayList<Usuario> getListaUsuarios() {
     	ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
-    	listaUsuarios.addAll(usuariosSoporteTecnico);
-    	listaUsuarios.addAll(usuariosAdministrativo);
-    	listaUsuarios.addAll(usuariosClientes);
-    	listaUsuarios.addAll(usuariosProfesores);
+    	listaUsuarios.addAll(this.usuariosAdministrativo);
+    	listaUsuarios.addAll(this.usuariosClientes);
+    	listaUsuarios.addAll(this.usuariosProfesores);
+    	listaUsuarios.addAll(this.usuariosSoporteTecnico);
     	return listaUsuarios;
+    }
+    
+    public void agregarUsuario(Usuario usuario) {
+     	if (usuario.soyAdministrativo())
+     		usuariosAdministrativo.add((Administrativo) usuario);
+    	if (usuario.soyCliente())
+     		usuariosClientes.add((Cliente) usuario);
+    	if (usuario.soySoporteTecnico())
+     		usuariosSoporteTecnico.add((SoporteTecnico) usuario);
+    	if (usuario.soyProfesor())
+     		usuariosProfesores.add((Profesor) usuario);
     }
     
     public Usuario getUsuario(int id) throws GymException {
@@ -70,12 +86,39 @@ public class CadenaGimnasio {
     	
 		throw new GymException("User Not Found.");
     }
+
+	public Administrativo getAdministrativo(int id) throws GymException{
+    	for (Administrativo user: this.usuariosAdministrativo) 
+    		if (id == user.getID()) 
+    			return user;
+    	
+		throw new GymException("User Not Found.");
+	}
+	
+	public Cliente getCliente(int id) throws GymException{
+    	for (Cliente user: this.usuariosClientes) 
+    		if (id == user.getID()) 
+    			return user;
+    	
+		throw new GymException("User Not Found.");
+	}
+
+	public Profesor getProfesor(int id) throws GymException{
+    	for (Profesor user: this.usuariosProfesores) 
+    		if (id == user.getID()) 
+    			return user;
+    	
+		throw new GymException("User Not Found.");
+	}
     
-    
-    public String getNombre() {
-    	return this.nombre;
-    }
-    
+	public SoporteTecnico getSoporteTecnico(int id) throws GymException{
+    	for (SoporteTecnico user: this.usuariosSoporteTecnico) 
+    		if (id == user.getID()) 
+    			return user;
+    	
+		throw new GymException("User Not Found.");
+	}
+	
     /* =======================================================
      *                     METODOS DE SEDE 
      * =======================================================
@@ -123,14 +166,21 @@ public class CadenaGimnasio {
     	return flagEjercicioFound;
     }
     
-    public void agregarEjercicio(String nombre, boolean puedeSerVirtual, 
+    public void agregarEjercicio(String nombre, boolean puedeSerVirtual, int maxClasesVirtGuardadas,
     		ArrayList<TipoArticulo> listaArticulosNecesarios) throws GymException {
     	if (!ejercicioYaExiste(nombre)) {
-        	Ejercicio newEjercicio = new Ejercicio(nombre, puedeSerVirtual, listaArticulosNecesarios);
+        	Ejercicio newEjercicio = new Ejercicio(nombre, puedeSerVirtual, maxClasesVirtGuardadas ,listaArticulosNecesarios);
         	this.ejercicios.add(newEjercicio);
     	} else {
     		throw new GymException("El ejercicio ya existe.");
     	}
+    }
+    
+    public void agregarEjercicio(String nombre, boolean puedeSerVirtual, int maxClasesVirtGuardadas,
+    		TipoArticulo articuloNecesario) throws GymException {
+    	ArrayList<TipoArticulo> listaArticulosNecesarios = new ArrayList<TipoArticulo>();
+    	listaArticulosNecesarios.add(articuloNecesario);
+    	agregarEjercicio(nombre, puedeSerVirtual, maxClasesVirtGuardadas ,listaArticulosNecesarios);
     }
     
     public ArrayList<Ejercicio> getListaEjercicios() {
@@ -156,9 +206,11 @@ public class CadenaGimnasio {
      * =======================================================
      */
     
-    //public String getListaClases(Sede sede) {
-    //	return this.sede.getClases();
-    //}
+    public void agendarClase(Sede sede, Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, Date horario,
+    		Emplazamiento emplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException{
+		sede.agregarClase(profesor, ejercicio, listaAlumnos, horario, emplazamiento, listaArticulos, esVirtual);
+    }
+    
     
     //public String getStringListaClases() {
     //	return Arrays.toString(this.sedes.toArray());
@@ -188,5 +240,26 @@ public class CadenaGimnasio {
 		Articulo newArticulo = new Articulo(tipoArticulo, fechaCompra, fechaFabricacion);
 		sede.agregarArticulo(newArticulo);
 	}
+
+	public void crearEmplazamiento(Sede sede, TipoEmplazamiento tipoEmplazamiento, int capacidad, int metrosCuadrados) {
+		sede.crearEmplazamiento(tipoEmplazamiento, capacidad, metrosCuadrados);
+	}
+
+	public ArrayList<Emplazamiento> getListaEmplazamientos(Sede sede, TipoEmplazamiento tipoEmplazamiento) {
+		return sede.getListaEmplazamientos(tipoEmplazamiento);
+	}
+
+	public void finalizarClase(Sede sede, Clase clase) {
+		sede.finalizarClase(clase);
+		this.baseDeClasesVirtuales.agregarClaseVirtual(clase);
+	}
+
+	public ArrayList<Clase> getClasesVirtualesAlmacenadas() {
+		return this.baseDeClasesVirtuales.getClasesVirtuales();
+	}
+
+
+
+
     
 }
