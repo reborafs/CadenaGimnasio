@@ -36,4 +36,11 @@ public class Emplazamiento {
 		this.tipoEmplazamiento = tipoEmplazamiento;
 	}
 
+	public String toString() {
+		return "{" + 
+				"tipoEmplazamiento: " + this.tipoEmplazamiento + ", " + 
+				"capacidad: " + this.capacidad + ", " + 
+				"metrosCuadrados: " + this.metrosCuadrados + 
+				"}";
+	}
 }

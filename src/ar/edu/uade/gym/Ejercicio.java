@@ -7,12 +7,17 @@ import ar.edu.uade.articulos.TipoArticulo;
 public class Ejercicio {
     private String nombre;
     private boolean puedeSerVirtual = false;
+    private int maxClasesVirtualesGuardadas = 10;
     private ArrayList<TipoArticulo> listaArticulosNecesarios;
 
 
-    public Ejercicio(String nombre, boolean puedeSerVirtual, ArrayList<TipoArticulo> listaArticulosNecesarios) {
+    public Ejercicio(String nombre, boolean puedeSerVirtual, int maxClasesVirtualesGuardadas,
+    		ArrayList<TipoArticulo> listaArticulosNecesarios) {
     	this.nombre = nombre.toLowerCase();
     	this.puedeSerVirtual = puedeSerVirtual;    	
+        if (listaArticulosNecesarios != null)
+        	this.maxClasesVirtualesGuardadas = maxClasesVirtualesGuardadas;
+        
         if (listaArticulosNecesarios == null)
         	this.listaArticulosNecesarios = new ArrayList<TipoArticulo>();
         else
@@ -31,8 +36,12 @@ public class Ejercicio {
     	return this.nombre;
     }
 
-    public boolean isVirtual() {
+    public boolean puedeSerVirtual() {
     	return this.puedeSerVirtual;
+    }
+    
+    public int getMaxCantidadClasesVirtuales() {
+    	return this.maxClasesVirtualesGuardadas;
     }
     
     public String toString() {

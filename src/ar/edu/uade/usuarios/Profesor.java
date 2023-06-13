@@ -15,11 +15,6 @@ public class Profesor extends Usuario {
     }
 	
 	@Override
-	public String toString() {
-		return this.getNombre();
-	}
-	
-	@Override
     public boolean soyProfesor() {
     	return true;
     }

@@ -1,10 +1,12 @@
 package ar.edu.uade.gym;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import ar.edu.uade.articulos.Articulo;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.Profesor;
+import ar.edu.uade.usuarios.Usuario;
 
 
 public class Clase {
@@ -12,6 +14,8 @@ public class Clase {
     static int MAX_ALUMNOS_POR_CLASE = 30;
 
     private Profesor profesorAsignado;
+    private Date horario;
+    private int duracion;
     private Ejercicio ejercicio;
     private EstadoClase estado;
     private ArrayList<Cliente> listaAlumnos;
@@ -19,8 +23,10 @@ public class Clase {
     private ArrayList<Articulo> listaArticulos;
     private boolean esVirtual = false;
 
-    public Clase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, 
-    		TipoEmplazamiento tipoEmplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) {
+    public Clase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, TipoNivel tipoNivel,
+    		Emplazamiento emplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
+    	
+    	validarProfesor(profesor);
     	this.profesorAsignado = profesor;
         this.ejercicio = ejercicio;
         this.estado = EstadoClase.AGENDADA;
@@ -30,6 +36,7 @@ public class Clase {
         if (listaAlumnos == null)
         	this.listaAlumnos = new ArrayList<Cliente>();
         else
+        	validarListaAlumnos(listaAlumnos, tipoNivel);
         	this.listaAlumnos = listaAlumnos;
         
         if (listaArticulos == null)
@@ -38,6 +45,13 @@ public class Clase {
         	this.listaArticulos = listaArticulos;
     }
 
+    
+    public void validarProfesor(Usuario usuario) throws GymException {
+    	if (!usuario.soyProfesor()) {
+    		throw new GymException("El usuario no es un profesor.");
+    	}
+    }
+    
     private void validarListaAlumnos(ArrayList<Cliente> listaAlumnos, TipoNivel nivelSede) throws GymException {
     	ArrayList<Cliente> alumnosHabilitados = new ArrayList<Cliente>();
     	ArrayList<Cliente> alumnosInhabilitados = new ArrayList<Cliente>();
@@ -66,7 +80,7 @@ public class Clase {
     	
     	if (listaAlumnos != null) {
         	if (!listaAlumnos.isEmpty()) {     	
-	        	// CHEQUEAR CAPACIDAD DEL EMPLAZAMIENTO
+	        	// TO-DO CHEQUEAR CAPACIDAD DEL EMPLAZAMIENTO
         		int cantidadAlumnos = listaAlumnosNuevos.size() + this.listaAlumnos.size();
 	        	if (cantidadAlumnos > this.emplazamiento.getCapacidad()) {
 	        		throw new GymException("No es posible agendar la clase debido a que el maximo de alumnos es 30.");
@@ -82,7 +96,7 @@ public class Clase {
     }
     
     public int calcularDesgaste() {
-        // Code for calculating wear and tear
+    	// TO-DO
         return 0;
     }
     
@@ -98,6 +112,10 @@ public class Clase {
     	this.listaAlumnos.add(alumno);
     }
     
+    public void setEstadoFinalizado() {
+    	this.estado = EstadoClase.FINALIZADA;
+    }
+    
     @Override
     public String toString() {
     	return "{" +
@@ -109,4 +127,23 @@ public class Clase {
     			"esVirtual: " + this.esVirtual + 
     			"}";
     }
+
+
+	public Usuario getProfesor() {
+		return this.profesorAsignado;
+	}
+	
+	public Date getHorario() {
+		return this.horario;
+	}
+
+
+	//public TipoEmplazamiento getTipoEmplazamiento() {
+	//	return this.tipoEmplazamiento;
+	//}
+
+
+	public Object getEmplazamiento() {
+		return this.emplazamiento;
+	}
 }
