@@ -1,16 +1,13 @@
 package ar.edu.uade.vistas;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +23,7 @@ import javax.swing.JTextField;
 import ar.edu.uade.gym.CadenaGimnasio;
 import ar.edu.uade.usuarios.Usuario;
 
-public class Login  extends JFrame{
+public class Login extends JFrame{
 	
     JTextField campoUsuario, campoContrasenia;
 
@@ -89,14 +86,6 @@ public class Login  extends JFrame{
 				//System.out.println(campoUsuario.getText()+" "+campoContrasenia.getText());
 			    String nombreUsuarioConectar = campoUsuario.getText();  
 			    String contraseniaConectar = campoContrasenia.getText();
-			    
-			    ArrayList<Usuario> listaUsuarios = CadenaGimnasio.getListaUsuarios();
-			    
-			    if()
-			    
-			    
-			    String tipoUsuario;
-			    
 			    
 			}
 		}

@@ -6,4 +6,5 @@
  *
  */
 module CadenaGimnasio {
+	requires java.desktop;
 }
