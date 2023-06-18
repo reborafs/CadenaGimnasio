@@ -1,5 +1,7 @@
 package ar.edu.uade.gym;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -14,7 +16,23 @@ import ar.edu.uade.articulos.TipoArticulo;
 import ar.edu.uade.bbdd.BaseDeDatos;
 
 public class CadenaGimnasio {
-    private static CadenaGimnasio instancia;
+    public CadenaGimnasio(String nombre, ArrayList<SoporteTecnico> usuariosSoporteTecnico,
+			ArrayList<Administrativo> usuariosAdministrativo, ArrayList<Cliente> usuariosClientes,
+			ArrayList<Profesor> usuariosProfesores, ArrayList<TipoArticulo> catalogoDeArticulos, ArrayList<Sede> sedes,
+			ArrayList<Ejercicio> ejercicios, BaseDeDatos baseDeClasesVirtuales) {
+		super();
+		this.nombre = nombre;
+		this.usuariosSoporteTecnico = usuariosSoporteTecnico;
+		this.usuariosAdministrativo = usuariosAdministrativo;
+		this.usuariosClientes = usuariosClientes;
+		this.usuariosProfesores = usuariosProfesores;
+		this.catalogoDeArticulos = catalogoDeArticulos;
+		this.sedes = sedes;
+		this.ejercicios = ejercicios;
+		this.baseDeClasesVirtuales = baseDeClasesVirtuales;
+	}
+
+	private static CadenaGimnasio instancia;
     private String nombre;
     private ArrayList<SoporteTecnico> usuariosSoporteTecnico;
     private ArrayList<Administrativo> usuariosAdministrativo;
@@ -25,7 +43,7 @@ public class CadenaGimnasio {
     private ArrayList<Ejercicio> ejercicios;
     private BaseDeDatos baseDeClasesVirtuales;
 
-    private CadenaGimnasio(String nombre) {
+    public CadenaGimnasio(String nombre) {
         this.nombre = nombre;
         this.usuariosSoporteTecnico = new ArrayList<SoporteTecnico>();
         this.usuariosAdministrativo = new ArrayList<Administrativo>();
@@ -37,7 +55,22 @@ public class CadenaGimnasio {
         this.baseDeClasesVirtuales = new BaseDeDatos();
     }
 
-    public static CadenaGimnasio getInstance() {
+    public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	@Override
+	public String toString() {
+		return "CadenaGimnasio [nombre=" + nombre + ", usuariosSoporteTecnico=" + usuariosSoporteTecnico
+				+ ", usuariosAdministrativo=" + usuariosAdministrativo + ", usuariosClientes=" + usuariosClientes
+				+ ", usuariosProfesores=" + usuariosProfesores + ", catalogoDeArticulos=" + catalogoDeArticulos
+				+ ", sedes=" + sedes + ", ejercicios=" + ejercicios + ", baseDeClasesVirtuales=" + baseDeClasesVirtuales
+				+ "]";
+	}
+
+    
+    
+	public static CadenaGimnasio getInstance() {
         if (instancia == null) {
             instancia = new CadenaGimnasio("Supertlon");
         }
@@ -199,7 +232,9 @@ public class CadenaGimnasio {
     	return null;
     }
 
-
+	public void agregarEjerciciosDisponibles(Sede sede, Ejercicio newEjercicio) {
+		sede.agregarEjerciciosDisponibles(newEjercicio);
+	}
     
     /* =======================================================
      *                    METODOS DE CLASES 
@@ -258,8 +293,91 @@ public class CadenaGimnasio {
 		return this.baseDeClasesVirtuales.getClasesVirtuales();
 	}
 
+	public void llenarGym() {
+		try {
+			// AGREGAR SEDE
+			this.agregarSede("Caballito", TipoNivel.BLACK, null, null);
+			this.agregarSede("Belgrano", TipoNivel.ORO, null, null);		
+			this.agregarSede("Palermo", TipoNivel.PLATINUM, null, null);
+			
+			// AGREGAR USUARIO 
+			Usuario admin = new Administrativo("Sebastian");
+			Usuario cliente1 = new Cliente("Gabriel", TipoNivel.PLATINUM);
+			Usuario cliente2 = new Cliente("Ramona", TipoNivel.BLACK);
+			Usuario profe = new Profesor("Jorge");		
+			Usuario soporte = new SoporteTecnico("Cecilia");
 
+			this.agregarUsuario(admin);
+			this.agregarUsuario(cliente1);
+			this.agregarUsuario(cliente2);
+			this.agregarUsuario(profe);
+			this.agregarUsuario(soporte);
+			
+			// AGREGAR ARTICULOS
+			Sede sedeBelgrano = this.getSede("Belgrano");
+			
+			this.agregarTipoArticuloPorFecha("Colchoneta", "Pepito", "Colchoneta de 2m x 0.75m", 200);
+			this.agregarTipoArticuloPorUso("Pesa", "Pepito", "Pesa marca Pepito de 20kg", 50);
+			
+			TipoArticulo tipoArticulo = this.getCatalogoDeArticulos().get(0);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date fechaFabricacion = sdf.parse("2023-04-10");
+			
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, new Date(), fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, new Date(), fechaFabricacion);
+			
+			//AGREGAR EJERCICIO
+			TipoArticulo tipoArticulo1 = this.getCatalogoDeArticulos().get(0);
+			TipoArticulo tipoArticulo2 = this.getCatalogoDeArticulos().get(1);
+			this.agregarEjercicio("Crossfit", true, 10, tipoArticulo1);
+			this.agregarEjercicio("Yoga", true, 15 ,tipoArticulo2);
+			
+			//EMPLAZAMIENTO
+			this.crearEmplazamiento(sedeBelgrano,TipoEmplazamiento.SALON, 25, 30);
+			this.crearEmplazamiento(sedeBelgrano,TipoEmplazamiento.PILETA, 40, 50);
+			
+			//CLASE
+			// Invento dos alumnos, uno con nivel suficiente y otro no.
+			ArrayList<Cliente> listaAlumnos = new ArrayList<Cliente>();
+			
+			Cliente cliente4 = new Cliente("Ivan", TipoNivel.PLATINUM);
+			this.agregarUsuario(cliente4);
+			listaAlumnos.add(cliente4);
 
+			//Cliente cliente2 = new Cliente("Sabrina", TipoNivel.BLACK);
+			//this.agregarUsuario(cliente2);
+			//listaAlumnos.add(cliente2);
 
-    
+			// Agendo la clase
+			Profesor profesor = this.getProfesor(3);
+			Ejercicio ejercicio = this.getEjercicio("Crossfit");
+			Date horario = new Date();
+			ArrayList<Emplazamiento> listaEmplazamientos = this.getListaEmplazamientos(sedeBelgrano, TipoEmplazamiento.SALON);
+			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
+			ArrayList<Articulo> listaArticulos = null;
+			boolean esVirtual = true;
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, horario, emplazamiento, listaArticulos, esVirtual);
+			
+			
+			//ALMACENAR CLASE EN BBDD
+			ArrayList<Clase> listaClases = sedeBelgrano.getListaClases();
+			Clase clase = listaClases.get(0);
+			this.finalizarClase(sedeBelgrano, clase);
+			
+			ArrayList<Clase> clasesVirtuales = this.getClasesVirtualesAlmacenadas();
+			
+			//Agregar Ejercicio
+			Ejercicio ejercicio1 = this.getEjercicio("Crossfit");
+			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
+			
+		} catch (GymException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }
