@@ -1,5 +1,7 @@
 package ar.edu.uade.main;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import java.util.Date;
@@ -24,8 +26,7 @@ import java.text.SimpleDateFormat;
 
 public class Main {
 	
-	/**
-	 * ==============================================================================
+	/* ==============================================================================
 	 * 							HELPER METHODS
 	 * ==============================================================================
 	 */
@@ -39,15 +40,13 @@ public class Main {
 	}
 	
 	
-	/**
-	 * ==============================================================================
+	/*==============================================================================
 	 * 							TEST - CREAR SEDE
 	 * ==============================================================================
 	 * Descripcion: Solo se puede crear si no hay una sede en el mismo barrio Se debe
 	   crear con un nivel de aceptacion(Black, Oro, Platinum). El mismo debe impedir
 	   que un cliente con nivel bajo asista a esta sede. Por Ej: cliente Black no
-	   puede acceder a Oro  
-	 */
+	   puede acceder a Oro  */
 	static public void testAgregarSede(CadenaGimnasio gym) {
 
 		// AGREGAR SEDE, VALIDA SI YA EXISTE
@@ -164,8 +163,7 @@ public class Main {
 	}
 	
 	
-	/**
-	 * ==============================================================================
+	/*==============================================================================
 	 * 							TEST - ABM CLASE
 	 * ==============================================================================
 	 * Descripcion: El sistema debe permitir realizar altas, bajas y modificaciones 
@@ -189,12 +187,13 @@ public class Main {
 			// Agendo la clase
 			Profesor profesor = gym.getProfesor(3);
 			Ejercicio ejercicio = gym.getEjercicio("Crossfit");
-			Date horario = new Date();
+			LocalDate fecha = LocalDate.of(2023,7,1);
+			LocalTime horario = LocalTime.of(19,0,0);
 			ArrayList<Emplazamiento> listaEmplazamientos = gym.getListaEmplazamientos(sedeBelgrano, TipoEmplazamiento.SALON);
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
 			ArrayList<Articulo> listaArticulos = null;
 			boolean esVirtual = true;
-			gym.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, horario, emplazamiento, listaArticulos, esVirtual);
+			gym.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, fecha, horario, emplazamiento, listaArticulos, esVirtual);
 		} catch (GymException e) {
 			e.printStackTrace();
 		}

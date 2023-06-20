@@ -1,12 +1,11 @@
 package ar.edu.uade.gym;
 
 import java.util.ArrayList;
-import java.util.Date;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 import ar.edu.uade.articulos.Articulo;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.Profesor;
-import ar.edu.uade.usuarios.Usuario;
 
 
 public class Clase {
@@ -14,8 +13,8 @@ public class Clase {
     static int MAX_ALUMNOS_POR_CLASE = 30;
 
     private Profesor profesorAsignado;
-    private Date horario;
-    private int duracion;
+    private LocalDate fecha;
+    private LocalTime horario;
     private Ejercicio ejercicio;
     private EstadoClase estado;
     private ArrayList<Cliente> listaAlumnos;
@@ -26,27 +25,24 @@ public class Clase {
     public Clase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, TipoNivel tipoNivel,
     		Emplazamiento emplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
     	
-    	validarProfesor(profesor);
-    	this.profesorAsignado = profesor;
+    	asignarProfesor(profesor);
         this.ejercicio = ejercicio;
         this.estado = EstadoClase.AGENDADA;
         this.emplazamiento = emplazamiento;
         this.esVirtual = esVirtual;
 
-        if (listaAlumnos == null)
-        	this.listaAlumnos = new ArrayList<Cliente>();
-        else
-        	validarListaAlumnos(listaAlumnos, tipoNivel);
-        	this.listaAlumnos = listaAlumnos;
+        if (listaAlumnos == null) {this.listaAlumnos = new ArrayList<Cliente>();}
+        else { agregarAlumnos(listaAlumnos, tipoNivel) ;}
         
-        if (listaArticulos == null)
-        	this.listaArticulos = new ArrayList<Articulo>();
-        else
-        	this.listaArticulos = listaArticulos;
+        if (listaArticulos == null) {this.listaArticulos = new ArrayList<Articulo>();}
+        else { this.listaArticulos = listaArticulos; }
     }
 
-    
-    public void validarProfesor(Usuario usuario) throws GymException {
+	/* =======================================================
+	 *                    VALIDACIONES
+	 * =======================================================
+	 */
+    private void validarProfesor(Profesor usuario) throws GymException {
     	if (!usuario.soyProfesor()) {
     		throw new GymException("El usuario no es un profesor.");
     	}
@@ -88,29 +84,66 @@ public class Clase {
         	}
     	}    	
     }
-    
+
+	private void validarEstadoClase() {
+
+	}
+
+	/* =======================================================
+	 *                    METODOS DE PROFESORES
+	 * =======================================================
+	 */
+	public void asignarProfesor(Profesor profesor) throws GymException {
+		validarProfesor(profesor);
+		this.profesorAsignado = profesor;
+	}
+
+
+	/* =======================================================
+	 *                    METODOS DE CLIENTES
+	 * =======================================================
+	 */
+
     public void agregarAlumnos(ArrayList<Cliente> listaAlumnosNuevos, TipoNivel nivelSede) throws GymException {
+		if (this.listaAlumnos == null) {
+			this.listaAlumnos = new ArrayList<Cliente>();
+		}
     	validarListaAlumnos(listaAlumnosNuevos, nivelSede);
     	validarEmplazamiento(listaAlumnosNuevos);
     	this.listaAlumnos.addAll(listaAlumnosNuevos);
     }
-    
+
+	public void agregarAlumno(Cliente alumno, TipoNivel nivelSede) throws GymException {
+		ArrayList<Cliente> listaAlumnosNuevos = new ArrayList<Cliente>();
+		listaAlumnosNuevos.add(alumno);
+		agregarAlumnos(listaAlumnosNuevos, nivelSede);
+	}
+
+	/* =======================================================
+	 *                    METODOS DE ARTICULOS
+	 * =======================================================
+	 */
     public int calcularDesgaste() {
     	// TO-DO
         return 0;
     }
+
+	/* =======================================================
+	 *                    METODOS DE RENTABILIDAD
+	 * =======================================================
+	 */
+
+
+	/* =======================================================
+	 *                    OTROS
+	 * =======================================================
+	 */
     
     public Ejercicio getEjercicio() {
     	return this.ejercicio;
     }
     
-    public void agregarAlumno(Cliente alumno, TipoNivel nivelSede) throws GymException {
-    	ArrayList<Cliente> listaAlumnosNuevos = new ArrayList<Cliente>();
-    	listaAlumnosNuevos.add(alumno);
-    	validarListaAlumnos(listaAlumnosNuevos, nivelSede);
-    	validarEmplazamiento(listaAlumnosNuevos);
-    	this.listaAlumnos.add(alumno);
-    }
+
     
     public void setEstadoFinalizado() {
     	this.estado = EstadoClase.FINALIZADA;
@@ -129,12 +162,20 @@ public class Clase {
     }
 
 
-	public Usuario getProfesor() {
+	public Profesor getProfesor() {
 		return this.profesorAsignado;
 	}
-	
-	public Date getHorario() {
+
+	public LocalTime getHorario() {
 		return this.horario;
+	}
+
+	public LocalDate getFecha() {
+		return this.fecha;
+	}
+
+	public ArrayList<Cliente> getListaAlumnos() {
+		return this.listaAlumnos;
 	}
 
 
@@ -146,4 +187,6 @@ public class Clase {
 	public Object getEmplazamiento() {
 		return this.emplazamiento;
 	}
+
+
 }
