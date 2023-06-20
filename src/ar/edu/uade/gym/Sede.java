@@ -17,16 +17,24 @@ public class Sede {
     private ArrayList<Clase> listaClases;
     private ArrayList<Ejercicio> ejerciciosDisponibles;
 
-    public Sede(String ubicacion, TipoNivel tipoNivel, ArrayList<Emplazamiento> emplazamientos, ArrayList<Ejercicio> ejercicios) {
+
+
+	public Sede(String ubicacion, TipoNivel tipoNivel, ArrayList<Emplazamiento> emplazamientos, ArrayList<Ejercicio> ejercicios) {
     	this.ubicacion = ubicacion.toLowerCase();
     	this.tipoNivel = tipoNivel;
+    	this.listaClases = new ArrayList<Clase>();
+    	this.stockArticulos = new ArrayList<Articulo>();
+    	
         if (emplazamientos == null)
         	this.emplazamientosDisponibles = new ArrayList<Emplazamiento>();
         else
         	this.emplazamientosDisponibles = emplazamientos;
-    	this.ejerciciosDisponibles = ejercicios;
-    	this.listaClases = new ArrayList<Clase>();
-    	this.stockArticulos = new ArrayList<Articulo>();
+        
+        if (ejerciciosDisponibles == null)
+	        this.ejerciciosDisponibles = new ArrayList<Ejercicio>();
+        else
+        	this.ejerciciosDisponibles = ejercicios;
+        
     }
     
     
@@ -80,10 +88,6 @@ public class Sede {
 		return this.stockArticulos;
 	}
     
-    @Override
-    public String toString() {
-    	return "["+this.ubicacion+","+this.tipoNivel.toString()+"]";
-    }
 
 
 	public void crearEmplazamiento(TipoEmplazamiento tipoEmplazamiento, int capacidad, int metrosCuadrados) {
@@ -119,5 +123,16 @@ public class Sede {
 		clase.setEstadoFinalizado();
 	}
 
+	public ArrayList<Ejercicio> getEjerciciosDisponibles() {
+		return ejerciciosDisponibles;
+	}
+	
+	public void agregarEjerciciosDisponibles(Ejercicio ejercicio) {
+		this.ejerciciosDisponibles.add(ejercicio);
+	}
+	@Override
+	public String toString() {
+		return "["+this.ubicacion+","+this.tipoNivel.toString()+"]";
+	}
 
 }
