@@ -1,5 +1,6 @@
 package ar.edu.uade.gym;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -41,21 +42,33 @@ public class Sede {
 	 * =======================================================
 	 */
     
-    private void validarProfesor(Usuario profesor) throws GymException {
-    	if (!profesor.soyProfesor())
-    		throw new GymException("El Usuario no es un profesor.");
-    	
-    	// TO-DO chequear que el profesor no tenga otra clase en el mismo horario.
-    	for (Clase clase: this.listaClases) {
-    		Profesor profeAsignado = clase.getProfesor();
-			//if (profeAsignado != null)
-				//if (profeAsignado == profesor && )
-			//if (user == profesor && )
-    	}
-    }
+	private void validarProfesor(Clase claseNueva, Usuario profesor) throws GymException {
+		if (!profesor.soyProfesor())
+			throw new GymException("El Usuario no es un profesor.");
+
+		ArrayList<Clase> listaClasesMismoDia = getListaClases();
+		listaClasesMismoDia.removeIf(clase -> (clase.getFecha() == claseNueva.getFecha()) );
+
+		// Chequear que el profesor no tenga otra clase en el mismo horario.
+		for (Clase clase: listaClasesMismoDia) {
+			Profesor profeAsignado = clase.getProfesor();
+			if (profeAsignado.equals(profesor) && clase.getFecha() == clase.getFecha()
+					&& clase.getHorario() == claseNueva.getHorario()) {
+				throw new GymException("El profesor tiene una clase asignada en el mismo horario.");
+			}
+		}
+
+		// Chequear que el profesor no tenga un intervalo menor a 3 hs entre clase y clase.
+		for (Clase clase: listaClasesMismoDia) {
+			long tiempoEntreClases = clase.getHorario().until(claseNueva.getHorario(), ChronoUnit.MINUTES);
+			if (Math.abs(tiempoEntreClases) >= 180) {
+				throw new GymException("El profesor debe tener un intervalo de 3hs entre clase y clase.");
+			}
+		}
+	}
 
 	public void asignarProfesor(Clase clase, Usuario profesor) throws GymException {
-		validarProfesor(profesor);
+		validarProfesor(clase, profesor);
 		clase.asignarProfesor((Profesor) profesor);
 	}
 
@@ -64,24 +77,15 @@ public class Sede {
 	 * =======================================================
 	 */
 
-	/**
-	 * Valido si el alumno ya existe en la clase a la que se esta anotando. Para que no pueda anotarse dos veces en la
-	 * misma clase.
-	 * @param clase
-	 * @param alumnoNuevo
-	 * @throws GymException
-	 */
-	private void validarAlumnoRepetido(Clase clase, Cliente alumnoNuevo) throws GymException {
-		for (Cliente alumnoAnotado: clase.getListaAlumnos())
-			if (alumnoAnotado == alumnoNuevo)
-				throw new GymException("El alumno ya esta anotado en esta clase.");
-	}
-
 	private void validarClaseDiariaAlumno(Clase claseNueva, Cliente alumno) throws GymException {
 		for (Clase clase: this.listaClases) {
-			if (clase.getFecha() == claseNueva.getFecha())
-				if (clase.getListaAlumnos().contains(alumno))
-					throw new GymException("El alumno ya esta anotado en una clase este mismo dia.");
+			if (clase.equals(claseNueva)) {
+				throw new GymException("El alumno ya esta anotado en esta clase.");
+			} else {
+				if (clase.getFecha() == claseNueva.getFecha())
+					if (clase.getListaAlumnos().contains(alumno))
+						throw new GymException("El alumno ya esta anotado en una clase este mismo dia.");
+			}
 		}
 	}
 
@@ -112,10 +116,11 @@ public class Sede {
     public void agregarClase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, LocalDate fecha,
 							 LocalTime horario, Emplazamiento emplazamiento, ArrayList<Articulo> listaArticulos,
 							 boolean esVirtual) throws GymException {
-    	validarProfesor(profesor);
+
+		Clase newClase = new Clase(profesor, ejercicio, listaAlumnos, this.getTipoNivel(),
+				emplazamiento, listaArticulos, esVirtual);
+		validarProfesor(newClase, profesor);
     	validarEmplazamientoDisponible(emplazamiento, fecha, horario);
-    	Clase newClase = new Clase(profesor, ejercicio, listaAlumnos, this.getTipoNivel(), 
-    			emplazamiento, listaArticulos, esVirtual);
     	this.listaClases.add(newClase);
     }
 
