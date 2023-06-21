@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
+
 import ar.edu.uade.usuarios.Usuario;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.SoporteTecnico;
@@ -168,9 +168,9 @@ public class CadenaGimnasio {
     }
 
     public void agregarSede(String ubicacion, TipoNivel tipoNivel, ArrayList<Emplazamiento> emplazamientos, 
-    		ArrayList<Ejercicio> ejerciciosDisponibles) throws GymException {
+    		ArrayList<Ejercicio> ejerciciosDisponibles, double alquilerSede) throws GymException {
     	if (!sedeYaExiste(ubicacion)) {
-    		Sede newSede = new Sede(ubicacion, tipoNivel, emplazamientos, ejerciciosDisponibles);
+    		Sede newSede = new Sede(ubicacion, tipoNivel, emplazamientos, ejerciciosDisponibles, alquilerSede);
     		this.sedes.add(newSede);
     	} else {
     		throw new GymException("La sede ya existe.");
@@ -244,9 +244,9 @@ public class CadenaGimnasio {
      */
     
     public void agendarClase(Sede sede, Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos,
-							 LocalDate fecha, LocalTime horario, Emplazamiento emplazamiento,
+							 LocalDate fecha, LocalTime horarioInicio, LocalTime horarioFin, Emplazamiento emplazamiento,
 							 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
-		sede.agregarClase(profesor, ejercicio, listaAlumnos, fecha, horario, emplazamiento, listaArticulos, esVirtual);
+		sede.agregarClase(profesor, ejercicio, listaAlumnos, fecha, horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
     }
 
 	public void asignarProfesorClase(Sede sede, Clase clase ,Usuario profesor) throws GymException {
@@ -277,8 +277,8 @@ public class CadenaGimnasio {
 		this.catalogoDeArticulos.add(newTipoArticulo);
 	}
 
-	public void agregarArticulo(Sede sede, TipoArticulo tipoArticulo, Date fechaCompra, Date fechaFabricacion) {
-		Articulo newArticulo = new Articulo(tipoArticulo, fechaCompra, fechaFabricacion);
+	public void agregarArticulo(Sede sede, TipoArticulo tipoArticulo, double precio, LocalDate fechaCompra, LocalDate fechaFabricacion) {
+		Articulo newArticulo = new Articulo(tipoArticulo, precio, fechaCompra, fechaFabricacion);
 		sede.agregarArticulo(newArticulo);
 	}
 
@@ -302,15 +302,15 @@ public class CadenaGimnasio {
 	public void llenarGym() {
 		try {
 			// AGREGAR SEDE
-			this.agregarSede("Caballito", TipoNivel.BLACK, null, null);
-			this.agregarSede("Belgrano", TipoNivel.ORO, null, null);		
-			this.agregarSede("Palermo", TipoNivel.PLATINUM, null, null);
+			this.agregarSede("Caballito", TipoNivel.BLACK, null, null, 80000);
+			this.agregarSede("Belgrano", TipoNivel.ORO, null, null, 100000);
+			this.agregarSede("Palermo", TipoNivel.PLATINUM, null, null, 120000);
 			
 			// AGREGAR USUARIO 
 			Usuario admin = new Administrativo("Sebastian");
 			Usuario cliente1 = new Cliente("Gabriel", TipoNivel.PLATINUM);
 			Usuario cliente2 = new Cliente("Ramona", TipoNivel.BLACK);
-			Usuario profe = new Profesor("Jorge");		
+			Usuario profe = new Profesor("Jorge", 50000);
 			Usuario soporte = new SoporteTecnico("Cecilia");
 
 			this.agregarUsuario(admin);
@@ -326,12 +326,13 @@ public class CadenaGimnasio {
 			this.agregarTipoArticuloPorUso("Pesa", "Pepito", "Pesa marca Pepito de 20kg", 50);
 			
 			TipoArticulo tipoArticulo = this.getCatalogoDeArticulos().get(0);
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date fechaFabricacion = sdf.parse("2023-04-10");
-			
-			this.agregarArticulo(sedeBelgrano, tipoArticulo, new Date(), fechaFabricacion);
-			this.agregarArticulo(sedeBelgrano, tipoArticulo, new Date(), fechaFabricacion);
+
+			LocalDate fechaFabricacion = LocalDate.of(2023,5,10);
+			LocalDate fechaCompra = LocalDate.of(2023,6,10);
+
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+
 			
 			//AGREGAR EJERCICIO
 			TipoArticulo tipoArticulo1 = this.getCatalogoDeArticulos().get(0);
@@ -359,12 +360,13 @@ public class CadenaGimnasio {
 			Profesor profesor = this.getProfesor(3);
 			Ejercicio ejercicio = this.getEjercicio("Crossfit");
 			LocalDate fecha = LocalDate.of(2023,7,1);
-			LocalTime horario = LocalTime.of(19,0,0);
+			LocalTime horarioInicio = LocalTime.of(19,0,0);
+			LocalTime horarioFin = LocalTime.of(20,0,0);
 			ArrayList<Emplazamiento> listaEmplazamientos = this.getListaEmplazamientos(sedeBelgrano, TipoEmplazamiento.SALON);
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
 			ArrayList<Articulo> listaArticulos = null;
 			boolean esVirtual = true;
-			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, fecha, horario, emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
 			
 			
 			//ALMACENAR CLASE EN BBDD
@@ -379,10 +381,6 @@ public class CadenaGimnasio {
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
 			
 		} catch (GymException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

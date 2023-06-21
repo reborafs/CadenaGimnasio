@@ -1,5 +1,6 @@
 package ar.edu.uade.gym;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,27 +14,32 @@ public class Clase {
     static int MAX_ALUMNOS_POR_CLASE = 30;
 
     private Profesor profesorAsignado;
-    private LocalDate fecha;
-    private LocalTime horario;
-    private Ejercicio ejercicio;
+    private final LocalDate fecha;
+	private final LocalTime horarioInicio;
+	private final LocalTime horarioFin;
+    private final Ejercicio ejercicio;
     private EstadoClase estado;
     private ArrayList<Cliente> listaAlumnos;
-    private Emplazamiento emplazamiento;
+    private final Emplazamiento emplazamiento;
     private ArrayList<Articulo> listaArticulos;
     private boolean esVirtual = false;
 
     public Clase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, TipoNivel tipoNivel,
-    		Emplazamiento emplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
+				 LocalDate fecha, LocalTime horarioInicio, LocalTime horarioFin, Emplazamiento emplazamiento,
+				 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
     	
     	asignarProfesor(profesor);
         this.ejercicio = ejercicio;
         this.estado = EstadoClase.AGENDADA;
         this.emplazamiento = emplazamiento;
         this.esVirtual = esVirtual;
+		this.fecha = fecha;
+		this.horarioInicio = horarioInicio;
+		this.horarioFin = horarioFin;
 
         if (listaAlumnos == null) {this.listaAlumnos = new ArrayList<Cliente>();}
-        else { agregarAlumnos(listaAlumnos, tipoNivel) ;}
-        
+        else { agregarAlumnos(listaAlumnos, tipoNivel); }
+
         if (listaArticulos == null) {this.listaArticulos = new ArrayList<Articulo>();}
         else { this.listaArticulos = listaArticulos; }
     }
@@ -85,9 +91,11 @@ public class Clase {
     	}    	
     }
 
-	private void validarEstadoClase() {
 
+	public void confirmarClase() {
+		this.estado = EstadoClase.CONFIRMADA;
 	}
+
 
 	/* =======================================================
 	 *                    METODOS DE PROFESORES
@@ -123,16 +131,10 @@ public class Clase {
 	 *                    METODOS DE ARTICULOS
 	 * =======================================================
 	 */
-    public int calcularDesgaste() {
-    	// TO-DO
-        return 0;
-    }
 
-	/* =======================================================
-	 *                    METODOS DE RENTABILIDAD
-	 * =======================================================
-	 */
-
+	public void agregarArticulo(Articulo articulo) {
+		this.listaArticulos.add(articulo);
+	}
 
 	/* =======================================================
 	 *                    OTROS
@@ -142,23 +144,9 @@ public class Clase {
     public Ejercicio getEjercicio() {
     	return this.ejercicio;
     }
-    
 
-    
-    public void setEstadoFinalizado() {
-    	this.estado = EstadoClase.FINALIZADA;
-    }
-    
-    @Override
-    public String toString() {
-    	return "{" +
-    			"Profesor: " + this.profesorAsignado + ", " +
-    			"Ejercicio: " + this.ejercicio + ", " +
-    			"Estado: " + this.estado + ", " +
-    			"CantidadAlumnos: " + this.listaAlumnos.size() + ", " +
-    			"Emplazamiento: " + this.emplazamiento + ", " +
-    			"esVirtual: " + this.esVirtual + 
-    			"}";
+    public void finalizarClase() {
+		this.estado = EstadoClase.FINALIZADA;
     }
 
 
@@ -166,27 +154,47 @@ public class Clase {
 		return this.profesorAsignado;
 	}
 
-	public LocalTime getHorario() {
-		return this.horario;
+	public LocalTime getHorarioInicio() {
+		return this.horarioInicio;
+	}
+	public LocalTime getHorarioFin() {
+		return this.horarioFin;
 	}
 
 	public LocalDate getFecha() {
 		return this.fecha;
 	}
 
+	public long getDuracionHoras() {
+		return this.horarioInicio.until(horarioFin, ChronoUnit.HOURS);
+	}
+
+	public long getDuracionMinutos() {
+		return this.horarioInicio.until(horarioFin, ChronoUnit.MINUTES);
+	}
+
 	public ArrayList<Cliente> getListaAlumnos() {
 		return this.listaAlumnos;
 	}
 
-
-	//public TipoEmplazamiento getTipoEmplazamiento() {
-	//	return this.tipoEmplazamiento;
-	//}
-
-
-	public Object getEmplazamiento() {
+	public Emplazamiento getEmplazamiento() {
 		return this.emplazamiento;
 	}
 
+	public ArrayList<Articulo> getListaArticulos() {
+		return listaArticulos;
+	}
+
+	@Override
+	public String toString() {
+		return "{" +
+				"Profesor: " + this.profesorAsignado + ", " +
+				"Ejercicio: " + this.ejercicio + ", " +
+				"Estado: " + this.estado + ", " +
+				"CantidadAlumnos: " + this.listaAlumnos.size() + ", " +
+				"Emplazamiento: " + this.emplazamiento + ", " +
+				"esVirtual: " + this.esVirtual +
+				"}";
+	}
 
 }
