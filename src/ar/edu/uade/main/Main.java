@@ -1,5 +1,7 @@
 package ar.edu.uade.main;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import java.util.Date;
@@ -24,8 +26,7 @@ import java.text.SimpleDateFormat;
 
 public class Main {
 	
-	/**
-	 * ==============================================================================
+	/* ==============================================================================
 	 * 							HELPER METHODS
 	 * ==============================================================================
 	 */
@@ -39,26 +40,24 @@ public class Main {
 	}
 	
 	
-	/**
-	 * ==============================================================================
+	/*==============================================================================
 	 * 							TEST - CREAR SEDE
 	 * ==============================================================================
 	 * Descripcion: Solo se puede crear si no hay una sede en el mismo barrio Se debe
 	   crear con un nivel de aceptacion(Black, Oro, Platinum). El mismo debe impedir
 	   que un cliente con nivel bajo asista a esta sede. Por Ej: cliente Black no
-	   puede acceder a Oro  
-	 */
+	   puede acceder a Oro  */
 	static public void testAgregarSede(CadenaGimnasio gym) {
 
 		// AGREGAR SEDE, VALIDA SI YA EXISTE
 		try {
 			// ESTAS SEDE SE AGREGAN BIEN
-			gym.agregarSede("Caballito", TipoNivel.BLACK, null, null);
-			gym.agregarSede("Belgrano", TipoNivel.ORO, null, null);		
-			gym.agregarSede("Palermo", TipoNivel.PLATINUM, null, null);
+			gym.agregarSede("Caballito", TipoNivel.BLACK, null, null, 80000);
+			gym.agregarSede("Belgrano", TipoNivel.ORO, null, null, 100000);
+			gym.agregarSede("Palermo", TipoNivel.PLATINUM, null, null, 120000);
 
 			// ESTAS SEDES VAN A FALLAR PORQUE CABALLITO YA EXISTE
-			//gym.agregarSede("Caballito", TipoNivel.ORO, null, null);
+			//gym.agregarSede("Caballito", TipoNivel.ORO, null, null,15);
 		} catch (GymException e) {
 			e.printStackTrace();
 		}
@@ -78,7 +77,7 @@ public class Main {
 		Usuario admin = new Administrativo("Sebastian");
 		Usuario cliente1 = new Cliente("Gabriel", TipoNivel.PLATINUM);
 		Usuario cliente2 = new Cliente("Ramona", TipoNivel.BLACK);
-		Usuario profe = new Profesor("Jorge");		
+		Usuario profe = new Profesor("Jorge", 50000);
 		Usuario soporte = new SoporteTecnico("Cecilia");
 
 		gym.agregarUsuario(admin);
@@ -114,12 +113,12 @@ public class Main {
 
 		try {
 			TipoArticulo tipoArticulo = gym.getCatalogoDeArticulos().get(0);
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date fechaFabricacion = sdf.parse("2023-04-10");
-			
-			gym.agregarArticulo(sedeBelgrano, tipoArticulo, new Date(), fechaFabricacion);
-			gym.agregarArticulo(sedeBelgrano, tipoArticulo, new Date(), fechaFabricacion);
+
+			LocalDate fechaFabricacion = LocalDate.of(2023,5,10);
+			LocalDate fechaCompra = LocalDate.of(2023,6,10);
+
+			gym.agregarArticulo(sedeBelgrano, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
+			gym.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
@@ -164,8 +163,7 @@ public class Main {
 	}
 	
 	
-	/**
-	 * ==============================================================================
+	/*==============================================================================
 	 * 							TEST - ABM CLASE
 	 * ==============================================================================
 	 * Descripcion: El sistema debe permitir realizar altas, bajas y modificaciones 
@@ -189,12 +187,14 @@ public class Main {
 			// Agendo la clase
 			Profesor profesor = gym.getProfesor(3);
 			Ejercicio ejercicio = gym.getEjercicio("Crossfit");
-			Date horario = new Date();
+			LocalDate fecha = LocalDate.of(2023,7,1);
+			LocalTime horarioInicio = LocalTime.of(19,0,0);
+			LocalTime horarioFin = LocalTime.of(20,0,0);
 			ArrayList<Emplazamiento> listaEmplazamientos = gym.getListaEmplazamientos(sedeBelgrano, TipoEmplazamiento.SALON);
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
 			ArrayList<Articulo> listaArticulos = null;
 			boolean esVirtual = true;
-			gym.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, horario, emplazamiento, listaArticulos, esVirtual);
+			gym.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
 		} catch (GymException e) {
 			e.printStackTrace();
 		}

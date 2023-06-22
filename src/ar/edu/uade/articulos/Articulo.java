@@ -1,59 +1,67 @@
 package ar.edu.uade.articulos;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Articulo {
 	
     private static int nextID = 0;
     private final int id;
     private TipoArticulo tipoArticulo;
-    private Date fechaCompra;
-    private Date fechaFabricacion;
+    private double precio;
+    private LocalDate fechaCompra;
+    private LocalDate fechaFabricacion;
     private int usos;
     private boolean flagDesgastado;
-	
-    public Articulo(TipoArticulo tipoArticulo, Date fechaCompra, Date fechaFabricacion) {
+
+    public Articulo(TipoArticulo tipoArticulo, double precio, LocalDate fechaCompra, LocalDate fechaFabricacion) {
         this.id = nextID++;
         this.tipoArticulo = tipoArticulo;
+        this.precio = precio;
         this.usos = 0;
         this.flagDesgastado = false;
-        
+
         if (fechaCompra == null) 
-        	this.fechaCompra = new Date(0);
+        	this.fechaCompra = LocalDate.now();
         else 
         	this.fechaCompra = fechaCompra;
         
         if (fechaFabricacion == null) 
-        	this.fechaFabricacion = new Date(0);
+        	this.fechaFabricacion = LocalDate.now();
         else 
         	this.fechaFabricacion = fechaFabricacion;
     }
 
+    public double getCostoAmortizacion() {
+        // SE CALCULA COMO EL PRECIO DIVIDIDO EL TOTAL DE USOS O DIAS DESDE SU FABRICACION
+        return precio / this.tipoArticulo.getCantidadAmortizacion();
+    }
+
+
     public FormaAmortizacion getFormaAmortizacion() {
-        // Code for getting amortization method
         return this.tipoArticulo.getFormaAmortizacion();
     }
 
-    private int getUsosRestantes() {
-    	int usosRestantes = (this.tipoArticulo.getCantidadAmortizacion() - this.usos);
-    	return usosRestantes;
+    private long getUsosRestantes() {
+    	long cantidadLimiteUsos = this.tipoArticulo.getCantidadAmortizacion();
+        long usosHastaHoy = this.usos;
+    	return cantidadLimiteUsos - usosHastaHoy;
     }
 	
-    private int getDiasRestantes() {
-    	Date now = new Date();
-    	int diasRestantes = (int)( (now.getTime() - fechaFabricacion.getTime()) / (1000 * 60 * 60 * 24) );
-        this.tipoArticulo.getCantidadAmortizacion();
-        return diasRestantes;
+    private long getDiasRestantes() {
+        long diasHastaAmortizarse= this.tipoArticulo.getCantidadAmortizacion();
+    	long diasDesdeFabricacion = fechaFabricacion.until(LocalDate.now(), ChronoUnit.DAYS);
+        return diasHastaAmortizarse - diasDesdeFabricacion;
     }
 
-    public int getDesgaste() {
-    	int desgaste = -1;
+    public long getDesgaste() {
+    	long desgaste = -1;
     	
     	if (this.getFormaAmortizacion() == FormaAmortizacion.POR_USO) 
     		desgaste = getUsosRestantes();
     
     	if (this.getFormaAmortizacion() == FormaAmortizacion.FECHA_FABRICACION) 
-    		desgaste = getDiasRestantes();    	
+    		desgaste = getDiasRestantes();
     	
     	return desgaste;
     }
@@ -67,11 +75,18 @@ public class Articulo {
     public boolean isDesgastado() {
         return this.flagDesgastado;
     }
-    
+
     public int getID() {
-    	return this.id;
+        return this.id;
     }
-    
+    public double getPrecio() {
+        return this.precio;
+    }
+    public void setPrecio(double precio) {
+        if (precio >= 0)
+            this.precio = precio;
+    }
+
     @Override
     public String toString() {
     	return "{" +

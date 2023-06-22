@@ -2,11 +2,11 @@ package ar.edu.uade.articulos;
 
 public class TipoArticulo {
 
-	private String nombre;
-    private String marca;
-    private String descripcion;
-    private FormaAmortizacion formaAmortizacion;
-    private int cantidadAmortizacion;
+	private final String nombre;
+    private final String marca;
+    private final String descripcion;
+    private final FormaAmortizacion formaAmortizacion;
+    private final int cantidadAmortizacion;
 
     public TipoArticulo(String nombre, String marca, String descripcion, boolean flagAmortizacionPorFecha, int cantidad) {
         this.nombre = nombre;
@@ -23,18 +23,6 @@ public class TipoArticulo {
     public FormaAmortizacion getFormaAmortizacion() {
         return formaAmortizacion;
     }
-    
-    public String getNombre() {
-		return nombre;
-    }
-
-	public String getMarca() {
-		return marca;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
 
 	public int getCantidadAmortizacion() {
 		return this.cantidadAmortizacion;
