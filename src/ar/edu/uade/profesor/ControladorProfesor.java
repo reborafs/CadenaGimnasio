@@ -50,7 +50,6 @@ public class ControladorProfesor {
 			}
 			sedeEjercicio.put(sede.getUbicacion(), ejerciciosDisponibles);		
 		}
-		System.out.print(sedeEjercicio);
 	}
 	
 	@Override
