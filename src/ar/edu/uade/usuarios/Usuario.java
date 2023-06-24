@@ -5,9 +5,9 @@ public abstract class Usuario {
     private String contrasenia;
     final private int id;
     
-    public Usuario(String nombre) {
+    public Usuario(String nombre, String contrasenia) {
     	this.nombre = nombre;
-    	//this.contrasenia = contrasenia;
+    	this.contrasenia = contrasenia;
     	this.id = NumeroIdentificador.getInstance().generarNuevoId();
     }
 

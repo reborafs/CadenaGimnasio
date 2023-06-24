@@ -7,8 +7,8 @@ public class Profesor extends Usuario {
 
     private double sueldo;
 
-    public Profesor(String nombre, double sueldo) {
-    	super(nombre);
+    public Profesor(String nombre, String contrasenia, double sueldo) {
+    	super(nombre, contrasenia);
         this.sueldo = sueldo;
     }
 	

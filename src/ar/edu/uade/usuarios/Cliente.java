@@ -6,8 +6,8 @@ public class Cliente extends Usuario {
 	
     private TipoNivel tipoNivel;
     
-    public Cliente(String nombre, TipoNivel nivel) {
-    	super(nombre);
+    public Cliente(String nombre, String contrasenia, TipoNivel nivel) {
+    	super(nombre, contrasenia);
     	this.tipoNivel = nivel;
     }
     

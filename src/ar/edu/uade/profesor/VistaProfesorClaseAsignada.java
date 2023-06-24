@@ -109,12 +109,5 @@ public class VistaProfesorClaseAsignada extends JFrame {
         }
         return false;
     }
-	
-    public static void main(String[] args) {
-        // Crear y mostrar la ventana
-        SwingUtilities.invokeLater(() -> {
-        	VistaProfesorClaseAsignada vistaProfesorClaseAsignada = new VistaProfesorClaseAsignada();
-        	vistaProfesorClaseAsignada.setVisible(true);
-        });
-    }
+
 }

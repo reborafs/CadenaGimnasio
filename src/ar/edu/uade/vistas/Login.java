@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
 //import ar.edu.uade.usuarios.Administrativo;
 //import ar.edu.uade.usuarios.Cliente;
 //import ar.edu.uade.usuarios.Profesor;
@@ -38,7 +39,7 @@ public class Login extends JFrame{
         gbc.insets = new Insets(5, 5, 5, 5);
 
         // Agregar el título
-        JLabel labelTitulo = new JLabel("GYMNASIO");
+        JLabel labelTitulo = new JLabel("GIMNASIO");
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 32));
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -78,18 +79,16 @@ public class Login extends JFrame{
         panel.add(btnConectar, gbc);
 
         this.add(panel, BorderLayout.CENTER);
-        
-       class HandlerBtnConectar implements ActionListener{
 
-        	@Override
-			public void actionPerformed(ActionEvent e) {
-				//System.out.println(campoUsuario.getText()+" "+campoContrasenia.getText());
-			    String nombreUsuarioConectar = campoUsuario.getText();  
-			    String contraseniaConectar = campoContrasenia.getText();
-			    
-			}
-		}
-		
+        class HandlerBtnConectar implements ActionListener{
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ControladorLogin controladorLogin = new ControladorLogin();
+                controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
+            }
+        }
+
 		/*INSTANCIACION DEL MANEJADOR*/
 		HandlerBtnConectar handlerBtnConectar=new HandlerBtnConectar();
 		

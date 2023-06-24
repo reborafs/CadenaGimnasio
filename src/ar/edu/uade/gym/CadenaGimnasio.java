@@ -131,6 +131,17 @@ public class CadenaGimnasio {
 		throw new GymException("User Not Found.");
     }
 
+
+	public Usuario getUsuario(String nombre,  String contrasenia) throws GymException {
+		ArrayList<Usuario> listaUsuarios = getListaUsuarios();
+
+		for (Usuario user: listaUsuarios)
+			if (nombre.equals(user.getNombre()) && contrasenia.equals(user.getContrasenia()))
+				return user;
+
+		throw new GymException("User Not Found.");
+	}
+
 	public Administrativo getAdministrativo(int id) throws GymException{
     	for (Administrativo user: this.usuariosAdministrativo) 
     		if (id == user.getID()) 
@@ -318,23 +329,28 @@ public class CadenaGimnasio {
 
 	public void llenarGym() {
 		try {
-			// AGREGAR SEDE
-			this.agregarSede("Caballito", TipoNivel.BLACK, null, null, 80000);
-			this.agregarSede("Belgrano", TipoNivel.ORO, null, null, 100000);
-			this.agregarSede("Palermo", TipoNivel.PLATINUM, null, null, 120000);
-			
-			// AGREGAR USUARIO 
-			Usuario admin = new Administrativo("Sebastian");
-			Usuario cliente1 = new Cliente("Gabriel", TipoNivel.PLATINUM);
-			Usuario cliente2 = new Cliente("Ramona", TipoNivel.BLACK);
-			Usuario profe = new Profesor("Jorge", 50000);
-			Usuario soporte = new SoporteTecnico("Cecilia");
+
+			// AGREGAR USUARIO
+			Usuario admin = new Administrativo("admin","admin");
+			Usuario cliente1 = new Cliente("cliente","cliente", TipoNivel.PLATINUM);
+			Usuario cliente2 = new Cliente("ramona","flowers", TipoNivel.BLACK);
+			Usuario profe = new Profesor("profe","profe",  50000);
+			Usuario soporte = new SoporteTecnico("soporte", "soporte");
 
 			this.agregarUsuario(admin);
 			this.agregarUsuario(cliente1);
 			this.agregarUsuario(cliente2);
 			this.agregarUsuario(profe);
 			this.agregarUsuario(soporte);
+
+
+
+			// AGREGAR SEDE
+			this.agregarSede("Caballito", TipoNivel.BLACK, null, null, 80000);
+			this.agregarSede("Belgrano", TipoNivel.ORO, null, null, 100000);
+			this.agregarSede("Palermo", TipoNivel.PLATINUM, null, null, 120000);
+			
+
 			
 			// AGREGAR ARTICULOS
 			Sede sedeBelgrano = this.getSede("Belgrano");
@@ -365,7 +381,7 @@ public class CadenaGimnasio {
 			// Invento dos alumnos, uno con nivel suficiente y otro no.
 			ArrayList<Cliente> listaAlumnos = new ArrayList<Cliente>();
 			
-			Cliente cliente4 = new Cliente("Ivan", TipoNivel.PLATINUM);
+			Cliente cliente4 = new Cliente("Ivan","rodriguez", TipoNivel.PLATINUM);
 			this.agregarUsuario(cliente4);
 			listaAlumnos.add(cliente4);
 
