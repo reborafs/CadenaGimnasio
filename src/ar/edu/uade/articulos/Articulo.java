@@ -67,9 +67,13 @@ public class Articulo {
     }
 
     public void setDesgaste() {
-    	this.usos++;
-    	if (this.getDesgaste() <= 0)
-    		this.flagDesgastado = true;
+        this.usos++;
+        if (this.getDesgaste() <= 0)
+            this.flagDesgastado = true;
+    }
+
+    public void darDeBaja() {
+        this.flagDesgastado = true;
     }
 
     public boolean isDesgastado() {
@@ -86,6 +90,9 @@ public class Articulo {
         if (precio >= 0)
             this.precio = precio;
     }
+    public TipoArticulo getTipoArticulo() {
+        return this.tipoArticulo;
+    }
 
     @Override
     public String toString() {
@@ -98,5 +105,6 @@ public class Articulo {
     			"flagDesgastado: " + this.flagDesgastado + 
     			"}";
     }
-    
+
+
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import ar.edu.uade.articulos.CategoriaArticulo;
 import ar.edu.uade.usuarios.Usuario;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.SoporteTecnico;
@@ -111,6 +112,14 @@ public class CadenaGimnasio {
     	if (usuario.soyProfesor())
      		usuariosProfesores.add((Profesor) usuario);
     }
+
+	public void asignarSede(Administrativo admin, Sede sedeNueva) {
+		if (!(admin.getSedesAsignadas().contains(sedeNueva)))
+			admin.asignarSede(sedeNueva);
+		else {
+			System.out.println("La sede ya estaba asignada.");
+		}
+	}
     
     public Usuario getUsuario(int id) throws GymException {
     	ArrayList<Usuario> listaUsuarios = getListaUsuarios();
@@ -264,16 +273,24 @@ public class CadenaGimnasio {
 	public ArrayList<TipoArticulo> getCatalogoDeArticulos() {
 		return catalogoDeArticulos;
 	}
-	
-	public void agregarTipoArticuloPorFecha(String nombre, String marca, String descripcion, int diasAmortizacion) {
+
+	public void eliminarArticulo(Sede sede, Articulo articulo) {
+		sede.eliminarArticulo(articulo);
+	}
+
+	public void darDeBajaArticulo(Sede sede, Articulo articulo) {
+		sede.darDeBajaArticulo(articulo);
+	}
+
+	public void agregarTipoArticuloPorFecha(String nombre, CategoriaArticulo articulo, String marca, String descripcion, int diasAmortizacion) {
 		boolean flagAmortizacionPorFecha = true;
-	    TipoArticulo newTipoArticulo = new TipoArticulo(nombre, marca, descripcion, flagAmortizacionPorFecha, diasAmortizacion);
+	    TipoArticulo newTipoArticulo = new TipoArticulo(nombre, articulo, marca, descripcion, flagAmortizacionPorFecha, diasAmortizacion);
 		this.catalogoDeArticulos.add(newTipoArticulo);
 	}
 	
-	public void agregarTipoArticuloPorUso(String nombre, String marca, String descripcion, int usosAmortizacion) {
+	public void agregarTipoArticuloPorUso(String nombre, CategoriaArticulo articulo, String marca, String descripcion, int usosAmortizacion) {
 		boolean flagAmortizacionPorFecha = false;
-		TipoArticulo newTipoArticulo = new TipoArticulo(nombre, marca, descripcion, flagAmortizacionPorFecha, usosAmortizacion);
+		TipoArticulo newTipoArticulo = new TipoArticulo(nombre, articulo, marca, descripcion, flagAmortizacionPorFecha, usosAmortizacion);
 		this.catalogoDeArticulos.add(newTipoArticulo);
 	}
 
@@ -322,9 +339,9 @@ public class CadenaGimnasio {
 			// AGREGAR ARTICULOS
 			Sede sedeBelgrano = this.getSede("Belgrano");
 			
-			this.agregarTipoArticuloPorFecha("Colchoneta", "Pepito", "Colchoneta de 2m x 0.75m", 200);
-			this.agregarTipoArticuloPorUso("Pesa", "Pepito", "Pesa marca Pepito de 20kg", 50);
-			
+			this.agregarTipoArticuloPorFecha("Colchoneta", CategoriaArticulo.COLCHONETA,"Pepito", "Colchoneta de 2m x 0.75m", 200);
+			this.agregarTipoArticuloPorUso("Pesa", CategoriaArticulo.PESA,"Pepito", "Pesa marca Pepito de 20kg", 50);
+
 			TipoArticulo tipoArticulo = this.getCatalogoDeArticulos().get(0);
 
 			LocalDate fechaFabricacion = LocalDate.of(2023,5,10);
