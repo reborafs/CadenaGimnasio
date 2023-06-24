@@ -37,10 +37,6 @@ public class BaseDeDatos {
 	}
 	}
 
-    public void eliminarClaseVirtual(Clase clase) {
-    	
-    }
-
 	public ArrayList<Clase> getClasesVirtuales() {
 		ArrayList<Clase> flatClases = new ArrayList<Clase>();
 		

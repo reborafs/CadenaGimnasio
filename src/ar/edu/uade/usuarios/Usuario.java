@@ -2,19 +2,22 @@ package ar.edu.uade.usuarios;
 
 public abstract class Usuario {
     private String nombre;
-    //private String contrasenia;
-    private int id;
+    private String contrasenia;
+    final private int id;
     
     public Usuario(String nombre) {
     	this.nombre = nombre;
     	//this.contrasenia = contrasenia;
     	this.id = NumeroIdentificador.getInstance().generarNuevoId();
     }
-    
+
     public String getNombre() {
-    	return this.nombre;
+        return this.nombre;
     }
-    
+    public String getContrasenia() {
+        return this.contrasenia;
+    }
+
     public int getID() {
     	return this.id;
     }
@@ -49,7 +52,14 @@ public abstract class Usuario {
     public boolean soySoporteTecnico() {
     	return false;
     }
-    
+
+    public void setNombre(String nuevoNombre) {
+        this.nombre = nombre;
+    }
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
+    }
+
     @Override
     public String toString() {
     	return "{" + "id: " + this.id + ", " + "nombre: " + this.nombre + ", " + "tipoUsuario: " + this.getStringTipoUsuario() + "}";

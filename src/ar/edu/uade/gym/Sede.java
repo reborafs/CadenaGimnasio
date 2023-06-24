@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import ar.edu.uade.articulos.Articulo;
 import ar.edu.uade.articulos.FormaAmortizacion;
+import ar.edu.uade.articulos.TipoArticulo;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.Profesor;
 import ar.edu.uade.usuarios.Usuario;
@@ -124,15 +125,48 @@ public class Sede {
 		Clase newClase = new Clase(profesor, ejercicio, listaAlumnos, this.getTipoNivel(), fecha,
 				horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
 		validarProfesor(newClase, profesor);
+		validarArticulosNecesarios(newClase, ejercicio);
     	validarEmplazamientoDisponible(emplazamiento, fecha, horarioInicio);
     	this.listaClases.add(newClase);
 		validarYConfirmarClase(newClase);
     }
 
+
+	private boolean validarArticulosNecesarios(Clase clase, Ejercicio ejercicio) {
+		// Inicializo 2 arrays, los tipos de articulos que necesitamos para ejercicio
+		// y los articulos que tenemos en la clase.
+		ArrayList<TipoArticulo> tiposArticulosNecesarios = ejercicio.getArticuloNecesarios();
+		ArrayList<Articulo> articulosClase = clase.getListaArticulos();
+
+		for (TipoArticulo tipoArticulo : tiposArticulosNecesarios) {
+			boolean flagFound = false;
+			int index = 0;
+			for (Articulo articulo : articulosClase) {
+				if (tipoArticulo.equals(articulo.getTipoArticulo()) ) {
+					flagFound = true;
+					break;
+				} else {
+					index++;
+				}
+			}
+			if (flagFound) {articulosClase.remove(index);}
+			else {break;}
+
+		}
+
+		if (articulosClase.size() == 0) {
+			return true;
+		} else {
+			System.out.println("No se encuentran los articulos necesarios para confirmar esta clase.");
+			return false;
+		}
+	}
+
 	public void validarYConfirmarClase(Clase clase) {
 		// TO-DO AGREGAR VALIDACIONES DE EMPLAZAMIENTO, PROFESOR Y OTROS SI ES NECESARIO.
 		if (validarRentabilidad(clase))
-			clase.confirmarClase();
+			if (validarArticulosNecesarios(clase, clase.getEjercicio()))
+				clase.confirmarClase();
 	}
 	public void finalizarClase(Clase clase) {
 		calcularDesgasteArticulos(clase);
@@ -191,6 +225,17 @@ public class Sede {
 			articulo.setDesgaste();
 	}
 
+	public void eliminarArticulo(Articulo articulo) {
+		this.stockArticulos.remove(articulo);
+	}
+
+	public void darDeBajaArticulo(Articulo articulo) {
+		for (Articulo articuloStock : this.stockArticulos)
+			if (articulo.equals(articuloStock))
+				articulo.darDeBaja();
+	}
+
+
 	/* =======================================================
 	 *                    METODOS DE RENTABILIDAD
 	 * =======================================================
@@ -242,7 +287,13 @@ public class Sede {
 		double ingresos = calcularIngresos(clase);
 		double costos = calcularCostos(clase);
 		double calculoRentabilidad = ingresos - costos;
-		return (calculoRentabilidad > 0);
+
+		if (calculoRentabilidad > 0) {
+			return true;
+		} else {
+			System.out.println("No se puede confirmar la clase debido a que NO es rentable.");
+			return false;
+		}
 	}
 
 

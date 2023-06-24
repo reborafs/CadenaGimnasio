@@ -2,14 +2,16 @@ package ar.edu.uade.articulos;
 
 public class TipoArticulo {
 
-	private final String nombre;
+    private final String nombre;
+    private final CategoriaArticulo categoria;
     private final String marca;
     private final String descripcion;
     private final FormaAmortizacion formaAmortizacion;
     private final int cantidadAmortizacion;
 
-    public TipoArticulo(String nombre, String marca, String descripcion, boolean flagAmortizacionPorFecha, int cantidad) {
+    public TipoArticulo(String nombre, CategoriaArticulo categoria, String marca, String descripcion, boolean flagAmortizacionPorFecha, int cantidad) {
         this.nombre = nombre;
+        this.categoria = categoria;
         this.marca = marca;
         this.descripcion = descripcion;
         this.cantidadAmortizacion = cantidad;
