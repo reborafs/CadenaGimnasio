@@ -7,13 +7,15 @@ import ar.edu.uade.gym.Sede;
 public class Administrativo extends Usuario {
     private ArrayList<Sede> sedesAsignadas;
     
-	public Administrativo(String nombre) {
-		super(nombre);
+	public Administrativo(String nombre, String contrasenia) {
+		super(nombre, contrasenia);
+        this.sedesAsignadas = new ArrayList<Sede>();
 	}
 
-	public Administrativo(String nombre, Sede sedeAsignada) {
-		super(nombre);
-		this.sedesAsignadas.add(sedeAsignada);
+	public Administrativo(String nombre, String contrasenia, Sede sedeAsignada) {
+		super(nombre, contrasenia);
+        this.sedesAsignadas = new ArrayList<Sede>();
+        this.sedesAsignadas.add(sedeAsignada);
 	}
 	
 	public void asignarSede(Sede sede) {

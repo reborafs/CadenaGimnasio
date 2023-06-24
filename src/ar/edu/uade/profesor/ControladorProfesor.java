@@ -1,20 +1,10 @@
 package ar.edu.uade.profesor;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import ar.edu.uade.articulos.TipoArticulo;
-import ar.edu.uade.bbdd.BaseDeDatos;
 import ar.edu.uade.gym.CadenaGimnasio;
 import ar.edu.uade.gym.Ejercicio;
-import ar.edu.uade.gym.GymException;
 import ar.edu.uade.gym.Sede;
-import ar.edu.uade.gym.TipoNivel;
-import ar.edu.uade.main.Main;
-import ar.edu.uade.usuarios.Administrativo;
-import ar.edu.uade.usuarios.Cliente;
-import ar.edu.uade.usuarios.Profesor;
-import ar.edu.uade.usuarios.SoporteTecnico;
 
 import java.util.HashMap;
 

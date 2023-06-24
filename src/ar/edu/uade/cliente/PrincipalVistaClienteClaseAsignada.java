@@ -161,11 +161,5 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         return null;
     }
 	
-    public static void main(String[] args) {
-        // Crear y mostrar la ventana
-        SwingUtilities.invokeLater(() -> {
-        	PrincipalVistaClienteClaseAsignada vistaClienteClaseAsignada = new PrincipalVistaClienteClaseAsignada();
-        	vistaClienteClaseAsignada.setVisible(true);
-        });
-    }
+
 }

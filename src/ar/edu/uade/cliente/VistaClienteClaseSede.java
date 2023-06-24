@@ -126,11 +126,11 @@ public class VistaClienteClaseSede extends JFrame {
         return false;
     }
 	
-    public static void main(String[] args) {
-        // Crear y mostrar la ventana
-        SwingUtilities.invokeLater(() -> {
-        	VistaClienteClaseSede vistaClienteClaseSede = new VistaClienteClaseSede();
-        	vistaClienteClaseSede.setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        // Crear y mostrar la ventana
+//        SwingUtilities.invokeLater(() -> {
+//        	VistaClienteClaseSede vistaClienteClaseSede = new VistaClienteClaseSede();
+//        	vistaClienteClaseSede.setVisible(true);
+//        });
+//    }
 }

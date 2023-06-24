@@ -2,8 +2,8 @@ package ar.edu.uade.usuarios;
 
 public class SoporteTecnico extends Usuario {
 	
-	public SoporteTecnico(String nombre) {
-		super(nombre);
+	public SoporteTecnico(String nombre, String contrasenia) {
+		super(nombre, contrasenia);
 	}
 	
     public void crearSede() {

@@ -63,7 +63,7 @@ public class VistaProfesorSueldo extends JFrame {
         panelMenu.add(labelMembresia1, gbc);
 
 	}
-	
+/*
     public static void main(String[] args) {
         // Crear y mostrar la ventana
         SwingUtilities.invokeLater(() -> {
@@ -71,4 +71,5 @@ public class VistaProfesorSueldo extends JFrame {
         	vistaProfesorSueldo.setVisible(true);
         });
     }
+*/
 }

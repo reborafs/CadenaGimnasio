@@ -103,8 +103,8 @@ public class ClienteMembresia extends JFrame {
         panelMenu.add(labelMembresia3Desc, gbc);
     }
 
-    public static void main(String[] args) {
-        ClienteMembresia clienteMembresia = new ClienteMembresia();
-        clienteMembresia.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        ClienteMembresia clienteMembresia = new ClienteMembresia();
+//        clienteMembresia.setVisible(true);
+//    }
 }
