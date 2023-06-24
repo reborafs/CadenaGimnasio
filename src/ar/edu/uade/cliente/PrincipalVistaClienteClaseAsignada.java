@@ -1,6 +1,7 @@
 package ar.edu.uade.cliente;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -61,6 +63,8 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
 
 		this.add(panelMenu, BorderLayout.NORTH);
 		
+		JPanel panelContenido = new JPanel(new BorderLayout());
+		
 		// Tabla de clases asignadas
 		JTable tabla = new JTable();
 		DefaultTableModel modelo = new DefaultTableModel();
@@ -76,10 +80,10 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
 		String[] fila = {"7:00 - 8:00", "8:00 - 9:00", "9:00 - 10:00", "11:00 - 12:00", "13:00 - 14:00", "15:00 - 16:00", "18:00 - 19:00", "20:00 - 21:00"};
 		int cantColumnas = columnas.length;
 		
-		String[] horario1 = {"8:00 - 9:00"};
-		String[] horario2 = {"11:00 - 12:00"};
-		String[] horario3 = {"15:00 - 16:00"};
-		String[] horario4 = {"7:00 - 8:00"};
+		String[] horario1 = {"8:00 - 9:00", "Yoga"};
+		String[] horario2 = {"11:00 - 12:00", "Crossfit"};
+		String[] horario3 = {"15:00 - 16:00", "Crossfit"};
+		String[] horario4 = {"7:00 - 8:00", "Yoga"};
 		String[] horario5 = {};
 		
 		HashMap<String, String[]> calendario = new HashMap<String, String[]>();
@@ -94,9 +98,9 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
             horarioDisponible[0] = horario;
             for (int j = 1; j <= cantColumnas-1; j++) {
             	String dia = columnas[j];
-                String[] horarioClase = calendario.get(dia);
-                if (horarioClase != null && contieneEjercicio(horarioClase, horario)) {
-                	horarioDisponible[j] = "Ocupado";
+                String[] Clase = calendario.get(dia);
+                if (Clase != null && contieneEjercicio(Clase, horario)) {
+                	horarioDisponible[j] = nombreEjercicio(Clase, horario);
                 } else {
                 	horarioDisponible[j] = "Libre";
                 }
@@ -112,7 +116,31 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
 
         // Agregar la tabla a un JScrollPane y añadirlo a la ventana
         JScrollPane scrollPane = new JScrollPane(tabla);
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
+        panelContenido.add(scrollPane, BorderLayout.CENTER);
+	
+        //Inscripcion
+        JPanel panelInscripcion = new JPanel();
+        JLabel labelInscribirClase = new JLabel("Clase a la que se desea inscribir:");
+        panelInscripcion.add(labelInscribirClase);
+        panelContenido.add(panelInscripcion, BorderLayout.SOUTH);
+        
+        HashMap<String, String[]> clasesExistentes = new HashMap<String, String[]>();
+        
+        String[] horario6 = {"8:00 - 9:00", "Yoga"};
+		String[] horario7 = {"11:00 - 12:00", "Crossfit"};
+		String[] horario8 = {"15:00 - 16:00", "Crossfit"};
+		String[] horario9 = {"7:00 - 8:00", "Yoga"};
+		String[] horario10 = {};
+        
+        clasesExistentes.put("Yoga", horario6);
+        clasesExistentes.put("Crossfit", horario7);
+        clasesExistentes.put("Boxing", horario8);
+        clasesExistentes.put("Bailoterapia", horario9);
+        clasesExistentes.put("Karate", horario10);
+        
+
+        panel.add(panelContenido, BorderLayout.CENTER);
+        getContentPane().add(panel);
 	}
 	
     private boolean contieneEjercicio(String[] ejercicios, String ejercicio) {
@@ -122,6 +150,15 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
             }
         }
         return false;
+    }
+    
+    private String nombreEjercicio(String[] ejercicios, String ejercicio) {
+        for (String e : ejercicios) {
+            if (e.equals(ejercicio)) {
+                return ejercicios[1];
+            }
+        }
+        return null;
     }
 	
     public static void main(String[] args) {
