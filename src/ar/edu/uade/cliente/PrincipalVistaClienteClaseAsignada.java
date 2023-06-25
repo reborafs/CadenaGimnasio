@@ -7,15 +7,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
+
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+
 
 public class PrincipalVistaClienteClaseAsignada extends JFrame {
 	public PrincipalVistaClienteClaseAsignada() {
@@ -126,10 +130,10 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         
         HashMap<String, String[]> clasesExistentes = new HashMap<String, String[]>();
         
-        String[] horario6 = {"8:00 - 9:00", "Yoga"};
-		String[] horario7 = {"11:00 - 12:00", "Crossfit"};
-		String[] horario8 = {"15:00 - 16:00", "Crossfit"};
-		String[] horario9 = {"7:00 - 8:00", "Yoga"};
+        String[] horario6 = {"Lunes","8:00 - 9:00","7:00 - 8:00","7:00 - 8:00","7:00 - 8:00"};
+		String[] horario7 = {"11:00 - 12:00"};
+		String[] horario8 = {"15:00 - 16:00"};
+		String[] horario9 = {"7:00 - 8:00"};
 		String[] horario10 = {};
         
         clasesExistentes.put("Yoga", horario6);
@@ -138,6 +142,26 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         clasesExistentes.put("Bailoterapia", horario9);
         clasesExistentes.put("Karate", horario10);
         
+        int i = 1;
+        for (String clase : clasesExistentes.keySet()) {
+            gbc.gridx = 0;
+            gbc.gridy = i;
+            JLabel labelClase = new JLabel(clase + ":");
+            panelInscripcion.add(labelClase, gbc);
+            for (int j = 0; j <= clasesExistentes.get(clase).length - 1; j++) {
+                gbc.gridx = j + 1;
+                gbc.gridy = i;
+                ButtonGroup grupo = new ButtonGroup();
+                
+                JRadioButton clasesExistentesRadio = new JRadioButton(clasesExistentes.get(clase)[j]);
+                
+                grupo.add(clasesExistentesRadio);
+                panelInscripcion.add(clasesExistentesRadio, gbc);
+                //String horarioClase = clasesExistentes.get(clase)[j];
+                //JLabel labelHorarioClase = new JLabel(horarioClase);
+            }
+            i++;
+        }
 
         panel.add(panelContenido, BorderLayout.CENTER);
         getContentPane().add(panel);
@@ -161,5 +185,13 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         return null;
     }
 	
+    public static void main(String[] args) {
+
+        // Crear y mostrar la ventana
+        SwingUtilities.invokeLater(() -> {
+        	PrincipalVistaClienteClaseAsignada vistaLogin = new PrincipalVistaClienteClaseAsignada();;
+            vistaLogin.setVisible(true);
+        });
+    }
 
 }
