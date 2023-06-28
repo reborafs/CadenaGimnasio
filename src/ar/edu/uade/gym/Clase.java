@@ -4,7 +4,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import ar.edu.uade.articulos.Articulo;
+import ar.edu.uade.gym.articulos.Articulo;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.Profesor;
 
@@ -16,7 +16,7 @@ public class Clase {
     private Profesor profesorAsignado;
     private final LocalDate fecha;
 	private final LocalTime horarioInicio;
-	private final LocalTime horarioFin;
+	//private final LocalTime horarioFin;
     private final Ejercicio ejercicio;
     private EstadoClase estado;
     private ArrayList<Cliente> listaAlumnos;
@@ -25,7 +25,7 @@ public class Clase {
     private boolean esVirtual = false;
 
     public Clase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, TipoNivel tipoNivel,
-				 LocalDate fecha, LocalTime horarioInicio, LocalTime horarioFin, Emplazamiento emplazamiento,
+				 LocalDate fecha, LocalTime horarioInicio, Emplazamiento emplazamiento,
 				 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
     	
     	asignarProfesor(profesor);
@@ -35,7 +35,7 @@ public class Clase {
         this.esVirtual = esVirtual;
 		this.fecha = fecha;
 		this.horarioInicio = horarioInicio;
-		this.horarioFin = horarioFin;
+		//this.horarioFin = horarioFin;
 
         if (listaAlumnos == null) {this.listaAlumnos = new ArrayList<Cliente>();}
         else { agregarAlumnos(listaAlumnos, tipoNivel); }
@@ -157,21 +157,20 @@ public class Clase {
 	public LocalTime getHorarioInicio() {
 		return this.horarioInicio;
 	}
-	public LocalTime getHorarioFin() {
-		return this.horarioFin;
-	}
+
 
 	public LocalDate getFecha() {
 		return this.fecha;
 	}
 
 	public long getDuracionHoras() {
-		return this.horarioInicio.until(horarioFin, ChronoUnit.HOURS);
+		return 1;
+		//return this.horarioInicio.until(horarioFin, ChronoUnit.HOURS);
 	}
 
-	public long getDuracionMinutos() {
-		return this.horarioInicio.until(horarioFin, ChronoUnit.MINUTES);
-	}
+	//public long getDuracionMinutos() {
+	//	return this.horarioInicio.until(horarioFin, ChronoUnit.MINUTES);
+	//}
 
 	public ArrayList<Cliente> getListaAlumnos() {
 		return this.listaAlumnos;

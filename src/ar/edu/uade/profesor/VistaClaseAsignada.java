@@ -5,7 +5,13 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 
 public class VistaClaseAsignada extends JFrame {
@@ -58,35 +64,52 @@ public class VistaClaseAsignada extends JFrame {
 		
 		
 		// Definicion de columnas
-		//ControladorProfesor test = new ControladorProfesor();
-		String[] columnas = {"Horario", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"};
-		modelo.setColumnIdentifiers(columnas);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		String[] header = new String[8];
+		ArrayList<LocalDate> semana = new ArrayList<LocalDate>();
+		header[0] = "Horario";
+		for (int day=1; day<=7; day++) {
+			LocalDate fecha = LocalDate.now().plusDays(day-1);
+			semana.add(fecha);
+			header[day] = getDiaSemana(fecha.getDayOfWeek().getValue()) + " " + fecha.format(formatter);
+		}
+
+		modelo.setColumnIdentifiers(header);
 
 		// Definición de filas
-		String[] fila = {"7:00 - 8:00", "8:00 - 9:00", "9:00 - 10:00", "11:00 - 12:00", "13:00 - 14:00", "15:00 - 16:00", "18:00 - 19:00", "20:00 - 21:00"};
-		int cantColumnas = columnas.length;
-		
-		String[] horario1 = {"7:00 - 8:00", "8:00 - 9:00", "9:00 - 10:00", "11:00 - 12:00", "13:00 - 14:00"};
-		String[] horario2 = {"18:00 - 19:00", "20:00 - 21:00"};
-		String[] horario3 = {"18:00 - 19:00"};
-		String[] horario4 = {"9:00 - 10:00", "11:00 - 12:00"};
-		String[] horario5 = {};
-		
-		HashMap<String, String[]> calendario = new HashMap<String, String[]>();
-		calendario.put("Lunes", horario1);
-		calendario.put("Martes", horario2);
-		calendario.put("Miercoles", horario3);
-		calendario.put("Viernes", horario4);
-		calendario.put("Sabado", horario5);
-		
-        for (String horario : fila) {
+		LocalTime[] horas = {
+				LocalTime.of(7,0),
+				LocalTime.of(8,0),
+				LocalTime.of(9,0),
+				LocalTime.of(10,0),
+				LocalTime.of(11,0),
+				LocalTime.of(12,0),
+				LocalTime.of(13,0),
+				LocalTime.of(14,0),
+				LocalTime.of(15,0),
+				LocalTime.of(16,0),
+				LocalTime.of(17,0),
+				LocalTime.of(18,0),
+				LocalTime.of(19,0),
+				LocalTime.of(20,0),
+				LocalTime.of(21,0)};
+
+		int cantColumnas = header.length;
+		int cantFilas = horas.length;
+
+		HashMap<LocalDate, ArrayList<LocalTime>>
+				horariosOcupados = controller.getClasesAsignadas("belgrano");
+
+		DateTimeFormatter horasFormatter = DateTimeFormatter.ofPattern("HH");
+
+		for (int i = 1; i <= cantFilas-1; i++) {
             String[] horarioDisponible = new String[cantColumnas+1];
-            horarioDisponible[0] = horario;
+            horarioDisponible[0] = horas[i].format(horasFormatter) + "-" + horas[i].plusHours(1).format(horasFormatter);
             for (int j = 1; j <= cantColumnas-1; j++) {
-            	String dia = columnas[j];
-                String[] horarioClase = calendario.get(dia);
-                if (horarioClase != null && contieneEjercicio(horarioClase, horario)) {
-                	horarioDisponible[j] = "Clase";
+            	LocalDate dia = semana.get(j - 1);
+                LocalTime horarioClase = horas[i];
+                if (horarioClase != null && contieneEjercicio(horariosOcupados, dia, horarioClase)) {
+                	horarioDisponible[j] = "Ocupado";
                 } else {
                 	horarioDisponible[j] = "Libre";
                 }
@@ -123,13 +146,26 @@ public class VistaClaseAsignada extends JFrame {
 
 	}
 	
-    private boolean contieneEjercicio(String[] ejercicios, String ejercicio) {
-        for (String e : ejercicios) {
-            if (e.equals(ejercicio)) {
-                return true;
+    private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados,LocalDate dia, LocalTime hora) {
+		boolean flagOcupado = false;
+		for (LocalTime horarioOcupado : horariosOcupados.get(dia)) {
+            if (horarioOcupado.equals(hora)) {
+                flagOcupado = true;
             }
         }
-        return false;
+        return flagOcupado;
     }
 
+	private String getDiaSemana(int dia) {
+		return switch (dia) {
+			case 1 -> "Lun";
+			case 2 -> "Mar";
+			case 3 -> "Mie";
+			case 4 -> "Jue";
+			case 5 -> "Vie";
+			case 6 -> "Sab";
+			case 7 -> "Dom";
+			default -> "xxx";
+		};
+	}
 }

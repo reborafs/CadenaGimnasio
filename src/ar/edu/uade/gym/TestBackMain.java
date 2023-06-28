@@ -1,12 +1,12 @@
-package ar.edu.uade.main;
+package ar.edu.uade.gym;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import ar.edu.uade.articulos.Articulo;
-import ar.edu.uade.articulos.CategoriaArticulo;
-import ar.edu.uade.articulos.TipoArticulo;
+import ar.edu.uade.gym.articulos.Articulo;
+import ar.edu.uade.gym.articulos.CategoriaArticulo;
+import ar.edu.uade.gym.articulos.TipoArticulo;
 import ar.edu.uade.gym.CadenaGimnasio;
 import ar.edu.uade.gym.Clase;
 import ar.edu.uade.gym.Ejercicio;
@@ -187,12 +187,11 @@ public class TestBackMain {
 			Ejercicio ejercicio = gym.getEjercicio("Crossfit");
 			LocalDate fecha = LocalDate.of(2023,7,1);
 			LocalTime horarioInicio = LocalTime.of(19,0,0);
-			LocalTime horarioFin = LocalTime.of(20,0,0);
 			ArrayList<Emplazamiento> listaEmplazamientos = gym.getListaEmplazamientos(sedeBelgrano, TipoEmplazamiento.SALON);
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
 			ArrayList<Articulo> listaArticulos = null;
 			boolean esVirtual = true;
-			gym.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
+			gym.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, emplazamiento, listaArticulos, esVirtual);
 		} catch (GymException e) {
 			e.printStackTrace();
 		}
