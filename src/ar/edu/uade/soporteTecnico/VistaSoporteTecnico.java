@@ -1,5 +1,8 @@
 package ar.edu.uade.soporteTecnico;
 
+import ar.edu.uade.usuarios.Profesor;
+import ar.edu.uade.usuarios.SoporteTecnico;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,7 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class VistaSoporteTecnico  extends JFrame{
-	
+
+	private SoporteTecnico usuario;
+
 	public VistaSoporteTecnico() {
 		super("SoporteTecnico");
 		this.setLayout(new BorderLayout());

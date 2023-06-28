@@ -1,4 +1,4 @@
-package ar.edu.uade.vistas;
+package ar.edu.uade.login;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -8,28 +8,25 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
-//import ar.edu.uade.usuarios.Administrativo;
-//import ar.edu.uade.usuarios.Cliente;
-//import ar.edu.uade.usuarios.Profesor;
-//import ar.edu.uade.usuarios.SoporteTecnico;
-//import ar.edu.uade.usuarios.Usuario;
-import ar.edu.uade.gym.CadenaGimnasio;
-import ar.edu.uade.usuarios.Usuario;
-
 public class Login extends JFrame{
 	
     JTextField campoUsuario, campoContrasenia;
+    private ControladorLogin controladorLogin;
+
 
     public Login() {
         super("Login");
+        this.controladorLogin = ControladorLogin.getInstance();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(600, 300);
+
+
         this.setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
@@ -84,8 +81,7 @@ public class Login extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                ControladorLogin controladorLogin = new ControladorLogin();
-                controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
+                controladorLogin.loginUsuario(campoUsuario.getText(), campoContrasenia.getText());
             }
         }
 

@@ -1,8 +1,7 @@
 package ar.edu.uade.main;
 
-import ar.edu.uade.cliente.PrincipalVistaClienteClaseAsignada;
 import ar.edu.uade.gym.CadenaGimnasio;
-import ar.edu.uade.vistas.Login;
+import ar.edu.uade.login.Login;
 
 import javax.swing.*;
 

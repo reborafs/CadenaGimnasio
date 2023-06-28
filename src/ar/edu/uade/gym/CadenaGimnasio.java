@@ -23,7 +23,6 @@ public class CadenaGimnasio {
 			ArrayList<Administrativo> usuariosAdministrativo, ArrayList<Cliente> usuariosClientes,
 			ArrayList<Profesor> usuariosProfesores, ArrayList<TipoArticulo> catalogoDeArticulos, ArrayList<Sede> sedes,
 			ArrayList<Ejercicio> ejercicios, BaseDeDatos baseDeClasesVirtuales) {
-		super();
 		this.nombre = nombre;
 		this.usuariosSoporteTecnico = usuariosSoporteTecnico;
 		this.usuariosAdministrativo = usuariosAdministrativo;
@@ -70,7 +69,6 @@ public class CadenaGimnasio {
 				+ ", sedes=" + sedes + ", ejercicios=" + ejercicios + ", baseDeClasesVirtuales=" + baseDeClasesVirtuales
 				+ "]";
 	}
-
     
     
 	public static CadenaGimnasio getInstance() {
@@ -139,7 +137,7 @@ public class CadenaGimnasio {
 			if (nombre.equals(user.getNombre()) && contrasenia.equals(user.getContrasenia()))
 				return user;
 
-		throw new GymException("User Not Found.");
+		throw new GymException("Los datos ingresados no son correctos.");
 	}
 
 	public Administrativo getAdministrativo(int id) throws GymException{
@@ -417,5 +415,8 @@ public class CadenaGimnasio {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public double getSueldo(Profesor profesor) {
+		return profesor.getSueldo();
+	}
 }
