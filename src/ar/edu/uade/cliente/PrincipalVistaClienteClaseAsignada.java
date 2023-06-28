@@ -1,25 +1,28 @@
 package ar.edu.uade.cliente;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.List;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import javax.swing.JComboBox;
+
+import java.util.ArrayList;
 
 public class PrincipalVistaClienteClaseAsignada extends JFrame {
 	public PrincipalVistaClienteClaseAsignada() {
@@ -121,19 +124,17 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         // Agregar la tabla a un JScrollPane y añadirlo a la ventana
         JScrollPane scrollPane = new JScrollPane(tabla);
         panelContenido.add(scrollPane, BorderLayout.CENTER);
-	
-        //Inscripcion
+
+        // Inscripcion
         JPanel panelInscripcion = new JPanel();
-        JLabel labelInscribirClase = new JLabel("Clase a la que se desea inscribir:");
-        panelInscripcion.add(labelInscribirClase);
         panelContenido.add(panelInscripcion, BorderLayout.SOUTH);
         
         HashMap<String, String[]> clasesExistentes = new HashMap<String, String[]>();
         
-        String[] horario6 = {"Lunes","8:00 - 9:00","7:00 - 8:00","7:00 - 8:00","7:00 - 8:00"};
-		String[] horario7 = {"11:00 - 12:00"};
-		String[] horario8 = {"15:00 - 16:00"};
-		String[] horario9 = {"7:00 - 8:00"};
+        String[] horario6 = {"15/05/2023 - 8:00 - 9:00","15/05/2023 - 7:00 - 8:00","22/05/2023 - 7:00 - 8:00","02/05/2023 - 7:00 - 8:00"};
+		String[] horario7 = {"15/05/2023 - 11:00 - 12:00"};
+		String[] horario8 = {"15/05/2023 - 15:00 - 16:00"};
+		String[] horario9 = {"15/05/2023 - 7:00 - 8:00"};
 		String[] horario10 = {};
         
         clasesExistentes.put("Yoga", horario6);
@@ -142,30 +143,85 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         clasesExistentes.put("Bailoterapia", horario9);
         clasesExistentes.put("Karate", horario10);
         
-        int i = 1;
+        panelInscripcion.setLayout(new GridBagLayout());
+        GridBagConstraints gbcInscripcion = new GridBagConstraints();
+        gbcInscripcion.insets = new Insets(5, 5, 5, 5);
+        gbcInscripcion.anchor = GridBagConstraints.WEST;
+
+        List<JComboBox<String>> comboBoxesHorarios = new ArrayList<>();
+        int i = 0;
         for (String clase : clasesExistentes.keySet()) {
-            gbc.gridx = 0;
-            gbc.gridy = i;
+            gbcInscripcion.gridx = 0;
+            gbcInscripcion.gridy = i;
             JLabel labelClase = new JLabel(clase + ":");
-            panelInscripcion.add(labelClase, gbc);
-            for (int j = 0; j <= clasesExistentes.get(clase).length - 1; j++) {
-                gbc.gridx = j + 1;
-                gbc.gridy = i;
-                ButtonGroup grupo = new ButtonGroup();
-                
-                JRadioButton clasesExistentesRadio = new JRadioButton(clasesExistentes.get(clase)[j]);
-                
-                grupo.add(clasesExistentesRadio);
-                panelInscripcion.add(clasesExistentesRadio, gbc);
-                //String horarioClase = clasesExistentes.get(clase)[j];
-                //JLabel labelHorarioClase = new JLabel(horarioClase);
+            panelInscripcion.add(labelClase, gbcInscripcion);
+
+            gbcInscripcion.gridx = 1;
+            gbcInscripcion.gridy = i;
+            JComboBox<String> comboBoxHorarios = new JComboBox<>();
+            comboBoxHorarios.addItem("---"); // Opción por defecto
+            String[] horarios = clasesExistentes.get(clase);
+            for (String horario : horarios) {
+                comboBoxHorarios.addItem(horario);
             }
+            panelInscripcion.add(comboBoxHorarios, gbcInscripcion);
+            comboBoxesHorarios.add(comboBoxHorarios);
             i++;
         }
 
-        panel.add(panelContenido, BorderLayout.CENTER);
-        getContentPane().add(panel);
-	}
+        JButton btnInscribirse = new JButton("Inscribirse");
+        gbcInscripcion.gridx = 1;
+        gbcInscripcion.gridy = i;
+        gbcInscripcion.gridwidth = 2;
+        panelInscripcion.add(btnInscribirse, gbcInscripcion);
+
+        this.add(panelContenido, BorderLayout.CENTER);
+        
+        //Boton Incripcion
+        btnInscribirse.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < comboBoxesHorarios.size(); i++) {
+                    String clase = clasesExistentes.keySet().toArray(new String[0])[i];
+                    JComboBox<String> comboBoxHorarios = comboBoxesHorarios.get(i);
+                    String horarioSeleccionado = (String) comboBoxHorarios.getSelectedItem();
+                    System.out.println("Clase: " + clase + ", Horario: " + horarioSeleccionado);
+                }
+            }
+        });
+		
+        //Botones Menu
+        class HandlerBtnEjerciciosSedes implements ActionListener{
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //ControladorLogin controladorLogin = new ControladorLogin();
+                //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
+            }
+        }
+
+		/*INSTANCIACION DEL MANEJADOR*/
+		HandlerBtnEjerciciosSedes handlerBtnEjerciciosSedes=new HandlerBtnEjerciciosSedes();
+		
+		/*ASIGNACION DEL MANEJADOR AL BOTON*/
+		btnEjerciciosSedes.addActionListener(handlerBtnEjerciciosSedes);
+		
+		//Boton Membresia
+        class HandlerBtnMembresia implements ActionListener{
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //ControladorLogin controladorLogin = new ControladorLogin();
+                //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
+            }
+        }
+
+		/*INSTANCIACION DEL MANEJADOR*/
+		HandlerBtnMembresia handlerBtnMembresia=new HandlerBtnMembresia();
+		
+		/*ASIGNACION DEL MANEJADOR AL BOTON*/
+		btnMembresia.addActionListener(handlerBtnMembresia);
+    }
 	
     private boolean contieneEjercicio(String[] ejercicios, String ejercicio) {
         for (String e : ejercicios) {
@@ -184,6 +240,8 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         }
         return null;
     }
+    
+    
 	
     public static void main(String[] args) {
 
