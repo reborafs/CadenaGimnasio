@@ -17,18 +17,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-
-import javax.swing.JComboBox;
 
 import java.util.ArrayList;
 
-public class PrincipalVistaClienteClaseAsignada extends JFrame {
-	public PrincipalVistaClienteClaseAsignada() {
+public class VistaPrincipalClaseAsignada extends JFrame {
+
+    private ControladorCliente controller;
+
+	public VistaPrincipalClaseAsignada() {
 		super("Cliente: Clases Asignadas");
+        this.controller = ControladorCliente.getInstance();
+
         setSize(600, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
         JPanel panelMenu = new JPanel();
 		panelMenu.setLayout(new GridBagLayout());
@@ -39,8 +41,8 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
-		JButton btnClasesSedes = new JButton("Clases Asignadas");
-		panelMenu.add(btnClasesSedes, gbc);
+		JButton btnClaseAsignada = new JButton("Clases Asignadas");
+		panelMenu.add(btnClaseAsignada, gbc);
 		
 		/* Ejercicios Disponibles por Sedes*/
 		gbc.gridx = 1;
@@ -176,7 +178,7 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         panelInscripcion.add(btnInscribirse, gbcInscripcion);
 
         this.add(panelContenido, BorderLayout.CENTER);
-        
+
         //Boton Incripcion
         btnInscribirse.addActionListener(new ActionListener() {
             @Override
@@ -189,36 +191,34 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
                 }
             }
         });
-		
+
         //Botones Menu
         class HandlerBtnEjerciciosSedes implements ActionListener{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //ControladorLogin controladorLogin = new ControladorLogin();
+                controller.abrirVistaEjercicioPorSede();
                 //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
             }
         }
 
 		/*INSTANCIACION DEL MANEJADOR*/
 		HandlerBtnEjerciciosSedes handlerBtnEjerciciosSedes=new HandlerBtnEjerciciosSedes();
-		
+
 		/*ASIGNACION DEL MANEJADOR AL BOTON*/
 		btnEjerciciosSedes.addActionListener(handlerBtnEjerciciosSedes);
-		
+
 		//Boton Membresia
         class HandlerBtnMembresia implements ActionListener{
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                //ControladorLogin controladorLogin = new ControladorLogin();
-                //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
+                controller.abrirVistaMembresia();
             }
         }
 
 		/*INSTANCIACION DEL MANEJADOR*/
 		HandlerBtnMembresia handlerBtnMembresia=new HandlerBtnMembresia();
-		
+
 		/*ASIGNACION DEL MANEJADOR AL BOTON*/
 		btnMembresia.addActionListener(handlerBtnMembresia);
     }
@@ -240,16 +240,6 @@ public class PrincipalVistaClienteClaseAsignada extends JFrame {
         }
         return null;
     }
-    
-    
-	
-    public static void main(String[] args) {
 
-        // Crear y mostrar la ventana
-        SwingUtilities.invokeLater(() -> {
-        	PrincipalVistaClienteClaseAsignada vistaLogin = new PrincipalVistaClienteClaseAsignada();;
-            vistaLogin.setVisible(true);
-        });
-    }
 
 }

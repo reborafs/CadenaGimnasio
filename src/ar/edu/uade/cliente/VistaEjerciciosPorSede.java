@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -13,14 +15,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-public class VistaClienteClaseSede extends JFrame {
-	public VistaClienteClaseSede() {
+public class VistaEjerciciosPorSede extends JFrame {
+
+	private ControladorCliente controller;
+
+	public VistaEjerciciosPorSede() {
 		super("Cliente: Ejercicios por sede");
+		this.controller = ControladorCliente.getInstance();
+
         setSize(600, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
         JPanel panelMenu = new JPanel();
 		panelMenu.setLayout(new GridBagLayout());
@@ -31,8 +37,8 @@ public class VistaClienteClaseSede extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
-		JButton btnClasesSedes = new JButton("Clases Asignadas");
-		panelMenu.add(btnClasesSedes, gbc);
+		JButton btnClaseAsignada = new JButton("Clases Asignadas");
+		panelMenu.add(btnClaseAsignada, gbc);
 		
 		/* Ejercicios Disponibles por Sedes*/
 		gbc.gridx = 1;
@@ -115,6 +121,37 @@ public class VistaClienteClaseSede extends JFrame {
         // Agregar la tabla a un JScrollPane y añadirlo a la ventana
         JScrollPane scrollPane = new JScrollPane(tabla);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+
+		class HandlerBtnClaseAsignada implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.abrirVistaClaseAsignada();
+			}
+		}
+
+		/*INSTANCIACION DEL MANEJADOR*/
+		HandlerBtnClaseAsignada handlerBtnClaseAsignada =new HandlerBtnClaseAsignada();
+
+		/*ASIGNACION DEL MANEJADOR AL BOTON*/
+		btnClaseAsignada.addActionListener(handlerBtnClaseAsignada);
+
+		//Boton Membresia
+		class HandlerBtnMembresia implements ActionListener{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.abrirVistaMembresia();
+			}
+		}
+
+		/*INSTANCIACION DEL MANEJADOR*/
+		HandlerBtnMembresia handlerBtnMembresia=new HandlerBtnMembresia();
+
+		/*ASIGNACION DEL MANEJADOR AL BOTON*/
+		btnMembresia.addActionListener(handlerBtnMembresia);
+
+
 	}
 	
     private boolean contieneEjercicio(String[] ejercicios, String ejercicio) {
@@ -125,12 +162,5 @@ public class VistaClienteClaseSede extends JFrame {
         }
         return false;
     }
-	
-    public static void main(String[] args) {
-        // Crear y mostrar la ventana
-        SwingUtilities.invokeLater(() -> {
-        	VistaClienteClaseSede vistaClienteClaseSede = new VistaClienteClaseSede();
-        	vistaClienteClaseSede.setVisible(true);
-        });
-    }
+
 }

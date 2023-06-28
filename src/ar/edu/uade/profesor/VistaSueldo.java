@@ -5,20 +5,25 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
-public class VistaProfesorSueldo extends JFrame {
+public class VistaSueldo extends JFrame {
+
+	private ControladorProfesor controller;
 	
-	public VistaProfesorSueldo() {
+	public VistaSueldo() {
 		super("Profesor: Sueldo");
+		this.controller = ControladorProfesor.getInstance();
+
         setSize(600, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         JPanel panelMenu = new JPanel();
 		panelMenu.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -28,15 +33,15 @@ public class VistaProfesorSueldo extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		JButton btnEjerciciosSedes = new JButton("Clases Asignadas");
-		panelMenu.add(btnEjerciciosSedes, gbc);
+		JButton btnClaseAsignada = new JButton("Clases Asignadas");
+		panelMenu.add(btnClaseAsignada, gbc);
 		
 		/* Sueldo */
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		JButton btnMembresia = new JButton("Sueldo");
-		panelMenu.add(btnMembresia, gbc);
+		JButton btnSueldo = new JButton("Sueldo");
+		panelMenu.add(btnSueldo, gbc);
 		
 		//Titulo
         JPanel panel = new JPanel();
@@ -52,9 +57,7 @@ public class VistaProfesorSueldo extends JFrame {
 
 		this.add(panelMenu, BorderLayout.NORTH);
 		
-		int valor = 200000;
-		
-		JLabel labelMembresia1 = new JLabel("Su sueldo es de: " + valor);
+		JLabel labelMembresia1 = new JLabel("Su sueldo es de: $" + controller.getSueldo());
         labelMembresia1.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -62,6 +65,19 @@ public class VistaProfesorSueldo extends JFrame {
         gbc.anchor = GridBagConstraints.NORTHWEST;
         panelMenu.add(labelMembresia1, gbc);
 
+		class HandlerBtnClaseAsignada implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.abrirVistaClaseAsignada();
+			}
+		}
+
+		/*INSTANCIACION DEL MANEJADOR*/
+		HandlerBtnClaseAsignada handlerBtnClaseAsignada=new HandlerBtnClaseAsignada();
+
+		/*ASIGNACION DEL MANEJADOR AL BOTON*/
+		btnClaseAsignada.addActionListener(handlerBtnClaseAsignada);
 	}
 /*
     public static void main(String[] args) {

@@ -1,19 +1,23 @@
 package ar.edu.uade.profesor;
-import ar.edu.uade.profesor.ControladorProfesor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 
-public class VistaProfesorClaseAsignada extends JFrame {
-	
-	public VistaProfesorClaseAsignada() {
+public class VistaClaseAsignada extends JFrame {
+
+	private ControladorProfesor controller;
+
+	public VistaClaseAsignada() {
 		super("Profesor: Clases Asignadas");
+		this.controller = ControladorProfesor.getInstance();
+
         setSize(600, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
         JPanel panelMenu = new JPanel();
 		panelMenu.setLayout(new GridBagLayout());
@@ -24,15 +28,15 @@ public class VistaProfesorClaseAsignada extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		JButton btnEjerciciosSedes = new JButton("Clases Asignadas");
-		panelMenu.add(btnEjerciciosSedes, gbc);
+		JButton btnClaseAsignada = new JButton("Clases Asignadas");
+		panelMenu.add(btnClaseAsignada, gbc);
 		
 		/* Sueldo */
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		JButton btnMembresia = new JButton("Sueldo");
-		panelMenu.add(btnMembresia, gbc);
+		JButton btnSueldo = new JButton("Sueldo");
+		panelMenu.add(btnSueldo, gbc);
 		
 		//Titulo
         JPanel panel = new JPanel();
@@ -99,6 +103,24 @@ public class VistaProfesorClaseAsignada extends JFrame {
         // Agregar la tabla a un JScrollPane y añadirlo a la ventana
         JScrollPane scrollPane = new JScrollPane(tabla);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+
+
+
+		class HandlerBtnSueldo implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.abrirVistaSueldo();
+			}
+		}
+
+		/*INSTANCIACION DEL MANEJADOR*/
+		HandlerBtnSueldo handlerBtnSueldo=new HandlerBtnSueldo();
+
+		/*ASIGNACION DEL MANEJADOR AL BOTON*/
+		btnSueldo.addActionListener(handlerBtnSueldo);
+
 	}
 	
     private boolean contieneEjercicio(String[] ejercicios, String ejercicio) {
