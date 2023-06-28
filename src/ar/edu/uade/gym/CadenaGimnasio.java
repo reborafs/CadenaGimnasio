@@ -1,22 +1,21 @@
 package ar.edu.uade.gym;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
 
-import ar.edu.uade.articulos.CategoriaArticulo;
+import ar.edu.uade.gym.articulos.CategoriaArticulo;
+import ar.edu.uade.gym.bbdd.BaseDeDatos;
 import ar.edu.uade.usuarios.Usuario;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.SoporteTecnico;
 import ar.edu.uade.usuarios.Profesor;
 import ar.edu.uade.usuarios.Administrativo;
-import ar.edu.uade.articulos.Articulo;
-import ar.edu.uade.articulos.TipoArticulo;
-import ar.edu.uade.bbdd.BaseDeDatos;
+import ar.edu.uade.gym.articulos.Articulo;
+import ar.edu.uade.gym.articulos.TipoArticulo;
 
 public class CadenaGimnasio {
     public CadenaGimnasio(String nombre, ArrayList<SoporteTecnico> usuariosSoporteTecnico,
@@ -198,7 +197,14 @@ public class CadenaGimnasio {
     public ArrayList<Sede> getListaSedes() {
     	return this.sedes;
     }
-    
+
+	public ArrayList<String> getListaNombresSedes() {
+		ArrayList<String> stringSedes = new ArrayList<String>();
+		for (Sede sede : this.sedes)
+			stringSedes.add(sede.getUbicacion());
+		return stringSedes;
+	}
+
     public Sede getSede(String ubicacion) {
     	for (Sede sede: sedes) 
     		if (sede.getUbicacion().equals(ubicacion.toLowerCase())) 
@@ -262,19 +268,36 @@ public class CadenaGimnasio {
      */
     
     public void agendarClase(Sede sede, Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos,
-							 LocalDate fecha, LocalTime horarioInicio, LocalTime horarioFin, Emplazamiento emplazamiento,
+							 LocalDate fecha, LocalTime horarioInicio, Emplazamiento emplazamiento,
 							 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
-		sede.agregarClase(profesor, ejercicio, listaAlumnos, fecha, horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
+		sede.agregarClase(profesor, ejercicio, listaAlumnos, fecha, horarioInicio, emplazamiento, listaArticulos, esVirtual);
     }
 
 	public void asignarProfesorClase(Sede sede, Clase clase ,Usuario profesor) throws GymException {
 		sede.asignarProfesor(clase,profesor);
 	}
-    
-    //public String getStringListaClases() {
-    //	return Arrays.toString(this.sedes.toArray());
-    //}
-    
+
+	public HashMap<LocalDate, ArrayList<LocalTime>> getHorariosClasesAsignadasProfesor(String ubicacionSede, Profesor profesor) {
+	/// TOMA LA SIGUIENTE SEMANA Y RETORNA UN HASHMAP. CLAVE ES EL LOCALDATE Y LOS VALUES SON ARRAYS DE LOCALTIME
+	//  QUE SON EL HORARIO DE INICIO DE LA CLASE.
+		Sede sede = getSede(ubicacionSede);
+		HashMap<LocalDate, ArrayList<LocalTime>> horariosAsignados = new HashMap<>();
+		ArrayList<Clase> listaClases =  sede.getClasesProfesor(profesor);
+
+		ArrayList<LocalDate> semana = new ArrayList<>();
+		for (int day=0; day<7; day++) {	semana.add(LocalDate.now().plusDays(day));	}
+
+		for (LocalDate dia : semana) {
+			ArrayList<LocalTime> horarios = new ArrayList<>();
+			for (Clase clase : listaClases) {
+				if ( dia.isEqual(clase.getFecha()) )
+					horarios.add(clase.getHorarioInicio());
+			}
+			horariosAsignados.put(dia,horarios);
+		}
+		return horariosAsignados;
+	}
+
     /* =======================================================
      *                    METODOS DE ARTICULOS 
      * =======================================================
@@ -397,8 +420,12 @@ public class CadenaGimnasio {
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
 			ArrayList<Articulo> listaArticulos = null;
 			boolean esVirtual = true;
-			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
-			
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,6,29), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,1), LocalTime.of(20,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,2), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,4), LocalTime.of(15,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,8), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
+
 			
 			//ALMACENAR CLASE EN BBDD
 			ArrayList<Clase> listaClases = sedeBelgrano.getListaClases();
@@ -418,5 +445,13 @@ public class CadenaGimnasio {
 
 	public double getSueldo(Profesor profesor) {
 		return profesor.getSueldo();
+	}
+
+	public ArrayList<String> getEjerciciosDisponiblesSede(String ubicacionSede) {
+		Sede sede = getSede(ubicacionSede);
+		ArrayList<String> ejerciciosSede = new ArrayList<String>();
+		for (Ejercicio ejercicio : sede.getEjerciciosDisponibles())
+			ejerciciosSede.add(ejercicio.getNombre());
+		return ejerciciosSede;
 	}
 }

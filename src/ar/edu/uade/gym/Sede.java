@@ -4,9 +4,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import ar.edu.uade.articulos.Articulo;
-import ar.edu.uade.articulos.FormaAmortizacion;
-import ar.edu.uade.articulos.TipoArticulo;
+import ar.edu.uade.gym.articulos.Articulo;
+import ar.edu.uade.gym.articulos.TipoArticulo;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.Profesor;
 import ar.edu.uade.usuarios.Usuario;
@@ -72,6 +71,17 @@ public class Sede {
 		}
 	}
 
+	public ArrayList<Clase> getClasesProfesor(Profesor profesor) {
+		ArrayList<Clase> clasesAsignadas = new ArrayList<Clase>();
+		for (Clase clase: this.listaClases) {
+			Profesor profeAsignado = clase.getProfesor();
+			if (profeAsignado.equals(profesor)) {
+				clasesAsignadas.add(clase);
+			}
+		}
+		return clasesAsignadas;
+	}
+
 	public void asignarProfesor(Clase clase, Usuario profesor) throws GymException {
 		validarProfesor(clase, profesor);
 		clase.asignarProfesor((Profesor) profesor);
@@ -117,13 +127,11 @@ public class Sede {
 	 *                    METODOS DE CLASE
 	 * =======================================================
 	 */
-
     public void agregarClase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, LocalDate fecha,
-							 LocalTime horarioInicio, LocalTime horarioFin, Emplazamiento emplazamiento,
+							 LocalTime horarioInicio, Emplazamiento emplazamiento,
 							 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
-
-		Clase newClase = new Clase(profesor, ejercicio, listaAlumnos, this.getTipoNivel(), fecha,
-				horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
+		Clase newClase = new Clase(profesor, ejercicio, listaAlumnos, this.getTipoNivel(), fecha, horarioInicio,
+				emplazamiento, listaArticulos, esVirtual);
 		validarProfesor(newClase, profesor);
 		validarArticulosNecesarios(newClase, ejercicio);
     	validarEmplazamientoDisponible(emplazamiento, fecha, horarioInicio);

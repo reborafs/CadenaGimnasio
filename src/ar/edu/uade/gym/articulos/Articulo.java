@@ -1,4 +1,4 @@
-package ar.edu.uade.articulos;
+package ar.edu.uade.gym.articulos;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
