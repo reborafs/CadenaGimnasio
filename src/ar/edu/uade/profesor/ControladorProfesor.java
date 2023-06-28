@@ -2,25 +2,41 @@ package ar.edu.uade.profesor;
 
 import java.util.ArrayList;
 
+import ar.edu.uade.cliente.VistaEjerciciosPorSede;
 import ar.edu.uade.gym.CadenaGimnasio;
 import ar.edu.uade.gym.Ejercicio;
 import ar.edu.uade.gym.Sede;
+import ar.edu.uade.usuarios.Profesor;
 
+import javax.swing.*;
 import java.util.HashMap;
 
 public class ControladorProfesor {
-
-
+	private static ControladorProfesor instancia;
+	private final CadenaGimnasio gym;
+	private Profesor usuario;
 	private ArrayList<String> sedes;
 	private HashMap<String, ArrayList<String>> sedeEjercicio;
 	
 //	String[] testColumna = sedes.toArray(String[]::new);
 //	ArrayList<String> tipoEjercicio = new ArrayList<>(List.of("Yoga", "Crossfit", "Boxing", "Running"));
 //	String[] testFila = tipoEjercicio.toArray(String[]::new);
-	
-	public ControladorProfesor(){
+
+	private ControladorProfesor(){
+		this.gym = CadenaGimnasio.getInstance();
 		this.sedeEjercicio = new HashMap<String, ArrayList<String>>();
 		this.sedes = new ArrayList<String>();
+	}
+
+	public static ControladorProfesor getInstance() {
+		if (instancia == null) {
+			instancia = new ControladorProfesor();
+		}
+		return instancia;
+	}
+
+	public void setUsuario(Profesor usuario) {
+		this.usuario = usuario;
 	}
 	
 //	public void calcularSede(CadenaGimnasio gym) {
@@ -41,7 +57,11 @@ public class ControladorProfesor {
 			sedeEjercicio.put(sede.getUbicacion(), ejerciciosDisponibles);		
 		}
 	}
-	
+
+	public double getSueldo() {
+		return gym.getSueldo(usuario);
+	}
+
 	@Override
 	public String toString() {
 		return "ControladorProfesor [sedes=" + sedes + ", sedeEjercicio=" + sedeEjercicio + "]";
@@ -78,4 +98,27 @@ public class ControladorProfesor {
 //	public String[] getTipoEjercicio() {
 //		return testFila;
 //	}
+
+	public void abrirVistaPrincipal(Profesor usuario) {
+		setUsuario(usuario);
+		SwingUtilities.invokeLater(() -> {
+			VistaClaseAsignada vistaProfe = new VistaClaseAsignada();;
+			vistaProfe.setVisible(true);
+		});
+	}
+
+	public void abrirVistaClaseAsignada() {
+		SwingUtilities.invokeLater(() -> {
+			VistaClaseAsignada vistaProfe = new VistaClaseAsignada();
+			vistaProfe.setVisible(true);
+		});
+	}
+
+	public void abrirVistaSueldo() {
+		SwingUtilities.invokeLater(() -> {
+			VistaSueldo vistaProfe = new VistaSueldo();
+			vistaProfe.setVisible(true);
+		});
+	}
 }
+

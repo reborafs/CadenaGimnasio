@@ -5,18 +5,23 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class ClienteMembresia extends JFrame {
+public class VistaMembresia extends JFrame {
 
-    public ClienteMembresia() {
+    private ControladorCliente controller;
+
+    public VistaMembresia() {
         super("Cliente: Membresia");
+        this.controller = ControladorCliente.getInstance();
         setSize(600, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panelMenu = new JPanel();
         panelMenu.setLayout(new GridBagLayout());
@@ -27,8 +32,8 @@ public class ClienteMembresia extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
-        JButton btnClasesSedes = new JButton("Clases Asignadas");
-        panelMenu.add(btnClasesSedes, gbc);
+        JButton btnClaseAsignada = new JButton("Clases Asignadas");
+        panelMenu.add(btnClaseAsignada, gbc);
 
         /* Ejercicios Disponibles por Sedes */
         gbc.gridx = 1;
@@ -101,10 +106,38 @@ public class ClienteMembresia extends JFrame {
         gbc.gridwidth = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         panelMenu.add(labelMembresia3Desc, gbc);
+
+
+        class HandlerBtnClaseAsignada implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.abrirVistaClaseAsignada();
+                //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
+            }
+        }
+
+        /*INSTANCIACION DEL MANEJADOR*/
+        HandlerBtnClaseAsignada handlerBtnClaseAsignada =new HandlerBtnClaseAsignada();
+
+        /*ASIGNACION DEL MANEJADOR AL BOTON*/
+        btnClaseAsignada.addActionListener(handlerBtnClaseAsignada);
+
+        class HandlerBtnEjerciciosSedes implements ActionListener{
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.abrirVistaEjercicioPorSede();
+                //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
+            }
+        }
+
+        /*INSTANCIACION DEL MANEJADOR*/
+        HandlerBtnEjerciciosSedes handlerBtnEjerciciosSedes=new HandlerBtnEjerciciosSedes();
+
+        /*ASIGNACION DEL MANEJADOR AL BOTON*/
+        btnEjerciciosSedes.addActionListener(handlerBtnEjerciciosSedes);
+
     }
 
-    public static void main(String[] args) {
-        ClienteMembresia clienteMembresia = new ClienteMembresia();
-        clienteMembresia.setVisible(true);
-    }
 }
