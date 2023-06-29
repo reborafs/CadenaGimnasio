@@ -1,28 +1,22 @@
 package ar.edu.uade.administrativo;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
+import ar.edu.uade.gym.GymException;
 import ar.edu.uade.gym.articulos.Articulo;
 
 public class VistaGestionArticulos extends JFrame {
 
+	private ControladorAdministrativo controller;
+
 	public VistaGestionArticulos() {
 		super("Administrativo: Gestion de articulos");
+		this.controller = ControladorAdministrativo.getInstance();
 		this.setLayout(new BorderLayout());
 
 		JPanel panelMenu = new JPanel();
@@ -75,56 +69,60 @@ public class VistaGestionArticulos extends JFrame {
 		panelMenu.add(btnMonitorear, gbc);
 
 		this.setSize(300, 200);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 
-		// Acción del botón Gestion de Clientes
-		btnCliente.addActionListener(new ActionListener() {
+
+		class HandlerBtnIncorporar implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Lógica para abrir la vista de Gestión de Clientes
+				mostrarDialogoIncorporarArticulos();
 			}
-		});
+		}
 
-		// Acción del botón Gestion de Clases
-		btnClases.addActionListener(new ActionListener() {
+		class HandlerBtnMonitorear implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Lógica para abrir la vista de Gestión de Clases
+				mostrarListaArticulos();
 			}
-		});
+		}
 
-		// Acción del botón Gestion de Profesor
-		btnProfesor.addActionListener(new ActionListener() {
+		class HandlerBtnClientes implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Lógica para abrir la vista de Gestión de Profesor
+				controller.abrirVistaClientes();
 			}
-		});
+		}
 
-		// Acción del botón Gestion de Articulos
-		btnArticulos.addActionListener(new ActionListener() {
+		class HandlerBtnClases implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Lógica para abrir la vista de Gestión de Articulos
+				controller.abrirVistaClases();
 			}
-		});
-		
-		 // Acción del botón Incorporar Articulos
-        btnIncorporar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mostrarDialogoIncorporarArticulos();
-            }
-        });
+		}
 
-		// Acción del botón Monitorear Articulos
-        btnMonitorear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mostrarListaArticulos();
-            }
-        });
+		class HandlerBtnProfesor implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.abrirVistaProfesores();
+			}
+		}
+
+
+		/* INSTANCIACION DE LOS MANEJADORES */
+		HandlerBtnIncorporar handlerBtnIncorporar = new HandlerBtnIncorporar();
+		HandlerBtnMonitorear handlerBtnMonitorear = new HandlerBtnMonitorear();
+		HandlerBtnClientes handlerBtnClientes = new HandlerBtnClientes();
+		HandlerBtnClases handlerBtnClases = new HandlerBtnClases();
+		HandlerBtnProfesor handlerBtnProfesor = new HandlerBtnProfesor();
+
+		/* ASIGNACION DE LOS MANEJADORES A LOS BOTONES */
+		btnIncorporar.addActionListener(handlerBtnIncorporar);
+		btnMonitorear.addActionListener(handlerBtnMonitorear);
+		btnCliente.addActionListener(handlerBtnClientes);
+		btnClases.addActionListener(handlerBtnClases);
+		btnProfesor.addActionListener(handlerBtnProfesor);
+
 	}
 	
 	private void mostrarDialogoIncorporarArticulos() {
@@ -132,24 +130,48 @@ public class VistaGestionArticulos extends JFrame {
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2));
+        panel.setLayout(new GridLayout(6, 2));
 
-        JLabel lblTipoArticulo = new JLabel("Tipo de Articulo:");
-        JTextField txtTipoArticulo = new JTextField();
+		JLabel lblCategoriaArticulo = new JLabel("Categoria:");
+		JTextField txtCategoriaArticulo = new JTextField();
 
-        JLabel lblSerie = new JLabel("Sede:");
-        JTextField txtSerie = new JTextField();
+		JLabel lblMarca = new JLabel("Marca:");
+		JTextField txtMarca = new JTextField();
 
-        JButton btnAceptar = new JButton("Aceptar");
+		JLabel lblDescripcion = new JLabel("Descripcion:");
+		JTextField txtDescripcion = new JTextField();
+
+		JLabel lblUsosAmortizacion = new JLabel("Cantidad de Usos hasta renovar:");
+		JTextField txtUsosAmortizacion = new JFormattedTextField(NumberFormat.getIntegerInstance());
+
+		JLabel lblError = new JLabel("ERROR");
+		JLabel lblErrorMessage = new JLabel("ERROR");
+		lblError.setForeground(Color.RED);
+		lblErrorMessage.setForeground(Color.RED);
+
+		JButton btnAceptar = new JButton("Aceptar");
         btnAceptar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String tipoArticulo = txtTipoArticulo.getText();
-                String sede = txtSerie.getText();
-                // Lógica para procesar la información capturada
-                
-                // Cerrar el diálogo
-                dialogo.dispose();
+				try {
+					String categoriaArticulo = txtCategoriaArticulo.getText();
+					String marca = txtMarca.getText();
+					String descripcion = txtDescripcion.getText();
+					int usosAmortizacion = Integer.parseInt(txtUsosAmortizacion.getText());
+					boolean flagFecha = true;
+					// Lógica para procesar la información capturada
+					controller.agregarTipoArticulo(null, categoriaArticulo, marca, descripcion, usosAmortizacion, flagFecha);
+
+					// Cerrar el diálogo
+					lblError.setVisible(false);
+					lblErrorMessage.setVisible(false);
+					dialogo.dispose();
+				} catch (NumberFormatException ex) {
+					lblErrorMessage.setText("Se debe ingresar un numero entero.");
+					lblError.setVisible(true);
+					lblErrorMessage.setVisible(true);
+					return; // Exit the method without processing the information
+				}
             }
         });
 
@@ -162,17 +184,28 @@ public class VistaGestionArticulos extends JFrame {
             }
         });
 
-        panel.add(lblTipoArticulo);
-        panel.add(txtTipoArticulo);
-        panel.add(lblSerie);
-        panel.add(txtSerie);
-        panel.add(btnAceptar);
-        panel.add(btnCancelar);
 
-        dialogo.add(panel);
+		panel.add(lblCategoriaArticulo);
+		panel.add(txtCategoriaArticulo);
+		panel.add(lblMarca);
+		panel.add(txtMarca);
+		panel.add(lblDescripcion);
+		panel.add(txtDescripcion);
+		panel.add(lblUsosAmortizacion);
+		panel.add(txtUsosAmortizacion);
+		panel.add(lblError);
+		panel.add(lblErrorMessage);
+		panel.add(btnAceptar);
+		panel.add(btnCancelar);
+		lblError.setVisible(false);
+		lblErrorMessage.setVisible(false);
+
+		dialogo.add(panel);
         dialogo.pack();
         dialogo.setLocationRelativeTo(this);
         dialogo.setVisible(true);
+
+
     }
 	
 	private void mostrarListaArticulos() {
@@ -180,9 +213,10 @@ public class VistaGestionArticulos extends JFrame {
         // Supongamos que tienes un ArrayList llamado "listaArticulos" con los artículos
         
         StringBuilder sb = new StringBuilder();
-        Articulo[] listaArticulos;
-		for (Articulo articulo : listaArticulos ) {
-            sb.append(articulo.toString()).append("\n");
+		String[] listaArticulos = controller.getListaTiposArticulos();
+
+		for (String articulo : listaArticulos ) {
+            sb.append(articulo).append("\n");
         }
         
         String lista = sb.toString();
@@ -191,8 +225,4 @@ public class VistaGestionArticulos extends JFrame {
         JOptionPane.showMessageDialog(this, lista, "Lista de Articulos", JOptionPane.INFORMATION_MESSAGE);
     }
 
-	public static void main(String[] args) {
-		VistaGestionArticulos vistaGestionArticulos = new VistaGestionArticulos();
-		vistaGestionArticulos.setVisible(true);
-	}
 }
