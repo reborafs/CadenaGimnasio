@@ -547,4 +547,12 @@ public class CadenaGimnasio {
 			ejerciciosSede.add(ejercicio.getNombre());
 		return ejerciciosSede;
 	}
+
+	public ArrayList<String[]> getListaClientes() {
+		ArrayList<String[]> clientes = new ArrayList<>();
+		for (Cliente cliente : this.usuariosClientes)
+			clientes.add(cliente.getInfo());
+
+		return clientes;
+	}
 }

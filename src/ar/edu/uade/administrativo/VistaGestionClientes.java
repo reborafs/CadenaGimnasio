@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class VistaGestionClientes extends JFrame {
     private ControladorAdministrativo controller;
@@ -71,7 +74,8 @@ public class VistaGestionClientes extends JFrame {
         JButton btnModificarCliente = new JButton("Modificar Cliente");
         panelMenu.add(btnModificarCliente, gbc);
 
-        this.setSize(300, 200);
+        this.setSize(800, 600);
+        setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
 
@@ -83,6 +87,7 @@ public class VistaGestionClientes extends JFrame {
         btnProfesor.addActionListener(actionEvent -> abrirVistaProfesores());
         btnArticulos.addActionListener(actionEvent -> abrirVistaArticulos());
 
+        mostrarListaClientes();
     }
 
     private void abrirVistaProfesores() {
@@ -185,5 +190,37 @@ public class VistaGestionClientes extends JFrame {
         // Implementación de la funcionalidad de modificación de cliente
         // ...
     }
-	
+
+    private void mostrarListaClientes() {
+        // Tabla de clases asignadas
+        JTable tabla = new JTable();
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        ArrayList<String[]> listaClientes = controller.getListaClientes();
+
+        // Definicion de columnas
+        String[] columnas = {"ID","Nombre","Nivel"};
+        int cantColumnas = columnas.length;
+
+        modelo.setColumnIdentifiers(columnas);
+
+        for (String[] infoCliente : listaClientes) {
+            String[] fila = new String[cantColumnas+1];
+            fila[0] = infoCliente[0];
+            fila[1] = infoCliente[1];
+            fila[2] = infoCliente[2];
+            modelo.addRow(fila);
+        }
+
+        tabla.setModel(modelo);
+
+        for (int i = 0; i < cantColumnas; i++) {
+            tabla.getColumnModel().getColumn(i).setPreferredWidth(100);
+        }
+
+        // Agregar la tabla a un JScrollPane y añadirlo a la ventana
+        JScrollPane scrollPane = new JScrollPane(tabla);
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
+    }
+
 }

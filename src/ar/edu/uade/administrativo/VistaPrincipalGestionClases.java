@@ -70,9 +70,10 @@ public class VistaPrincipalGestionClases extends JFrame{
         gbc.gridwidth = 2;
         JButton btnCambiarEstadoClase = new JButton("Cambiar Estado Clase");
         panelMenu.add(btnCambiarEstadoClase, gbc);
-		
-        this.setSize(300, 200);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		this.setSize(800, 600);
+		setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
 
 		btnCliente.addActionListener(actionEvent -> abrirVistaClientes());
@@ -87,12 +88,12 @@ public class VistaPrincipalGestionClases extends JFrame{
 
 	private void abrirVistaProfesores() {
 		this.dispose();
-		controller.abrirVistaArticulos();
+		controller.abrirVistaProfesores();
 	}
 
 	private void abrirVistaClientes() {
 		this.dispose();
-		controller.abrirVistaArticulos();
+		controller.abrirVistaClientes();
 	}
 
 	private void abrirVistaAgendarClases() {
