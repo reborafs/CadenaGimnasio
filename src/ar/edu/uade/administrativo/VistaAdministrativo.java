@@ -61,34 +61,34 @@ public class VistaAdministrativo extends JFrame {
 		panelMenu.add(btnArticulos, gbc);
 		
         this.setSize(300, 200);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
         
         class HandlerBtnClientes implements ActionListener {
     		@Override
     		public void actionPerformed(ActionEvent e) {
-    			controller.abrirVistaClientes(controller.getUsuario());
+    			controller.abrirVistaClientes();
     		}
     	}
 
     	class HandlerBtnClases implements ActionListener {
     		@Override
     		public void actionPerformed(ActionEvent e) {
-    			controller.abrirVistaClases(controller.getUsuario());
+    			controller.abrirVistaClases();
     		}
     	}
 
     	class HandlerBtnProfesor implements ActionListener {
     		@Override
     		public void actionPerformed(ActionEvent e) {
-    			controller.abrirVistaProfesores(controller.getUsuario());
+    			controller.abrirVistaProfesores();
     		}
     	}
 
     	class HandlerBtnArticulos implements ActionListener {
     		@Override
     		public void actionPerformed(ActionEvent e) {
-    			controller.abrirVistaArticulos(controller.getUsuario());
+    			controller.abrirVistaArticulos();
     		}
     	}
 
@@ -104,9 +104,5 @@ public class VistaAdministrativo extends JFrame {
     	btnProfesor.addActionListener(handlerBtnProfesor);
     	btnArticulos.addActionListener(handlerBtnArticulos);
 	}
-	
-    public static void main(String[] args) {
-    	VistaAdministrativo vistaAdministrativo = new VistaAdministrativo();
-    }
-	
+
 }

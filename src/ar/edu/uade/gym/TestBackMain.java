@@ -96,8 +96,8 @@ public class TestBackMain {
 	* utilizados en las clases. */
 	static public void testCrearTipoArticulo(CadenaGimnasio gym) {
 		try {
-			gym.agregarTipoArticuloPorFecha("Colchoneta", CategoriaArticulo.COLCHONETA, "Pepito", "Colchoneta de 2m x 0.75m", 200);
-			gym.agregarTipoArticuloPorUso("Pesa", CategoriaArticulo.PESA,"Pepito", "Pesa marca Pepito de 20kg", 50);
+			gym.agregarTipoArticuloPorFecha("Colchoneta", "COLCHONETA", "Pepito", "Colchoneta de 2m x 0.75m", 200);
+			gym.agregarTipoArticuloPorUso("Pesa", "PESA","Pepito", "Pesa marca Pepito de 20kg", 50);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	

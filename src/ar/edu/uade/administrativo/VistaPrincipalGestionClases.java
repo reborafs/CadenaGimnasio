@@ -1,18 +1,25 @@
 package ar.edu.uade.administrativo;
 
+import ar.edu.uade.profesor.ControladorProfesor;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class VistaGestionClases extends JFrame{
-	public VistaGestionClases() {
+public class VistaPrincipalGestionClases extends JFrame{
+	private ControladorAdministrativo controller;
+
+	public VistaPrincipalGestionClases() {
 		super("Administrativo: Gestion de clases");
+		this.controller = ControladorAdministrativo.getInstance();
 		this.setLayout(new BorderLayout());
 		
 		JPanel panelMenu = new JPanel();
@@ -65,8 +72,39 @@ public class VistaGestionClases extends JFrame{
         panelMenu.add(btnCambiarEstadoClase, gbc);
 		
         this.setSize(300, 200);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
+
+		class HandlerBtnClientes implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.abrirVistaClientes();
+			}
+		}
+
+		class HandlerBtnProfesor implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.abrirVistaProfesores();
+			}
+		}
+
+		class HandlerBtnArticulos implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.abrirVistaArticulos();
+			}
+		}
+
+		/* INSTANCIACION DE LOS MANEJADORES */
+		HandlerBtnClientes handlerBtnClientes = new HandlerBtnClientes();
+		HandlerBtnProfesor handlerBtnProfesor = new HandlerBtnProfesor();
+		HandlerBtnArticulos handlerBtnArticulos = new HandlerBtnArticulos();
+
+		/* ASIGNACION DE LOS MANEJADORES A LOS BOTONES */
+		btnCliente.addActionListener(handlerBtnClientes);
+		btnProfesor.addActionListener(handlerBtnProfesor);
+		btnArticulos.addActionListener(handlerBtnArticulos);
 	}
 	
 	private void abrirVistaAgendarClases() {
@@ -75,7 +113,7 @@ public class VistaGestionClases extends JFrame{
         String sede = JOptionPane.showInputDialog(this, "Ingrese la sede de la clase:");
 
         // Aquí puedes utilizar los datos ingresados para crear la clase
-        Clase nuevaClase = new Clase(profesor, horario, sede);
+        //Clase nuevaClase = new Clase(profesor, horario, sede);
 
         // Realizar las acciones necesarias con la nueva clase (almacenarla, mostrarla, etc.)
         // ...
@@ -101,9 +139,5 @@ public class VistaGestionClases extends JFrame{
         }
     }
 	
-	
-	
-    public static void main(String[] args) {
-    	VistaAdministrativo vistaAdministrativo = new VistaAdministrativo();
-    }
+
 }
