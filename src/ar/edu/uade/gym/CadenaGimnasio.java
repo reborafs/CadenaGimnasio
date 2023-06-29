@@ -98,7 +98,24 @@ public class CadenaGimnasio {
     	listaUsuarios.addAll(this.usuariosSoporteTecnico);
     	return listaUsuarios;
     }
-    
+
+	public void agregarProfesor(String nombre, String contrasenia, double sueldo) {
+		Usuario user = new Profesor(nombre, contrasenia, sueldo);
+		agregarUsuario(user);
+	}
+
+	public void agregarCliente(String nombre, String contrasenia, String tipoNivel) throws GymException {
+		TipoNivel nivel;
+		switch (tipoNivel) {
+			case "ORO" -> nivel = TipoNivel.ORO;
+			case "BLACK" -> nivel = TipoNivel.BLACK;
+			case "PLATINUM" -> nivel = TipoNivel.PLATINUM;
+			default -> throw new GymException("El nivel ingresado para el Cliente no es valido.");
+		}
+		Usuario user = new Cliente(nombre, contrasenia, nivel);
+		agregarUsuario(user);
+	}
+
     public void agregarUsuario(Usuario usuario) {
      	if (usuario.soyAdministrativo())
      		usuariosAdministrativo.add((Administrativo) usuario);

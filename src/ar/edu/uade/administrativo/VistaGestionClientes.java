@@ -1,17 +1,13 @@
 package ar.edu.uade.administrativo;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-public class VistaGestionClientes extends JFrame{
+public class VistaGestionClientes extends JFrame {
     private ControladorAdministrativo controller;
 
     public VistaGestionClientes() {
@@ -79,54 +75,105 @@ public class VistaGestionClientes extends JFrame{
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
 
-        btnCrearCliente.addActionListener(e -> {
-            crearCliente();
-        });
+        btnCrearCliente.addActionListener(actionEvent -> crearCliente());
+        btnEliminarCliente.addActionListener(actionEvent -> eliminarCliente());
+        btnModificarCliente.addActionListener(actionEvent -> modificarCliente());
 
-        btnEliminarCliente.addActionListener(e -> {
-            eliminarCliente();
-        });
+        btnClases.addActionListener(actionEvent -> abrirVistaClases());
+        btnProfesor.addActionListener(actionEvent -> abrirVistaProfesores());
+        btnArticulos.addActionListener(actionEvent -> abrirVistaArticulos());
 
-        btnModificarCliente.addActionListener(e -> {
-            modificarCliente();
-        });
+    }
 
+    private void abrirVistaProfesores() {
+        this.dispose();
+        controller.abrirVistaProfesores();
+    }
 
-        class HandlerBtnClases implements ActionListener {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.abrirVistaClases();
-            }
-        }
+    private void abrirVistaArticulos() {
+        this.dispose();
+        controller.abrirVistaArticulos();
+    }
 
-        class HandlerBtnProfesor implements ActionListener {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.abrirVistaProfesores();
-            }
-        }
-
-        class HandlerBtnArticulos implements ActionListener {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.abrirVistaArticulos();
-            }
-        }
-
-        /* INSTANCIACION DE LOS MANEJADORES */
-        HandlerBtnClases handlerBtnClases = new HandlerBtnClases();
-        HandlerBtnProfesor handlerBtnProfesor = new HandlerBtnProfesor();
-        HandlerBtnArticulos handlerBtnArticulos = new HandlerBtnArticulos();
-
-        /* ASIGNACION DE LOS MANEJADORES A LOS BOTONES */
-        btnClases.addActionListener(handlerBtnClases);
-        btnProfesor.addActionListener(handlerBtnProfesor);
-        btnArticulos.addActionListener(handlerBtnArticulos);
+    private void abrirVistaClases() {
+        this.dispose();
+        controller.abrirVistaClases();
     }
 
     private void crearCliente() {
         // Implementación de la funcionalidad de creación de cliente
-        // ...
+        JDialog dialogo = new JDialog(this, "Crear Cliente", true);
+        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2));
+
+        JLabel lblNombre = new JLabel("Nombre:");
+        JTextField txtNombre = new JTextField();
+
+        JLabel lblContrasena = new JLabel("Contraseña:");
+        JTextField txtContrasena = new JTextField();
+
+        JLabel lblNivel = new JLabel("Nivel:");
+        JTextField txtNivel = new JTextField();
+
+        JLabel lblError = new JLabel("ERROR");
+        JLabel lblErrorMessage = new JLabel("ERROR");
+        lblError.setForeground(Color.RED);
+        lblErrorMessage.setForeground(Color.RED);
+
+        JButton btnAceptar = new JButton("Aceptar");
+        btnAceptar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String nombre = txtNombre.getText();
+                    String contrasena = txtContrasena.getText();
+                    String nivel = txtNivel.getText();
+
+                    controller.agregarCliente(nombre, contrasena, nivel);
+
+                    // Cerrar el diálogo
+                    lblError.setVisible(false);
+                    lblErrorMessage.setVisible(false);
+                    dialogo.dispose();
+                } catch (Exception ex) {
+                    lblErrorMessage.setText("Error.");
+                    lblError.setVisible(true);
+                    lblErrorMessage.setVisible(true);
+                    return; // Exit the method without processing the information
+                }
+            }
+        });
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cerrar el diálogo sin procesar la información
+                dialogo.dispose();
+            }
+        });
+
+
+        panel.add(lblNombre);
+        panel.add(txtNombre);
+        panel.add(lblContrasena);
+        panel.add(txtContrasena);
+        panel.add(lblNivel);
+        panel.add(txtNivel );
+
+        panel.add(lblError);
+        panel.add(lblErrorMessage);
+        panel.add(btnAceptar);
+        panel.add(btnCancelar);
+        lblError.setVisible(false);
+        lblErrorMessage.setVisible(false);
+
+        dialogo.add(panel);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
     }
 
     private void eliminarCliente() {

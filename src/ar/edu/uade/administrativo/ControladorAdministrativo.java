@@ -86,4 +86,12 @@ public class ControladorAdministrativo {
     public String[] getListaTiposArticulos() {
         return gym.getStringCatalogoDeArticulos().toArray(new String[0]);
     }
+
+    public void agregarCliente(String nombre, String contrasena, String nivel) {
+        try {
+            gym.agregarCliente(nombre,contrasena,nivel);
+        } catch (GymException e) {
+            e.printStackTrace();
+        }
+    }
 }

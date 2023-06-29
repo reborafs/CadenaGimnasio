@@ -59,36 +59,26 @@ public class VistaGestionProfesores extends JFrame{
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
 
-		class HandlerBtnClientes implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaClientes();
-			}
-		}
 
-		class HandlerBtnClases implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaClases();
-			}
-		}
+		btnCliente.addActionListener(actionEvent -> abrirVistaClientes());
+		btnClases.addActionListener(actionEvent -> abrirVistaClases());
+		btnArticulos.addActionListener(actionEvent -> abrirVistaArticulos());
 
-		class HandlerBtnArticulos implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaArticulos();
-			}
-		}
-
-		/* INSTANCIACION DE LOS MANEJADORES */
-		HandlerBtnClientes handlerBtnClientes = new HandlerBtnClientes();
-		HandlerBtnClases handlerBtnClases = new HandlerBtnClases();
-		HandlerBtnArticulos handlerBtnArticulos = new HandlerBtnArticulos();
-
-		/* ASIGNACION DE LOS MANEJADORES A LOS BOTONES */
-		btnCliente.addActionListener(handlerBtnClientes);
-		btnClases.addActionListener(handlerBtnClases);
-		btnArticulos.addActionListener(handlerBtnArticulos);
 	}
-	
+
+	private void abrirVistaArticulos() {
+		this.dispose();
+		controller.abrirVistaArticulos();
+	}
+
+	private void abrirVistaClases() {
+		this.dispose();
+		controller.abrirVistaClases();
+	}
+
+	private void abrirVistaClientes() {
+		this.dispose();
+		controller.abrirVistaClientes();
+	}
+
 }
