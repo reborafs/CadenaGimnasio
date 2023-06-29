@@ -78,8 +78,6 @@ public class VistaMembresia extends JFrame {
             panelMenu.add(labelMembresia1, gbc);
             gbc.gridy++;
 
-            System.out.print(membresia.toString());
-
             JLabel labelMembresia1Desc = new JLabel(membresias.get(membresia));
             gbc.anchor = GridBagConstraints.NORTHWEST;
             panelMenu.add(labelMembresia1Desc, gbc);
