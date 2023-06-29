@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -73,36 +74,33 @@ public class VistaEjerciciosPorSede extends JFrame {
 		JTable tabla = new JTable();
 		DefaultTableModel modelo = new DefaultTableModel();
 		
-		
-		// Definicion de columnas
-		//ControladorProfesor test = new ControladorProfesor();
-		String[] columnas = {"", "Caballito", "Palermo", "Almagro", "Recoleta", "Tigre"};
-		columnas[0] = "Tipo de Ejercicio";
-		modelo.setColumnIdentifiers(columnas);
+		HashMap<String, ArrayList<String>> ejerciciosPorSede = controller.getEjerciciosPorSede();
 
-		// Definición de filas
-		String[] fila = {"Crossfit", "Yoga", "Boxing", "Bailoterapia"};
+		// Definicion de columnas
+		String[] columnas = new String[ejerciciosPorSede.size()+1];
+		columnas[0] = "Tipo de Ejercicio";
+		// fila =  new String[20];
+		ArrayList<String> fila = new ArrayList<>();
+		int z = 1;
+		for (String sede : ejerciciosPorSede.keySet()){
+			columnas[z] = sede;
+			z++;
+			for(String valor: ejerciciosPorSede.get(sede)){
+				if(!controller.estaEnLista(valor,fila)){
+					fila.add(valor);
+				}
+			}
+		}
 		int cantColumnas = columnas.length;
-		
-		String[] sede1 = {"Crossfit", "Boxing", "Bailoterapia"};
-		String[] sede2 = {"Yoga", "Boxing"};
-		String[] sede3 = {"Yoga"};
-		String[] sede4 = {"Boxing", "Bailoterapia"};
-		String[] sede5 = {};
-		
-		HashMap<String, String[]> sedeEjercicio = new HashMap<String, String[]>();
-		sedeEjercicio.put("Caballito", sede1);
-		sedeEjercicio.put("Palermo", sede2);
-		sedeEjercicio.put("Almagro", sede3);
-		sedeEjercicio.put("Recoleta", sede4);
-		sedeEjercicio.put("Tigre", sede5);
+
+		modelo.setColumnIdentifiers(columnas);
 		
         for (String ejercicio : fila) {
             String[] ejercicioDisponible = new String[cantColumnas+1];
             ejercicioDisponible[0] = ejercicio;
-            for (int j = 1; j <= 5; j++) {
+            for (int j = 1; j <= ejerciciosPorSede.size(); j++) {
             	String sede = columnas[j];
-                String[] ejerciciosSede = sedeEjercicio.get(sede);
+				ArrayList<String> ejerciciosSede = ejerciciosPorSede.get(sede);
                 if (ejerciciosSede != null && contieneEjercicio(ejerciciosSede, ejercicio)) {
                 	ejercicioDisponible[j] = "Disponible";
                 } else {
@@ -154,7 +152,7 @@ public class VistaEjerciciosPorSede extends JFrame {
 
 	}
 	
-    private boolean contieneEjercicio(String[] ejercicios, String ejercicio) {
+    private boolean contieneEjercicio(ArrayList<String> ejercicios, String ejercicio) {
         for (String e : ejercicios) {
             if (e.equals(ejercicio)) {
                 return true;

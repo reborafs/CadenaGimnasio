@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -62,51 +63,28 @@ public class VistaMembresia extends JFrame {
         gbc.gridwidth = 1;
         this.add(panelMenu, BorderLayout.NORTH);
 
-        JLabel labelMembresia1 = new JLabel("Black");
-        labelMembresia1.setFont(new Font("Arial", Font.BOLD, 20));
+
+        HashMap<String, String>  membresias = controller.getMembresias();
+
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        panelMenu.add(labelMembresia1, gbc);
 
-        JLabel labelMembresia1Desc = new JLabel("Descripción");
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.gridwidth = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        panelMenu.add(labelMembresia1Desc, gbc);
-        
-        JLabel labelMembresia2 = new JLabel("Gold");
-        labelMembresia2.setFont(new Font("Arial", Font.BOLD, 20));
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.gridwidth = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        panelMenu.add(labelMembresia2, gbc);
+        for (String membresia : membresias.keySet()) {
 
-        JLabel labelMembresia2Desc = new JLabel("Descripción");
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        gbc.gridwidth = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        panelMenu.add(labelMembresia2Desc, gbc);
-        
-        JLabel labelMembresia3 = new JLabel("Platinum");
-        labelMembresia3.setFont(new Font("Arial", Font.BOLD, 20));
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-        gbc.gridwidth = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        panelMenu.add(labelMembresia3, gbc);
+            JLabel labelMembresia1 = new JLabel(membresia);
+            labelMembresia1.setFont(new Font("Arial", Font.BOLD, 20));
+            gbc.anchor = GridBagConstraints.NORTHWEST;
+            panelMenu.add(labelMembresia1, gbc);
+            gbc.gridy++;
 
-        JLabel labelMembresia3Desc = new JLabel("Descripción");
-        gbc.gridx = 0;
-        gbc.gridy = 9;
-        gbc.gridwidth = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        panelMenu.add(labelMembresia3Desc, gbc);
+            System.out.print(membresia.toString());
 
+            JLabel labelMembresia1Desc = new JLabel(membresias.get(membresia));
+            gbc.anchor = GridBagConstraints.NORTHWEST;
+            panelMenu.add(labelMembresia1Desc, gbc);
+            gbc.gridy++;
+        }
 
         class HandlerBtnClaseAsignada implements ActionListener {
 
