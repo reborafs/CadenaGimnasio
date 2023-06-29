@@ -7,6 +7,7 @@ import ar.edu.uade.usuarios.Administrativo;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ControladorAdministrativo {
 
@@ -93,5 +94,9 @@ public class ControladorAdministrativo {
         } catch (GymException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<String[]> getListaClientes() {
+        return gym.getListaClientes();
     }
 }

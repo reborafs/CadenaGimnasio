@@ -68,7 +68,8 @@ public class VistaGestionArticulos extends JFrame {
 		JButton btnMonitorear = new JButton("Monitorear Articulos");
 		panelMenu.add(btnMonitorear, gbc);
 
-		this.setSize(300, 200);
+		this.setSize(800, 600);
+		setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 

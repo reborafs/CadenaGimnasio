@@ -54,9 +54,10 @@ public class VistaGestionProfesores extends JFrame{
 		gbc.gridwidth = 2;
 		JButton btnArticulos = new JButton("Gestion de Articulos");
 		panelMenu.add(btnArticulos, gbc);
-		
-        this.setSize(300, 200);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		this.setSize(800, 600);
+		setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
 
 
