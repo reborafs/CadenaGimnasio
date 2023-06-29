@@ -1,9 +1,10 @@
-package ar.edu.uade.bbdd;
+package ar.edu.uade.gym.bbdd;
+
+import ar.edu.uade.gym.Clase;
+import ar.edu.uade.gym.Ejercicio;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import ar.edu.uade.gym.Clase;
-import ar.edu.uade.gym.Ejercicio;
 
 public class BaseDeDatos {
     private static BaseDeDatos instancia;

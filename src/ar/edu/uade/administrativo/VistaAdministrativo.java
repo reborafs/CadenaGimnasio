@@ -15,11 +15,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ar.edu.uade.cliente.ControladorCliente;
+
 public class VistaAdministrativo extends JFrame {
+	private ControladorAdministrativo controller;
 
 	public VistaAdministrativo() {
-		super("SoporteTecnico");
+		super("Administrativo");
 		this.setLayout(new BorderLayout());
+		this.controller = ControladorAdministrativo.getInstance();
 		
 		JPanel panelMenu = new JPanel();
 		panelMenu.setLayout(new GridBagLayout());
@@ -57,12 +61,48 @@ public class VistaAdministrativo extends JFrame {
 		panelMenu.add(btnArticulos, gbc);
 		
         this.setSize(300, 200);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
+        
+        class HandlerBtnClientes implements ActionListener {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+    			controller.abrirVistaClientes();
+    		}
+    	}
+
+    	class HandlerBtnClases implements ActionListener {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+    			controller.abrirVistaClases();
+    		}
+    	}
+
+    	class HandlerBtnProfesor implements ActionListener {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+    			controller.abrirVistaProfesores();
+    		}
+    	}
+
+    	class HandlerBtnArticulos implements ActionListener {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+    			controller.abrirVistaArticulos();
+    		}
+    	}
+
+    	/* INSTANCIACION DE LOS MANEJADORES */
+    	HandlerBtnClientes handlerBtnClientes = new HandlerBtnClientes();
+    	HandlerBtnClases handlerBtnClases = new HandlerBtnClases();
+    	HandlerBtnProfesor handlerBtnProfesor = new HandlerBtnProfesor();
+    	HandlerBtnArticulos handlerBtnArticulos = new HandlerBtnArticulos();
+
+    	/* ASIGNACION DE LOS MANEJADORES A LOS BOTONES */
+    	btnCliente.addActionListener(handlerBtnClientes);
+    	btnClases.addActionListener(handlerBtnClases);
+    	btnProfesor.addActionListener(handlerBtnProfesor);
+    	btnArticulos.addActionListener(handlerBtnArticulos);
 	}
-	
-    public static void main(String[] args) {
-    	VistaAdministrativo vistaAdministrativo = new VistaAdministrativo();
-    }
-	
+
 }

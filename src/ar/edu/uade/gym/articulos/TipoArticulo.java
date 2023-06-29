@@ -1,7 +1,9 @@
-package ar.edu.uade.articulos;
+package ar.edu.uade.gym.articulos;
 
 public class TipoArticulo {
 
+    private static int nextID = 0;
+    private final int id;
     private final String nombre;
     private final CategoriaArticulo categoria;
     private final String marca;
@@ -10,6 +12,7 @@ public class TipoArticulo {
     private final int cantidadAmortizacion;
 
     public TipoArticulo(String nombre, CategoriaArticulo categoria, String marca, String descripcion, boolean flagAmortizacionPorFecha, int cantidad) {
+        this.id = nextID++;
         this.nombre = nombre;
         this.categoria = categoria;
         this.marca = marca;
@@ -32,12 +35,11 @@ public class TipoArticulo {
 	
 	@Override
 	public String toString() {
-		return "{" +
-				"nombre: " + this.nombre + ", " +
+		return  "id: " + this.id + ", " +
+				"categoria: " + this.nombre + ", " +
 				"marca: " + this.marca + ", " + 
 				"descripcion: " + this.descripcion + ", " + 
 				"formaAmortizacion: " + this.formaAmortizacion + ", " + 
-				"cantidadAmortizacion: " + this.cantidadAmortizacion + 
-				"}";
+				"cantidad: " + this.cantidadAmortizacion;
 	}
 }

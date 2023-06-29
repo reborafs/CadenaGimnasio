@@ -1,22 +1,21 @@
 package ar.edu.uade.gym;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
 
-import ar.edu.uade.articulos.CategoriaArticulo;
+import ar.edu.uade.gym.articulos.CategoriaArticulo;
+import ar.edu.uade.gym.bbdd.BaseDeDatos;
 import ar.edu.uade.usuarios.Usuario;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.SoporteTecnico;
 import ar.edu.uade.usuarios.Profesor;
 import ar.edu.uade.usuarios.Administrativo;
-import ar.edu.uade.articulos.Articulo;
-import ar.edu.uade.articulos.TipoArticulo;
-import ar.edu.uade.bbdd.BaseDeDatos;
+import ar.edu.uade.gym.articulos.Articulo;
+import ar.edu.uade.gym.articulos.TipoArticulo;
 
 public class CadenaGimnasio {
     public CadenaGimnasio(String nombre, ArrayList<SoporteTecnico> usuariosSoporteTecnico,
@@ -198,7 +197,14 @@ public class CadenaGimnasio {
     public ArrayList<Sede> getListaSedes() {
     	return this.sedes;
     }
-    
+
+	public ArrayList<String> getListaNombresSedes() {
+		ArrayList<String> stringSedes = new ArrayList<String>();
+		for (Sede sede : this.sedes)
+			stringSedes.add(sede.getUbicacion());
+		return stringSedes;
+	}
+
     public Sede getSede(String ubicacion) {
     	for (Sede sede: sedes) 
     		if (sede.getUbicacion().equals(ubicacion.toLowerCase())) 
@@ -262,19 +268,36 @@ public class CadenaGimnasio {
      */
     
     public void agendarClase(Sede sede, Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos,
-							 LocalDate fecha, LocalTime horarioInicio, LocalTime horarioFin, Emplazamiento emplazamiento,
+							 LocalDate fecha, LocalTime horarioInicio, Emplazamiento emplazamiento,
 							 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
-		sede.agregarClase(profesor, ejercicio, listaAlumnos, fecha, horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
+		sede.agregarClase(profesor, ejercicio, listaAlumnos, fecha, horarioInicio, emplazamiento, listaArticulos, esVirtual);
     }
 
 	public void asignarProfesorClase(Sede sede, Clase clase ,Usuario profesor) throws GymException {
 		sede.asignarProfesor(clase,profesor);
 	}
-    
-    //public String getStringListaClases() {
-    //	return Arrays.toString(this.sedes.toArray());
-    //}
-    
+
+	public HashMap<LocalDate, ArrayList<LocalTime>> getHorariosClasesAsignadasProfesor(String ubicacionSede, Profesor profesor) {
+	/// TOMA LA SIGUIENTE SEMANA Y RETORNA UN HASHMAP. CLAVE ES EL LOCALDATE Y LOS VALUES SON ARRAYS DE LOCALTIME
+	//  QUE SON EL HORARIO DE INICIO DE LA CLASE.
+		Sede sede = getSede(ubicacionSede);
+		HashMap<LocalDate, ArrayList<LocalTime>> horariosAsignados = new HashMap<>();
+		ArrayList<Clase> listaClases =  sede.getClasesProfesor(profesor);
+
+		ArrayList<LocalDate> semana = new ArrayList<>();
+		for (int day=0; day<7; day++) {	semana.add(LocalDate.now().plusDays(day));	}
+
+		for (LocalDate dia : semana) {
+			ArrayList<LocalTime> horarios = new ArrayList<>();
+			for (Clase clase : listaClases) {
+				if ( dia.isEqual(clase.getFecha()) )
+					horarios.add(clase.getHorarioInicio());
+			}
+			horariosAsignados.put(dia,horarios);
+		}
+		return horariosAsignados;
+	}
+
     /* =======================================================
      *                    METODOS DE ARTICULOS 
      * =======================================================
@@ -283,6 +306,13 @@ public class CadenaGimnasio {
 		return catalogoDeArticulos;
 	}
 
+	public ArrayList<String> getStringCatalogoDeArticulos() {
+		ArrayList<String> catalogo = new ArrayList<>();
+		for (TipoArticulo tipoArticulo: catalogoDeArticulos ) {
+			catalogo.add(tipoArticulo.toString());
+		}
+		return catalogo;
+	}
 	public void eliminarArticulo(Sede sede, Articulo articulo) {
 		sede.eliminarArticulo(articulo);
 	}
@@ -291,15 +321,34 @@ public class CadenaGimnasio {
 		sede.darDeBajaArticulo(articulo);
 	}
 
-	public void agregarTipoArticuloPorFecha(String nombre, CategoriaArticulo articulo, String marca, String descripcion, int diasAmortizacion) {
+	public void agregarTipoArticuloPorFecha(String nombre, String categoria, String marca, String descripcion,
+											int diasAmortizacion) throws GymException {
 		boolean flagAmortizacionPorFecha = true;
-	    TipoArticulo newTipoArticulo = new TipoArticulo(nombre, articulo, marca, descripcion, flagAmortizacionPorFecha, diasAmortizacion);
+		CategoriaArticulo categoriaArticulo;
+
+		switch (categoria.toUpperCase()) {
+			case "ACCESORIO" -> categoriaArticulo = CategoriaArticulo.ACCESORIO;
+			case "COLCHONETA" -> categoriaArticulo = CategoriaArticulo.COLCHONETA;
+			case "PESA" -> categoriaArticulo = CategoriaArticulo.PESA;
+			default -> throw new GymException("La categoria '" + categoria +  "' de ese articulo no existe.");
+		}
+
+	    TipoArticulo newTipoArticulo = new TipoArticulo(nombre, categoriaArticulo, marca, descripcion, flagAmortizacionPorFecha, diasAmortizacion);
 		this.catalogoDeArticulos.add(newTipoArticulo);
 	}
 	
-	public void agregarTipoArticuloPorUso(String nombre, CategoriaArticulo articulo, String marca, String descripcion, int usosAmortizacion) {
+	public void agregarTipoArticuloPorUso(String nombre, String categoria, String marca, String descripcion, int usosAmortizacion) throws GymException {
 		boolean flagAmortizacionPorFecha = false;
-		TipoArticulo newTipoArticulo = new TipoArticulo(nombre, articulo, marca, descripcion, flagAmortizacionPorFecha, usosAmortizacion);
+		CategoriaArticulo categoriaArticulo;
+
+		switch (categoria.toUpperCase()) {
+			case "ACCESORIO" -> categoriaArticulo = CategoriaArticulo.ACCESORIO;
+			case "COLCHONETA" -> categoriaArticulo = CategoriaArticulo.COLCHONETA;
+			case "PESA" -> categoriaArticulo = CategoriaArticulo.PESA;
+			default -> throw new GymException("La categoria '" + categoria +  "' de ese articulo no existe.");
+		}
+
+		TipoArticulo newTipoArticulo = new TipoArticulo(nombre, categoriaArticulo, marca, descripcion, flagAmortizacionPorFecha, usosAmortizacion);
 		this.catalogoDeArticulos.add(newTipoArticulo);
 	}
 
@@ -328,33 +377,85 @@ public class CadenaGimnasio {
 	public void llenarGym() {
 		try {
 
-			// AGREGAR USUARIO
-			Usuario admin = new Administrativo("admin","admin");
-			Usuario cliente1 = new Cliente("cliente","cliente", TipoNivel.PLATINUM);
-			Usuario cliente2 = new Cliente("ramona","flowers", TipoNivel.BLACK);
-			Usuario profe = new Profesor("profe","profe",  50000);
-			Usuario soporte = new SoporteTecnico("soporte", "soporte");
 
-			this.agregarUsuario(admin);
-			this.agregarUsuario(cliente1);
-			this.agregarUsuario(cliente2);
-			this.agregarUsuario(profe);
-			this.agregarUsuario(soporte);
-
-
-
-			// AGREGAR SEDE
+			/* =======================================================
+			 *                    AGREGAR SEDES
+			 * =====================================================*/
 			this.agregarSede("Caballito", TipoNivel.BLACK, null, null, 80000);
 			this.agregarSede("Belgrano", TipoNivel.ORO, null, null, 100000);
 			this.agregarSede("Palermo", TipoNivel.PLATINUM, null, null, 120000);
-			
-
-			
-			// AGREGAR ARTICULOS
+			Sede sedeCaballito = this.getSede("Caballito");
 			Sede sedeBelgrano = this.getSede("Belgrano");
-			
-			this.agregarTipoArticuloPorFecha("Colchoneta", CategoriaArticulo.COLCHONETA,"Pepito", "Colchoneta de 2m x 0.75m", 200);
-			this.agregarTipoArticuloPorUso("Pesa", CategoriaArticulo.PESA,"Pepito", "Pesa marca Pepito de 20kg", 50);
+			Sede sedePalermo = this.getSede("Palermo");
+
+
+			/* =======================================================
+			 *                    AGREGAR EMPLAZAMIENTO EN SEDES
+			 * =====================================================*/
+			this.crearEmplazamiento(sedeCaballito,TipoEmplazamiento.SALON, 25, 30);
+			this.crearEmplazamiento(sedeCaballito,TipoEmplazamiento.SALON, 40, 50);
+			this.crearEmplazamiento(sedeCaballito,TipoEmplazamiento.SALON, 40, 50);
+			this.crearEmplazamiento(sedeCaballito,TipoEmplazamiento.AIRE_LIBRE, 40, 60);
+
+			this.crearEmplazamiento(sedeBelgrano,TipoEmplazamiento.SALON, 40, 50);
+			this.crearEmplazamiento(sedeBelgrano,TipoEmplazamiento.SALON, 25, 30);
+			this.crearEmplazamiento(sedeBelgrano,TipoEmplazamiento.PILETA, 25, 50);
+			this.crearEmplazamiento(sedeBelgrano,TipoEmplazamiento.AIRE_LIBRE, 40, 60);
+
+			this.crearEmplazamiento(sedePalermo,TipoEmplazamiento.SALON, 25, 30);
+			this.crearEmplazamiento(sedePalermo,TipoEmplazamiento.SALON, 30, 40);
+			this.crearEmplazamiento(sedePalermo,TipoEmplazamiento.SALON, 30, 40);
+			this.crearEmplazamiento(sedePalermo,TipoEmplazamiento.PILETA, 25, 50);
+
+			/* =======================================================
+			 *                    AGREGAR USUARIOS
+			 * =====================================================*/
+			ArrayList<Usuario> usuariosNuevos = new ArrayList<>();
+			usuariosNuevos.add(new Administrativo("admin","admin"));
+			usuariosNuevos.add(new Administrativo("admin2","admin"));
+			usuariosNuevos.add(new Administrativo("admin3","admin"));
+			usuariosNuevos.add(new Administrativo("admin4","admin"));
+			usuariosNuevos.add(new Administrativo("admin5","admin"));
+
+			usuariosNuevos.add(new Cliente("cliente","cliente", TipoNivel.PLATINUM));
+			usuariosNuevos.add(new Cliente("cliente2","cliente", TipoNivel.ORO));
+			usuariosNuevos.add(new Cliente("cliente3","cliente", TipoNivel.ORO));
+			usuariosNuevos.add(new Cliente("cliente4","cliente", TipoNivel.ORO));
+			usuariosNuevos.add(new Cliente("cliente5","cliente", TipoNivel.ORO));
+			usuariosNuevos.add(new Cliente("cliente6","cliente", TipoNivel.ORO));
+			usuariosNuevos.add(new Cliente("cliente7","cliente", TipoNivel.BLACK));
+			usuariosNuevos.add(new Cliente("cliente8","cliente", TipoNivel.BLACK));
+			usuariosNuevos.add(new Cliente("cliente9","cliente", TipoNivel.BLACK));
+			usuariosNuevos.add(new Cliente("cliente10","cliente", TipoNivel.BLACK));
+			usuariosNuevos.add(new Cliente("cliente11","cliente", TipoNivel.BLACK));
+			usuariosNuevos.add(new Cliente("cliente12","cliente", TipoNivel.PLATINUM));
+			usuariosNuevos.add(new Cliente("cliente13","cliente", TipoNivel.PLATINUM));
+			usuariosNuevos.add(new Cliente("cliente14","cliente", TipoNivel.PLATINUM));
+			usuariosNuevos.add(new Cliente("cliente15","cliente", TipoNivel.PLATINUM));
+			usuariosNuevos.add(new Cliente("cliente16","cliente", TipoNivel.PLATINUM));
+			usuariosNuevos.add(new Cliente("L-gante","cliente", TipoNivel.PLATINUM));
+			usuariosNuevos.add(new Cliente("Duki","cliente", TipoNivel.PLATINUM));
+			usuariosNuevos.add(new Cliente("ramona","cliente", TipoNivel.PLATINUM));
+
+			usuariosNuevos.add(new Profesor("profe","profe",  50000));
+			usuariosNuevos.add(new Profesor("profe2","profe",  40000));
+			usuariosNuevos.add(new Profesor("Stallone","profe",  60000));
+			usuariosNuevos.add(new Profesor("Ricky","profe",  70000));
+
+			usuariosNuevos.add(new SoporteTecnico("soporte", "soporte"));
+			usuariosNuevos.add(new SoporteTecnico("soporte2", "soporte"));
+			usuariosNuevos.add(new SoporteTecnico("soporte3", "soporte"));
+
+			for (Usuario user : usuariosNuevos) {
+				this.agregarUsuario(user);
+			}
+
+
+			/* =======================================================
+			 *                    AGREGAR ARTICULOS
+			 * =====================================================*/
+			this.agregarTipoArticuloPorFecha("Colchoneta", "COLCHONETA","Pepito", "Colchoneta de 2m x 0.75m", 200);
+			this.agregarTipoArticuloPorUso("Pesa", "PESA","Pepito", "Pesa marca Pepito de 20kg", 50);
 
 			TipoArticulo tipoArticulo = this.getCatalogoDeArticulos().get(0);
 
@@ -371,9 +472,7 @@ public class CadenaGimnasio {
 			this.agregarEjercicio("Crossfit", true, 10, tipoArticulo1);
 			this.agregarEjercicio("Yoga", true, 15 ,tipoArticulo2);
 			
-			//EMPLAZAMIENTO
-			this.crearEmplazamiento(sedeBelgrano,TipoEmplazamiento.SALON, 25, 30);
-			this.crearEmplazamiento(sedeBelgrano,TipoEmplazamiento.PILETA, 40, 50);
+
 			
 			//CLASE
 			// Invento dos alumnos, uno con nivel suficiente y otro no.
@@ -397,8 +496,12 @@ public class CadenaGimnasio {
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
 			ArrayList<Articulo> listaArticulos = null;
 			boolean esVirtual = true;
-			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, horarioFin, emplazamiento, listaArticulos, esVirtual);
-			
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,6,29), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,1), LocalTime.of(20,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,2), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,4), LocalTime.of(15,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,8), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
+
 			
 			//ALMACENAR CLASE EN BBDD
 			ArrayList<Clase> listaClases = sedeBelgrano.getListaClases();
@@ -418,5 +521,13 @@ public class CadenaGimnasio {
 
 	public double getSueldo(Profesor profesor) {
 		return profesor.getSueldo();
+	}
+
+	public ArrayList<String> getEjerciciosDisponiblesSede(String ubicacionSede) {
+		Sede sede = getSede(ubicacionSede);
+		ArrayList<String> ejerciciosSede = new ArrayList<String>();
+		for (Ejercicio ejercicio : sede.getEjerciciosDisponibles())
+			ejerciciosSede.add(ejercicio.getNombre());
+		return ejerciciosSede;
 	}
 }

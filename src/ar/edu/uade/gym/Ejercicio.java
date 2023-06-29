@@ -2,7 +2,7 @@ package ar.edu.uade.gym;
 
 import java.util.ArrayList;
 
-import ar.edu.uade.articulos.TipoArticulo;
+import ar.edu.uade.gym.articulos.TipoArticulo;
 
 public class Ejercicio {
     private String nombre;
