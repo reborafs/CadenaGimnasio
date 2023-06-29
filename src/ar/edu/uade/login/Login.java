@@ -25,7 +25,8 @@ public class Login extends JFrame{
         this.controladorLogin = ControladorLogin.getInstance();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 300);
-
+        pack();
+        setLocationRelativeTo(null);
 
         this.setLayout(new BorderLayout());
 

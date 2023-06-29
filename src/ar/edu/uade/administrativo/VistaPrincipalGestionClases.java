@@ -75,45 +75,33 @@ public class VistaPrincipalGestionClases extends JFrame{
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
 
-		class HandlerBtnClientes implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaClientes();
-			}
-		}
-
-		class HandlerBtnProfesor implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaProfesores();
-			}
-		}
-
-		class HandlerBtnArticulos implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaArticulos();
-			}
-		}
-
-		/* INSTANCIACION DE LOS MANEJADORES */
-		HandlerBtnClientes handlerBtnClientes = new HandlerBtnClientes();
-		HandlerBtnProfesor handlerBtnProfesor = new HandlerBtnProfesor();
-		HandlerBtnArticulos handlerBtnArticulos = new HandlerBtnArticulos();
-
-		/* ASIGNACION DE LOS MANEJADORES A LOS BOTONES */
-		btnCliente.addActionListener(handlerBtnClientes);
-		btnProfesor.addActionListener(handlerBtnProfesor);
-		btnArticulos.addActionListener(handlerBtnArticulos);
+		btnCliente.addActionListener(actionEvent -> abrirVistaClientes());
+		btnProfesor.addActionListener(actionEvent -> abrirVistaProfesores());
+		btnArticulos.addActionListener(actionEvent -> abrirVistaArticulos());
 	}
-	
+
+	private void abrirVistaArticulos() {
+		this.dispose();
+		controller.abrirVistaArticulos();
+	}
+
+	private void abrirVistaProfesores() {
+		this.dispose();
+		controller.abrirVistaArticulos();
+	}
+
+	private void abrirVistaClientes() {
+		this.dispose();
+		controller.abrirVistaArticulos();
+	}
+
 	private void abrirVistaAgendarClases() {
         String profesor = JOptionPane.showInputDialog(this, "Ingrese el nombre del profesor:");
         String horario = JOptionPane.showInputDialog(this, "Ingrese el horario de la clase:");
         String sede = JOptionPane.showInputDialog(this, "Ingrese la sede de la clase:");
 
         // Aquí puedes utilizar los datos ingresados para crear la clase
-        //Clase nuevaClase = new Clase(profesor, horario, sede);
+        // Clase nuevaClase = new Clase(profesor, horario, sede);
 
         // Realizar las acciones necesarias con la nueva clase (almacenarla, mostrarla, etc.)
         // ...

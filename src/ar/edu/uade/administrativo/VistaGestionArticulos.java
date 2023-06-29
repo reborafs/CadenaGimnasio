@@ -73,58 +73,30 @@ public class VistaGestionArticulos extends JFrame {
 		this.setVisible(true);
 
 
-		class HandlerBtnIncorporar implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mostrarDialogoIncorporarArticulos();
-			}
-		}
-
-		class HandlerBtnMonitorear implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mostrarListaArticulos();
-			}
-		}
-
-		class HandlerBtnClientes implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaClientes();
-			}
-		}
-
-		class HandlerBtnClases implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaClases();
-			}
-		}
-
-		class HandlerBtnProfesor implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaProfesores();
-			}
-		}
-
-
-		/* INSTANCIACION DE LOS MANEJADORES */
-		HandlerBtnIncorporar handlerBtnIncorporar = new HandlerBtnIncorporar();
-		HandlerBtnMonitorear handlerBtnMonitorear = new HandlerBtnMonitorear();
-		HandlerBtnClientes handlerBtnClientes = new HandlerBtnClientes();
-		HandlerBtnClases handlerBtnClases = new HandlerBtnClases();
-		HandlerBtnProfesor handlerBtnProfesor = new HandlerBtnProfesor();
-
-		/* ASIGNACION DE LOS MANEJADORES A LOS BOTONES */
-		btnIncorporar.addActionListener(handlerBtnIncorporar);
-		btnMonitorear.addActionListener(handlerBtnMonitorear);
-		btnCliente.addActionListener(handlerBtnClientes);
-		btnClases.addActionListener(handlerBtnClases);
-		btnProfesor.addActionListener(handlerBtnProfesor);
+		/* ASIGNACION DE LOS BOTONES */
+		btnIncorporar.addActionListener(actionEvent -> mostrarDialogoIncorporarArticulos());
+		btnMonitorear.addActionListener(actionEvent -> mostrarListaArticulos());
+		btnCliente.addActionListener(actionEvent -> abrirVistaClientes());
+		btnClases.addActionListener(actionEvent -> abrirVistaClases());
+		btnProfesor.addActionListener(actionEvent -> abrirVistaProfesores());
 
 	}
-	
+
+	private void abrirVistaProfesores() {
+		this.dispose();
+		controller.abrirVistaProfesores();
+	}
+
+	private void abrirVistaClases() {
+		this.dispose();
+		controller.abrirVistaClases();
+	}
+
+	private void abrirVistaClientes() {
+		this.dispose();
+		controller.abrirVistaClientes();
+	}
+
 	private void mostrarDialogoIncorporarArticulos() {
         JDialog dialogo = new JDialog(this, "Incorporar Articulos", true);
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
