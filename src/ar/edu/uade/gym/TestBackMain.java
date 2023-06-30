@@ -5,21 +5,8 @@
 //import java.util.ArrayList;
 //
 //import ar.edu.uade.gym.articulos.Articulo;
-//import ar.edu.uade.gym.articulos.CategoriaArticulo;
 //import ar.edu.uade.gym.articulos.TipoArticulo;
-//import ar.edu.uade.gym.CadenaGimnasio;
-//import ar.edu.uade.gym.Clase;
-//import ar.edu.uade.gym.Ejercicio;
-//import ar.edu.uade.gym.Emplazamiento;
-//import ar.edu.uade.gym.GymException;
-//import ar.edu.uade.gym.Sede;
-//import ar.edu.uade.gym.TipoEmplazamiento;
-//import ar.edu.uade.gym.TipoNivel;
-//import ar.edu.uade.usuarios.Administrativo;
-//import ar.edu.uade.usuarios.Cliente;
-//import ar.edu.uade.usuarios.Profesor;
-//import ar.edu.uade.usuarios.SoporteTecnico;
-//import ar.edu.uade.usuarios.Usuario;
+//import ar.edu.uade.usuarios.*;
 //
 //
 //public class TestBackMain {
