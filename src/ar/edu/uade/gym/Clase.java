@@ -1,5 +1,6 @@
 package ar.edu.uade.gym;
 
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -161,6 +162,10 @@ public class Clase {
 
 	public LocalTime getHorarioInicio() {
 		return this.horarioInicio;
+	}
+
+	public LocalDateTime getHorarioInicioFecha(){
+		return this.fecha.atTime(this.horarioInicio);
 	}
 
 

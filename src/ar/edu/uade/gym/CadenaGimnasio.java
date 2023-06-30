@@ -518,6 +518,10 @@ public class CadenaGimnasio {
 			 *                    AGREGAR ARTICULOS
 			 * =====================================================*/
 			this.agregarTipoArticuloPorFecha("Colchoneta", "COLCHONETA","Pepito", "Colchoneta de 2m x 0.75m", 200);
+			this.agregarTipoArticuloPorFecha("Disco", "PESA","Fulanito", "Disco marca Fulanito de 25kg", 500);
+			this.agregarTipoArticuloPorFecha("Macuerna", "PESA","Pepito", "Macuerna de 4kg", 300);
+			this.agregarTipoArticuloPorUso("Pelota medica", "PESA","Mengano", "Pelota marca Mengano de 10kg", 150);
+			this.agregarTipoArticuloPorUso("Alfombre de yoga", "COLCHONETA","Pepito", "Alfombre de yoga marca Pepito de 2m x 0.75m", 50);
 			this.agregarTipoArticuloPorUso("Pesa", "PESA","Pepito", "Pesa marca Pepito de 20kg", 50);
 			this.agregarTipoArticuloPorUso("Soga", "ACCESORIO","Pepito", "Soga marca Pepito de 3mts", 50);
 
@@ -528,17 +532,42 @@ public class CadenaGimnasio {
 
 			this.agregarArticulo(sedeBelgrano, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
 			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+
+			this.agregarArticulo(sedePalermo, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
 
 			
 			//AGREGAR EJERCICIO
 			TipoArticulo tipoArticulo1 = this.getCatalogoDeArticulos().get(0);
 			TipoArticulo tipoArticulo2 = this.getCatalogoDeArticulos().get(1);
+			TipoArticulo tipoArticulo3 = this.getCatalogoDeArticulos().get(2);
+			TipoArticulo tipoArticulo4 = this.getCatalogoDeArticulos().get(3);
+			TipoArticulo tipoArticulo5 = this.getCatalogoDeArticulos().get(4);
+			TipoArticulo tipoArticulo6 = this.getCatalogoDeArticulos().get(5);
 			this.agregarEjercicio("Crossfit", true, 10, tipoArticulo1);
 			this.agregarEjercicio("Yoga", true, 15 ,tipoArticulo2);
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Yoga"));
 
-
+			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
+			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
+			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
+			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
 
 			//CLASE
 			// Invento dos alumnos, uno con nivel suficiente y otro no.
@@ -614,6 +643,11 @@ public class CadenaGimnasio {
 			
 			//Agregar Ejercicio
 			Ejercicio ejercicio1 = this.getEjercicio("Crossfit");
+			Ejercicio ejercicio2 = this.getEjercicio("Yoga");
+			Ejercicio ejercicio3 = this.getEjercicio("Boxing");
+			Ejercicio ejercicio4 = this.getEjercicio("Karate");
+			Ejercicio ejercicio5 = this.getEjercicio("Bailoterapia");
+			Ejercicio ejercicio6 = this.getEjercicio("Yudo");
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
 
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio2);
