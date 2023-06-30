@@ -65,8 +65,10 @@ public class Sede {
 		// Chequear que el profesor no tenga un intervalo menor a 3 hs entre clase y clase.
 		for (Clase clase: listaClasesMismoDia) {
 			long tiempoEntreClases = clase.getHorarioInicio().until(claseNueva.getHorarioInicio(), ChronoUnit.MINUTES);
-			if (Math.abs(tiempoEntreClases) >= 180) {
-				throw new GymException("El profesor debe tener un intervalo de 3hs entre clase y clase.");
+			if(clase.getFecha() == claseNueva.getFecha()){
+				if (Math.abs(tiempoEntreClases) >= 180) {
+					throw new GymException("El profesor debe tener un intervalo de 3hs entre clase y clase.");
+				}
 			}
 		}
 	}
@@ -104,16 +106,18 @@ public class Sede {
 		}
 	}
 
-	private void validarListaAlumnos(int idClase, ArrayList<Cliente> listaAlumnos) throws GymException {
+	private void validarListaAlumnos(int idClase, ArrayList<Cliente> listaAlumnos, Cliente alumnoNuevo) throws GymException {
 		for (Cliente alumno: listaAlumnos) {
-			validarClaseDiariaAlumno(idClase, alumno);
+			//if(alumno.getID() == alumnoNuevo.getID()){
+				validarClaseDiariaAlumno(idClase, alumnoNuevo);
+			//}
 		}
 	}
 
 	private void validarAlumno(int idClase, Cliente alumno) throws GymException {
 		ArrayList<Cliente> listaAlumnos = new ArrayList<Cliente>();
-		listaAlumnos.add(alumno);
-		validarListaAlumnos(idClase, listaAlumnos);
+		//listaAlumnos.add(alumno);
+		validarListaAlumnos(idClase, listaAlumnos, alumno);
 	}
 
 
@@ -185,9 +189,12 @@ public class Sede {
 
 	public void validarYConfirmarClase(Clase clase) {
 		// TO-DO AGREGAR VALIDACIONES DE EMPLAZAMIENTO, PROFESOR Y OTROS SI ES NECESARIO.
-		if (validarRentabilidad(clase))
-			if (validarArticulosNecesarios(clase, clase.getEjercicio()))
+		if (validarRentabilidad(clase)) {
+			if (validarArticulosNecesarios(clase, clase.getEjercicio())) {
 				clase.confirmarClase();
+				System.out.print("Se confirmo la clase\n");
+			}
+		}
 	}
 	public void finalizarClase(Clase clase) {
 		calcularDesgasteArticulos(clase);

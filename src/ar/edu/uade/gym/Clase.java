@@ -224,4 +224,8 @@ public class Clase {
 
 		return array;
 	}
+
+	public EstadoClase getEstado() {
+		return estado;
+	}
 }
