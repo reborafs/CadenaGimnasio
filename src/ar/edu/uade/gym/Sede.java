@@ -92,35 +92,48 @@ public class Sede {
 	 * =======================================================
 	 */
 
-	private void validarClaseDiariaAlumno(Clase claseNueva, Cliente alumno) throws GymException {
+	private void validarClaseDiariaAlumno(int claseNueva, Cliente alumno) throws GymException {
 		for (Clase clase: this.listaClases) {
-			if (clase.equals(claseNueva)) {
+			if (clase.getClaseID() == claseNueva) {
 				throw new GymException("El alumno ya esta anotado en esta clase.");
 			} else {
-				if (clase.getFecha() == claseNueva.getFecha())
+				if (clase.getFecha() == this.listaClases.get(claseNueva).getFecha())
 					if (clase.getListaAlumnos().contains(alumno))
 						throw new GymException("El alumno ya esta anotado en una clase este mismo dia.");
 			}
 		}
 	}
 
-	private void validarListaAlumnos(Clase clase, ArrayList<Cliente> listaAlumnos) throws GymException {
+	private void validarListaAlumnos(int idClase, ArrayList<Cliente> listaAlumnos) throws GymException {
 		for (Cliente alumno: listaAlumnos) {
-			validarClaseDiariaAlumno(clase, alumno);
+			validarClaseDiariaAlumno(idClase, alumno);
 		}
 	}
 
-	private void validarAlumno(Clase clase, Cliente alumno) throws GymException {
+	private void validarAlumno(int idClase, Cliente alumno) throws GymException {
 		ArrayList<Cliente> listaAlumnos = new ArrayList<Cliente>();
 		listaAlumnos.add(alumno);
-		validarListaAlumnos(clase, listaAlumnos);
+		validarListaAlumnos(idClase, listaAlumnos);
 	}
 
 
-	public void agregarAlumno(Clase clase, Cliente cliente) throws GymException {
-		validarAlumno(clase, cliente);
-		clase.agregarAlumno(cliente, this.tipoNivel);
-		validarYConfirmarClase(clase);
+	public void agregarAlumno(int idClase, Cliente cliente) throws GymException {
+		validarAlumno(idClase, cliente);
+		this.listaClases.get(idClase).agregarAlumno(cliente, this.tipoNivel);
+		validarYConfirmarClase(this.listaClases.get(idClase));
+	}
+
+	public ArrayList<Clase> getClasesCliente(Cliente cliente) {
+		ArrayList<Clase> clasesAsignadas = new ArrayList<Clase>();
+		for (Clase clase: this.listaClases) {
+			ArrayList<Cliente> clienteAsignados = clase.getListaAlumnos();
+			for(Cliente clienteAsignado:clienteAsignados) {
+				if (clienteAsignado.equals(cliente)) {
+					clasesAsignadas.add(clase);
+				}
+			}
+		}
+		return clasesAsignadas;
 	}
 
 	/* =======================================================

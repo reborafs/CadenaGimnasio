@@ -4,7 +4,10 @@ import ar.edu.uade.gym.CadenaGimnasio;
 import ar.edu.uade.gym.Ejercicio;
 import ar.edu.uade.gym.Sede;
 import ar.edu.uade.usuarios.Cliente;
+import ar.edu.uade.usuarios.Profesor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -87,6 +90,7 @@ public class ControladorCliente {
         ArrayList<Sede> sedes = gym.getListaSedes();
         for(Sede sede : sedes){
             ArrayList<Ejercicio> ejercicios = sede.getEjerciciosDisponibles();
+            System.out.print("aqui -->" +ejercicios.toString());
             ArrayList<String> ejerciciosDisponibles = new ArrayList<>();
             for(Ejercicio ejercicio: ejercicios) {
                 if (sede.getEjerciciosDisponibles() != null) {
@@ -107,5 +111,13 @@ public class ControladorCliente {
         return false;
     }
 
+    /* =======================================================
+     *                    GETTERS / SETTERS
+     * =======================================================
+     */
+
+    public HashMap<LocalDate, ArrayList<LocalTime>> getClasesAsignadas(String ubicacionSede) {
+        return gym.getHorariosClasesAsignadasClientes(ubicacionSede, this.usuario);
+    }
 
 }

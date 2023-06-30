@@ -10,8 +10,12 @@ import ar.edu.uade.usuarios.Profesor;
 
 
 public class Clase {
-	
+
+
     static int MAX_ALUMNOS_POR_CLASE = 30;
+
+	private static int nextID = 0;
+	private final int id;
 
     private Profesor profesorAsignado;
     private final LocalDate fecha;
@@ -27,7 +31,8 @@ public class Clase {
     public Clase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, TipoNivel tipoNivel,
 				 LocalDate fecha, LocalTime horarioInicio, Emplazamiento emplazamiento,
 				 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
-    	
+
+		this.id = nextID++;
     	asignarProfesor(profesor);
         this.ejercicio = ejercicio;
         this.estado = EstadoClase.AGENDADA;
@@ -182,6 +187,10 @@ public class Clase {
 
 	public ArrayList<Articulo> getListaArticulos() {
 		return listaArticulos;
+	}
+
+	public int getClaseID() {
+		return id;
 	}
 
 	@Override
