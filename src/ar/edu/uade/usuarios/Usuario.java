@@ -54,7 +54,7 @@ public abstract class Usuario {
     }
 
     public void setNombre(String nuevoNombre) {
-        this.nombre = nombre;
+        this.nombre = nuevoNombre;
     }
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;

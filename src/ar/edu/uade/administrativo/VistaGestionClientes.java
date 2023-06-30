@@ -130,25 +130,22 @@ public class VistaGestionClientes extends JFrame {
         lblErrorMessage.setForeground(Color.RED);
 
         JButton btnAceptar = new JButton("Aceptar");
-        btnAceptar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    String nombre = txtNombre.getText();
-                    String contrasena = txtContrasena.getText();
-                    String nivel = txtNivel.getText();
-                    controller.agregarCliente(nombre, contrasena, nivel);
+        btnAceptar.addActionListener(e -> {
+            try {
+                String nombre = txtNombre.getText();
+                String contrasena = txtContrasena.getText();
+                String nivel = txtNivel.getText();
+                controller.agregarCliente(nombre, contrasena, nivel);
 
-                    // Cerrar el diálogo
-                    lblError.setVisible(false);
-                    lblErrorMessage.setVisible(false);
-                    dialogo.dispose();
-                } catch (Exception ex) {
-                    lblErrorMessage.setText("Error.");
-                    lblError.setVisible(true);
-                    lblErrorMessage.setVisible(true);
-                    return; // Exit the method without processing the information
-                }
+                // Cerrar el diálogo
+                lblError.setVisible(false);
+                lblErrorMessage.setVisible(false);
+                dialogo.dispose();
+            } catch (Exception ex) {
+                lblErrorMessage.setText("Error.");
+                lblError.setVisible(true);
+                lblErrorMessage.setVisible(true);
+                return; // Exit the method without processing the information
             }
         });
 
@@ -178,7 +175,7 @@ public class VistaGestionClientes extends JFrame {
 
     private void eliminarCliente() {
         // Implementación de la funcionalidad de creación de cliente
-        JDialog dialogo = new JDialog(this, "Modificar Cliente", true);
+        JDialog dialogo = new JDialog(this, "Eliminar Cliente", true);
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
@@ -224,7 +221,7 @@ public class VistaGestionClientes extends JFrame {
     }
 
     private void modificarCliente() {
-        JDialog dialogo = new JDialog(this, "Eliminar Cliente", true);
+        JDialog dialogo = new JDialog(this, "Modificar Cliente", true);
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();

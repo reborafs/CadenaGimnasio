@@ -3,9 +3,7 @@ package ar.edu.uade.gym;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 import ar.edu.uade.gym.articulos.CategoriaArticulo;
 import ar.edu.uade.gym.bbdd.BaseDeDatos;
@@ -368,10 +366,10 @@ public class CadenaGimnasio {
 		return catalogoDeArticulos;
 	}
 
-	public ArrayList<String> getStringCatalogoDeArticulos() {
-		ArrayList<String> catalogo = new ArrayList<>();
+	public ArrayList<String[]> getListaCatalogoDeArticulos() {
+		ArrayList<String[]> catalogo = new ArrayList<>();
 		for (TipoArticulo tipoArticulo: catalogoDeArticulos ) {
-			catalogo.add(tipoArticulo.toString());
+			catalogo.add(tipoArticulo.getInfo());
 		}
 		return catalogo;
 	}
@@ -500,9 +498,9 @@ public class CadenaGimnasio {
 			usuariosNuevos.add(new Cliente("ramona","cliente", TipoNivel.PLATINUM));
 
 			usuariosNuevos.add(new Profesor("profe","profe",  50000));
-			usuariosNuevos.add(new Profesor("profe2","profe",  40000));
+			usuariosNuevos.add(new Profesor("Messi","profe",  80000));
 			usuariosNuevos.add(new Profesor("Stallone","profe",  60000));
-			usuariosNuevos.add(new Profesor("Ricky","profe",  70000));
+			usuariosNuevos.add(new Profesor("Ricky Fort","profe",  70000));
 
 			usuariosNuevos.add(new SoporteTecnico("soporte", "soporte"));
 			usuariosNuevos.add(new SoporteTecnico("soporte2", "soporte"));
@@ -520,10 +518,6 @@ public class CadenaGimnasio {
 			 *                    AGREGAR ARTICULOS
 			 * =====================================================*/
 			this.agregarTipoArticuloPorFecha("Colchoneta", "COLCHONETA","Pepito", "Colchoneta de 2m x 0.75m", 200);
-			this.agregarTipoArticuloPorFecha("Disco", "PESA","Fulanito", "Disco marca Fulanito de 25kg", 500);
-			this.agregarTipoArticuloPorFecha("Macuerna", "PESA","Pepito", "Macuerna de 4kg", 300);
-			this.agregarTipoArticuloPorUso("Pelota medica", "PESA","Mengano", "Pelota marca Mengano de 10kg", 150);
-			this.agregarTipoArticuloPorUso("Alfombre de yoga", "COLCHONETA","Pepito", "Alfombre de yoga marca Pepito de 2m x 0.75m", 50);
 			this.agregarTipoArticuloPorUso("Pesa", "PESA","Pepito", "Pesa marca Pepito de 20kg", 50);
 			this.agregarTipoArticuloPorUso("Soga", "ACCESORIO","Pepito", "Soga marca Pepito de 3mts", 50);
 
@@ -534,42 +528,16 @@ public class CadenaGimnasio {
 
 			this.agregarArticulo(sedeBelgrano, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
 			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-
-			this.agregarArticulo(sedeCaballito, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-
-			this.agregarArticulo(sedePalermo, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
-			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
 
 			
 			//AGREGAR EJERCICIO
 			TipoArticulo tipoArticulo1 = this.getCatalogoDeArticulos().get(0);
 			TipoArticulo tipoArticulo2 = this.getCatalogoDeArticulos().get(1);
-			TipoArticulo tipoArticulo3 = this.getCatalogoDeArticulos().get(2);
-			TipoArticulo tipoArticulo4 = this.getCatalogoDeArticulos().get(3);
-			TipoArticulo tipoArticulo5 = this.getCatalogoDeArticulos().get(4);
-			TipoArticulo tipoArticulo6 = this.getCatalogoDeArticulos().get(5);
 			this.agregarEjercicio("Crossfit", true, 10, tipoArticulo1);
 			this.agregarEjercicio("Yoga", true, 15 ,tipoArticulo2);
-			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
-			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
-			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
-			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
-
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Yoga"));
+
 
 
 			//CLASE
@@ -603,9 +571,11 @@ public class CadenaGimnasio {
 			//listaAlumnos.add(cliente2);
 
 			// Agendo la clase
+
 			Profesor profesor = this.getProfesor(25);
 			Profesor profesor2 = this.getProfesor(26);
 			Profesor profesor3 = this.getProfesor(27);
+
 
 			Ejercicio ejercicio = this.getEjercicio("Crossfit");
 			Ejercicio ejercicio7 = this.getEjercicio("Yoga");
@@ -621,6 +591,7 @@ public class CadenaGimnasio {
 			ArrayList<Articulo> listaArticulos = null;
 			boolean esVirtual = true;
 			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,6,29), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
+
 			this.agendarClase(sedeBelgrano, profesor2, ejercicio7, listaAlumnos, LocalDate.of(2023,7,1), LocalTime.of(20,0,0), emplazamiento, listaArticulos, esVirtual);
 			this.agendarClase(sedeBelgrano, profesor3, ejercicio8, listaAlumnos, LocalDate.of(2023,7,2), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
 			this.agendarClase(sedeCaballito, profesor, ejercicio9, listaAlumnos, LocalDate.of(2023,7,3), LocalTime.of(13,0,0), emplazamiento, listaArticulos, esVirtual);
@@ -633,6 +604,7 @@ public class CadenaGimnasio {
 //			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,8), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
 
 
+
 			//ALMACENAR CLASE EN BBDD
 			ArrayList<Clase> listaClases = sedeBelgrano.getListaClases();
 			Clase clase = listaClases.get(0);
@@ -642,13 +614,8 @@ public class CadenaGimnasio {
 			
 			//Agregar Ejercicio
 			Ejercicio ejercicio1 = this.getEjercicio("Crossfit");
-			Ejercicio ejercicio2 = this.getEjercicio("Yoga");
-			Ejercicio ejercicio3 = this.getEjercicio("Boxing");
-			Ejercicio ejercicio4 = this.getEjercicio("Karate");
-			Ejercicio ejercicio5 = this.getEjercicio("Bailoterapia");
-			Ejercicio ejercicio6 = this.getEjercicio("Yudo");
-
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
+
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio2);
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio4);
 			this.agregarEjerciciosDisponibles(sedeCaballito, ejercicio2);
@@ -681,6 +648,7 @@ public class CadenaGimnasio {
 //		//	this.agregarAlumnoClase(sedePalermo, 9,cliente10);
 //			//this.agregarAlumnoClase(sedePalermo, 9,cliente10);
 //			this.agregarAlumnoClase(sedePalermo, 8,cliente10);
+
 
 
 		} catch (GymException e) {
@@ -733,5 +701,48 @@ public class CadenaGimnasio {
 		niveles.add(TipoNivel.ORO.name());
 		niveles.add(TipoNivel.PLATINUM.name());
 		return niveles;
+	}
+
+	public void modificarProfesor(int id, String nombre, String contrasena, Integer sueldo) throws GymException {
+		Profesor profe = getProfesor(id);
+		if (nombre != null) { profe.setNombre(nombre); };
+		if (contrasena != null) { profe.setContrasenia(contrasena); };
+		if (sueldo != null) { profe.setSueldo(Double.valueOf(sueldo)); };
+	}
+
+	public void eliminarProfesor(int id) throws GymException {
+		Profesor profesor = getProfesor(id);
+		this.usuariosProfesores.remove(profesor);
+	}
+
+	public ArrayList<String[]> getListaProfesores() {
+		ArrayList<String[]> profesores = new ArrayList<>();
+		for (Profesor profesor : this.usuariosProfesores)
+			profesores.add(profesor.getInfo());
+
+		return profesores;
+	}
+
+	public ArrayList<String> getCategoriasArticulos() {
+
+		ArrayList<TipoArticulo> listaTiposArticulos = getCatalogoDeArticulos();
+		Set<String> listaCategorias = new HashSet<>();
+		for (TipoArticulo tipoArticulo : listaTiposArticulos)
+			listaCategorias.add(tipoArticulo.getCategoriaArticulo().name());
+
+		return new ArrayList<>(listaCategorias);
+	}
+
+	public ArrayList<String[]> getListaClasesPorSede(ArrayList<Sede> sedesAsignadas) {
+		ArrayList<String[]> listaInfoClases = new ArrayList<>();
+		for (Sede sede : sedesAsignadas) {
+			for (Clase clase : sede.getListaClases()) {
+				ArrayList<String> arrayClase = new ArrayList<>();
+				arrayClase.add(sede.getUbicacion());
+				arrayClase.addAll(clase.getInfo());
+				listaInfoClases.add(arrayClase.toArray(new String[0]));
+			}
+		}
+		return listaInfoClases;
 	}
 }

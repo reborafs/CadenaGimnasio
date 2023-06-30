@@ -42,4 +42,21 @@ public class TipoArticulo {
 				"formaAmortizacion: " + this.formaAmortizacion + ", " + 
 				"cantidad: " + this.cantidadAmortizacion;
 	}
+
+
+    public String[] getInfo() {
+        String[] array = new String[7];
+        array[0] = String.valueOf(id);
+        array[1] = this.nombre;
+        array[2] = categoria.name();
+        array[3] = marca;
+        array[4] = descripcion;
+        array[5] = formaAmortizacion.getDescripction();
+        array[6] = String.valueOf(cantidadAmortizacion);
+        return array;
+    }
+
+    public CategoriaArticulo getCategoriaArticulo() {
+        return this.categoria;
+    }
 }

@@ -205,4 +205,18 @@ public class Clase {
 				"}";
 	}
 
+	public ArrayList<String> getInfo() {
+		ArrayList<String> array = new ArrayList<>();
+		array.add(profesorAsignado.getNombre());
+		array.add(fecha.toString());
+		array.add(horarioInicio.toString());
+		array.add(ejercicio.getNombre());
+		array.add(estado.toString());
+		array.add(String.valueOf(listaAlumnos.size()));
+		array.add(emplazamiento.getTipoEmplazamiento().toString());
+		array.add(String.valueOf(listaArticulos.size()));
+		if (esVirtual) {array.add("Si");} else {array.add("no");};
+
+		return array;
+	}
 }

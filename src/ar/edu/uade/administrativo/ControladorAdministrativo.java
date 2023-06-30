@@ -88,8 +88,8 @@ public class ControladorAdministrativo {
 
     }
 
-    public String[] getListaTiposArticulos() {
-        return gym.getStringCatalogoDeArticulos().toArray(new String[0]);
+    public ArrayList<String[]> getListaTiposArticulos() {
+        return gym.getListaCatalogoDeArticulos();
     }
 
     public void agregarCliente(String nombre, String contrasena, String nivel) {
@@ -132,5 +132,30 @@ public class ControladorAdministrativo {
 
     public ArrayList<String> getListaNiveles() {
         return gym.getListaNiveles();
+    }
+
+    public void agregarProfesor(String nombre, String contrasena, double sueldo) {
+        gym.agregarProfesor(nombre, contrasena, sueldo);
+    }
+
+    public void modificarProfesor(int id, String nombre, String contrasena, Integer sueldo) throws GymException {
+        gym.modificarProfesor(id, nombre, contrasena, sueldo);
+    }
+
+    public void eliminarProfesor(int id) throws GymException {
+        gym.eliminarProfesor(id);
+    }
+
+    public ArrayList<String[]> getListaProfesores() {
+        return gym.getListaProfesores();
+    }
+
+    public ArrayList<String>  getCategoriasArticulos() {
+        return gym.getCategoriasArticulos();
+    }
+
+    public ArrayList<String[]> getListaClasesPorSede() {
+        ArrayList<Sede> sedesAsignadas = this.usuario.getSedesAsignadas();
+        return gym.getListaClasesPorSede(sedesAsignadas);
     }
 }
