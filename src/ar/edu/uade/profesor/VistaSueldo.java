@@ -21,9 +21,6 @@ public class VistaSueldo extends JFrame {
 		super("Profesor: Sueldo");
 		this.controller = ControladorProfesor.getInstance();
 
-        setSize(600, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         JPanel panelMenu = new JPanel();
 		panelMenu.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -45,7 +42,7 @@ public class VistaSueldo extends JFrame {
 		
 		//Titulo
         JPanel panel = new JPanel();
-		JLabel labelTitulo = new JLabel("Clases Asignadas");
+		JLabel labelTitulo = new JLabel("Sueldo Mensual");
 		labelTitulo.setFont(new Font("Arial", Font.BOLD, 32));
 		gbc.gridx = 0;
 		gbc.gridy = 3;
@@ -57,27 +54,21 @@ public class VistaSueldo extends JFrame {
 
 		this.add(panelMenu, BorderLayout.NORTH);
 		
-		JLabel labelMembresia1 = new JLabel("Su sueldo es de: $" + controller.getSueldo());
-        labelMembresia1.setFont(new Font("Arial", Font.BOLD, 20));
+		JLabel labelSueldo = new JLabel("Su sueldo es de: $" + controller.getSueldo());
+		labelSueldo.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        panelMenu.add(labelMembresia1, gbc);
-
-		class HandlerBtnClaseAsignada implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaClaseAsignada();
-			}
-		}
-
-		/*INSTANCIACION DEL MANEJADOR*/
-		HandlerBtnClaseAsignada handlerBtnClaseAsignada=new HandlerBtnClaseAsignada();
+        panelMenu.add(labelSueldo, gbc);
 
 		/*ASIGNACION DEL MANEJADOR AL BOTON*/
-		btnClaseAsignada.addActionListener(handlerBtnClaseAsignada);
+		btnClaseAsignada.addActionListener(e ->	abrirVistaClaseAsignada());
+
+		this.setSize(800, 600);
+		setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setVisible(true);
 	}
 /*
     public static void main(String[] args) {
@@ -88,4 +79,10 @@ public class VistaSueldo extends JFrame {
         });
     }
 */
+
+	private void abrirVistaClaseAsignada() {
+		this.dispose();
+		controller.abrirVistaClaseAsignada();
+	}
+
 }

@@ -3,9 +3,7 @@ package ar.edu.uade.gym;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 import ar.edu.uade.gym.articulos.CategoriaArticulo;
 import ar.edu.uade.gym.bbdd.BaseDeDatos;
@@ -347,10 +345,10 @@ public class CadenaGimnasio {
 		return catalogoDeArticulos;
 	}
 
-	public ArrayList<String> getStringCatalogoDeArticulos() {
-		ArrayList<String> catalogo = new ArrayList<>();
+	public ArrayList<String[]> getListaCatalogoDeArticulos() {
+		ArrayList<String[]> catalogo = new ArrayList<>();
 		for (TipoArticulo tipoArticulo: catalogoDeArticulos ) {
-			catalogo.add(tipoArticulo.toString());
+			catalogo.add(tipoArticulo.getInfo());
 		}
 		return catalogo;
 	}
@@ -478,9 +476,9 @@ public class CadenaGimnasio {
 			usuariosNuevos.add(new Cliente("ramona","cliente", TipoNivel.PLATINUM));
 
 			usuariosNuevos.add(new Profesor("profe","profe",  50000));
-			usuariosNuevos.add(new Profesor("profe2","profe",  40000));
+			usuariosNuevos.add(new Profesor("Messi","profe",  80000));
 			usuariosNuevos.add(new Profesor("Stallone","profe",  60000));
-			usuariosNuevos.add(new Profesor("Ricky","profe",  70000));
+			usuariosNuevos.add(new Profesor("Ricky Fort","profe",  70000));
 
 			usuariosNuevos.add(new SoporteTecnico("soporte", "soporte"));
 			usuariosNuevos.add(new SoporteTecnico("soporte2", "soporte"));
@@ -650,5 +648,48 @@ public class CadenaGimnasio {
 		niveles.add(TipoNivel.ORO.name());
 		niveles.add(TipoNivel.PLATINUM.name());
 		return niveles;
+	}
+
+	public void modificarProfesor(int id, String nombre, String contrasena, Integer sueldo) throws GymException {
+		Profesor profe = getProfesor(id);
+		if (nombre != null) { profe.setNombre(nombre); };
+		if (contrasena != null) { profe.setContrasenia(contrasena); };
+		if (sueldo != null) { profe.setSueldo(Double.valueOf(sueldo)); };
+	}
+
+	public void eliminarProfesor(int id) throws GymException {
+		Profesor profesor = getProfesor(id);
+		this.usuariosProfesores.remove(profesor);
+	}
+
+	public ArrayList<String[]> getListaProfesores() {
+		ArrayList<String[]> profesores = new ArrayList<>();
+		for (Profesor profesor : this.usuariosProfesores)
+			profesores.add(profesor.getInfo());
+
+		return profesores;
+	}
+
+	public ArrayList<String> getCategoriasArticulos() {
+
+		ArrayList<TipoArticulo> listaTiposArticulos = getCatalogoDeArticulos();
+		Set<String> listaCategorias = new HashSet<>();
+		for (TipoArticulo tipoArticulo : listaTiposArticulos)
+			listaCategorias.add(tipoArticulo.getCategoriaArticulo().name());
+
+		return new ArrayList<>(listaCategorias);
+	}
+
+	public ArrayList<String[]> getListaClasesPorSede(ArrayList<Sede> sedesAsignadas) {
+		ArrayList<String[]> listaInfoClases = new ArrayList<>();
+		for (Sede sede : sedesAsignadas) {
+			for (Clase clase : sede.getListaClases()) {
+				ArrayList<String> arrayClase = new ArrayList<>();
+				arrayClase.add(sede.getUbicacion());
+				arrayClase.addAll(clase.getInfo());
+				listaInfoClases.add(arrayClase.toArray(new String[0]));
+			}
+		}
+		return listaInfoClases;
 	}
 }

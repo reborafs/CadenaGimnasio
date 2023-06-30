@@ -31,4 +31,11 @@ public class Profesor extends Usuario {
     }
 
 
+    public String[] getInfo() {
+        String[] array = new String[3];
+        array[0] = String.valueOf(getID());
+        array[1] = getNombre();
+        array[2] = String.valueOf(getSueldo());
+        return array;
+    }
 }

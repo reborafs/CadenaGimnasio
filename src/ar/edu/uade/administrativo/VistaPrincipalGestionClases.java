@@ -104,7 +104,7 @@ public class VistaPrincipalGestionClases extends JFrame{
 
 	private void abrirVistaAgendarClases() {
 
-		JDialog dialogo = new JDialog(this, "Incorporar Articulos", true);
+		JDialog dialogo = new JDialog(this, "Agendar Clases", true);
 		dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JPanel panel = new JPanel();
@@ -112,7 +112,6 @@ public class VistaPrincipalGestionClases extends JFrame{
 
 		JLabel lblSede = new JLabel("Ingrese la sede de la clase::");
 		JComboBox<String> txtSede = new JComboBox<>();
-		txtSede.addItem("---");
 		for (String sede : controller.getListaSedes()) {
 			txtSede.addItem(sede);
 		}
@@ -244,6 +243,45 @@ public class VistaPrincipalGestionClases extends JFrame{
     }
 
 	private void mostrarTablaClases() {
+		JTable tabla = new JTable();
+		DefaultTableModel modelo = new DefaultTableModel();
+
+		ArrayList<String[]> listaClasesPorSede = controller.getListaClasesPorSede();
+
+		// Definicion de columnas
+		String[] columnas = {"Sede","Profesor","Fecha","Horario","Ejercicio","Estado","Cantidad de Alumnos",
+				"Emplazamiento","Cant. Articulos","Es virtual?"};
+		int cantColumnas = columnas.length;
+
+		modelo.setColumnIdentifiers(columnas);
+
+		for (String[] infoClasePorSede : listaClasesPorSede) {
+			String[] fila = new String[cantColumnas+1];
+			fila[0] = infoClasePorSede[0];
+			fila[1] = infoClasePorSede[1];
+			fila[2] = infoClasePorSede[2];
+			fila[3] = infoClasePorSede[3];
+			fila[4] = infoClasePorSede[4];
+			fila[5] = infoClasePorSede[5];
+			fila[6] = infoClasePorSede[6];
+			fila[7] = infoClasePorSede[7];
+			fila[8] = infoClasePorSede[8];
+			fila[9] = infoClasePorSede[9];
+			modelo.addRow(fila);
+		}
+
+		tabla.setModel(modelo);
+
+		for (int i = 0; i < cantColumnas; i++) {
+			tabla.getColumnModel().getColumn(i).setPreferredWidth(100);
+		}
+
+		// Agregar la tabla a un JScrollPane y añadirlo a la ventana
+		JScrollPane scrollPane = new JScrollPane(tabla);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+
+		/*
 		// Tabla de clases asignadas
 		JTable tabla = new JTable();
 		DefaultTableModel modelo = new DefaultTableModel();
@@ -313,8 +351,10 @@ public class VistaPrincipalGestionClases extends JFrame{
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-	}
+		 */
 
+	}
+/*
 	private String getDiaSemana(int dia) {
 		return switch (dia) {
 			case 1 -> "Lun";
@@ -326,7 +366,7 @@ public class VistaPrincipalGestionClases extends JFrame{
 			case 7 -> "Dom";
 			default -> "xxx";
 		};
-	}
+	}*/
 
 	private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados,LocalDate dia, LocalTime hora) {
 		boolean flagOcupado = false;
