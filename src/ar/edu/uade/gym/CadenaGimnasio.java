@@ -104,15 +104,19 @@ public class CadenaGimnasio {
 		agregarUsuario(user);
 	}
 
-	public void agregarCliente(String nombre, String contrasenia, String tipoNivel) throws GymException {
-		TipoNivel nivel;
-		switch (tipoNivel) {
-			case "ORO" -> nivel = TipoNivel.ORO;
-			case "BLACK" -> nivel = TipoNivel.BLACK;
-			case "PLATINUM" -> nivel = TipoNivel.PLATINUM;
+
+	private TipoNivel stringToTipoNivel(String tipoNivel) throws GymException {
+		return switch (tipoNivel) {
+			case "ORO" -> TipoNivel.ORO;
+			case "BLACK" -> TipoNivel.BLACK;
+			case "PLATINUM" -> TipoNivel.PLATINUM;
 			default -> throw new GymException("El nivel ingresado para el Cliente no es valido.");
-		}
-		Usuario user = new Cliente(nombre, contrasenia, nivel);
+		};
+	}
+
+	public void agregarCliente(String nombre, String contrasenia, String nivel) throws GymException {
+		TipoNivel tipoNivel = stringToTipoNivel(nivel);
+		Usuario user = new Cliente(nombre, contrasenia, tipoNivel);
 		agregarUsuario(user);
 	}
 
@@ -293,7 +297,27 @@ public class CadenaGimnasio {
 	public void asignarProfesorClase(Sede sede, Clase clase ,Usuario profesor) throws GymException {
 		sede.asignarProfesor(clase,profesor);
 	}
+	public HashMap<LocalDate, ArrayList<LocalTime>> getHorariosClasesAsignadasAdmin(Administrativo usuario) {
+		ArrayList<Sede> sedes = usuario.getSedesAsignadas();
+		HashMap<LocalDate, ArrayList<LocalTime>> horariosAsignados = new HashMap<>();
+		ArrayList<Clase> listaClases = new ArrayList<>();
 
+		for (Sede sede : sedes)
+			listaClases.addAll(sede.getListaClases());
+
+		ArrayList<LocalDate> semana = new ArrayList<>();
+		for (int day=0; day<7; day++) {	semana.add(LocalDate.now().plusDays(day));	}
+
+		for (LocalDate dia : semana) {
+			ArrayList<LocalTime> horarios = new ArrayList<>();
+			for (Clase clase : listaClases) {
+				if ( dia.isEqual(clase.getFecha()) )
+					horarios.add(clase.getHorarioInicio());
+			}
+			horariosAsignados.put(dia,horarios);
+		}
+		return horariosAsignados;
+	}
 	public HashMap<LocalDate, ArrayList<LocalTime>> getHorariosClasesAsignadasProfesor(String ubicacionSede, Profesor profesor) {
 	/// TOMA LA SIGUIENTE SEMANA Y RETORNA UN HASHMAP. CLAVE ES EL LOCALDATE Y LOS VALUES SON ARRAYS DE LOCALTIME
 	//  QUE SON EL HORARIO DE INICIO DE LA CLASE.
@@ -394,7 +418,6 @@ public class CadenaGimnasio {
 	public void llenarGym() {
 		try {
 
-
 			/* =======================================================
 			 *                    AGREGAR SEDES
 			 * =====================================================*/
@@ -468,6 +491,9 @@ public class CadenaGimnasio {
 			}
 
 
+			asignarSede(usuariosAdministrativo.get(0), sedeBelgrano);
+
+
 			/* =======================================================
 			 *                    AGREGAR ARTICULOS
 			 * =====================================================*/
@@ -518,6 +544,10 @@ public class CadenaGimnasio {
 			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
 			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
 			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
+
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Yoga"));
+
 
 			//CLASE
 			// Invento dos alumnos, uno con nivel suficiente y otro no.
@@ -591,5 +621,34 @@ public class CadenaGimnasio {
 		for (Ejercicio ejercicio : sede.getEjerciciosDisponibles())
 			ejerciciosSede.add(ejercicio.getNombre());
 		return ejerciciosSede;
+	}
+
+	public ArrayList<String[]> getListaClientes() {
+		ArrayList<String[]> clientes = new ArrayList<>();
+		for (Cliente cliente : this.usuariosClientes)
+			clientes.add(cliente.getInfo());
+
+		return clientes;
+	}
+
+    public void eliminarCliente(int id) throws GymException {
+		Cliente cliente = getCliente(id);
+		this.usuariosClientes.remove(cliente);
+    }
+
+	public void modificarCliente(int id, String nombre, String contrasenia, String nivel) throws GymException {
+		Cliente cliente = getCliente(id);
+		if (nombre != null) { cliente.setNombre(nombre); };
+		if (contrasenia != null) { cliente.setContrasenia(contrasenia); };
+		if (nivel != null) { cliente.setTipoNivel(stringToTipoNivel(nivel)); };
+	}
+
+
+	public ArrayList<String> getListaNiveles() {
+		ArrayList<String> niveles = new ArrayList<>();
+		niveles.add(TipoNivel.BLACK.name());
+		niveles.add(TipoNivel.ORO.name());
+		niveles.add(TipoNivel.PLATINUM.name());
+		return niveles;
 	}
 }

@@ -1,11 +1,16 @@
 package ar.edu.uade.administrativo;
 
+import ar.edu.uade.gym.GymException;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class VistaGestionClientes extends JFrame {
     private ControladorAdministrativo controller;
@@ -71,7 +76,8 @@ public class VistaGestionClientes extends JFrame {
         JButton btnModificarCliente = new JButton("Modificar Cliente");
         panelMenu.add(btnModificarCliente, gbc);
 
-        this.setSize(300, 200);
+        this.setSize(800, 600);
+        setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
 
@@ -83,6 +89,7 @@ public class VistaGestionClientes extends JFrame {
         btnProfesor.addActionListener(actionEvent -> abrirVistaProfesores());
         btnArticulos.addActionListener(actionEvent -> abrirVistaArticulos());
 
+        mostrarTablaClientes();
     }
 
     private void abrirVistaProfesores() {
@@ -130,7 +137,6 @@ public class VistaGestionClientes extends JFrame {
                     String nombre = txtNombre.getText();
                     String contrasena = txtContrasena.getText();
                     String nivel = txtNivel.getText();
-
                     controller.agregarCliente(nombre, contrasena, nivel);
 
                     // Cerrar el diálogo
@@ -147,13 +153,7 @@ public class VistaGestionClientes extends JFrame {
         });
 
         JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cerrar el diálogo sin procesar la información
-                dialogo.dispose();
-            }
-        });
+        btnCancelar.addActionListener(e -> dialogo.dispose());
 
 
         panel.add(lblNombre);
@@ -177,13 +177,149 @@ public class VistaGestionClientes extends JFrame {
     }
 
     private void eliminarCliente() {
-        // Implementación de la funcionalidad de eliminación de cliente
-        // ...
+        // Implementación de la funcionalidad de creación de cliente
+        JDialog dialogo = new JDialog(this, "Modificar Cliente", true);
+        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 2));
+
+        JLabel lblID = new JLabel("ID de Cliente a Eliminar:");
+        JTextField txtID = new JFormattedTextField(NumberFormat.getIntegerInstance());
+
+        JLabel lblError = new JLabel("ERROR");
+        JLabel lblErrorMessage = new JLabel("ERROR");
+        lblError.setForeground(Color.RED);
+        lblErrorMessage.setForeground(Color.RED);
+
+        JButton btnAceptar = new JButton("Aceptar");
+        btnAceptar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(txtID.getText());
+                controller.eliminarCliente(id);
+                dialogo.dispose(); // Cerrar el diálogo
+            } catch (Exception ex) {
+                lblErrorMessage.setText(ex.getMessage());
+                lblError.setVisible(true);
+                lblErrorMessage.setVisible(true);
+            }
+        });
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+        panel.add(lblID);
+        panel.add(txtID);
+        panel.add(lblError);
+        panel.add(lblErrorMessage);
+        panel.add(btnAceptar);
+        panel.add(btnCancelar);
+        lblError.setVisible(false);
+        lblErrorMessage.setVisible(false);
+
+        dialogo.add(panel);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
     }
 
     private void modificarCliente() {
-        // Implementación de la funcionalidad de modificación de cliente
-        // ...
+        JDialog dialogo = new JDialog(this, "Eliminar Cliente", true);
+        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(6, 2));
+
+        JLabel lblID = new JLabel("ID de Cliente:");
+        JTextField txtID = new JFormattedTextField(NumberFormat.getIntegerInstance());
+
+        JLabel lblNombre = new JLabel("Nombre:");
+        JTextField txtNombre = new JTextField();
+
+        JLabel lblContrasena = new JLabel("Contraseña:");
+        JTextField txtContrasena = new JTextField();
+
+        JLabel lblNivel = new JLabel("Nivel:");
+        JComboBox<String> txtNivel = new JComboBox<>();
+        for (String nivel : controller.getListaNiveles()) {
+            txtNivel.addItem(nivel);
+        }
+
+        JLabel lblError = new JLabel("ERROR");
+        JLabel lblErrorMessage = new JLabel("ERROR");
+        lblError.setForeground(Color.RED);
+        lblErrorMessage.setForeground(Color.RED);
+
+        JButton btnAceptar = new JButton("Modificar");
+        btnAceptar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(txtID.getText());
+                String nombre = txtNombre.getText();
+                String contrasena = txtContrasena.getText();
+                String nivel  = txtNivel.getItemAt(txtNivel.getSelectedIndex());
+                controller.modificarCliente(id,nombre,contrasena,nivel);
+                dialogo.dispose(); // Cerrar el diálogo
+            } catch (Exception ex) {
+                lblErrorMessage.setText(ex.getMessage());
+                lblError.setVisible(true);
+                lblErrorMessage.setVisible(true);
+            }
+        });
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+        panel.add(lblID);
+        panel.add(txtID);
+        panel.add(lblNombre);
+        panel.add(txtNombre);
+        panel.add(lblContrasena);
+        panel.add(txtContrasena);
+        panel.add(lblNivel);
+        panel.add(txtNivel);
+        panel.add(lblError);
+        panel.add(lblErrorMessage);
+        panel.add(btnAceptar);
+        panel.add(btnCancelar);
+        lblError.setVisible(false);
+        lblErrorMessage.setVisible(false);
+
+        dialogo.add(panel);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
     }
-	
+
+    private void mostrarTablaClientes() {
+        // Tabla de clases asignadas
+        JTable tabla = new JTable();
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        ArrayList<String[]> listaClientes = controller.getListaClientes();
+
+        // Definicion de columnas
+        String[] columnas = {"ID","Nombre","Nivel"};
+        int cantColumnas = columnas.length;
+
+        modelo.setColumnIdentifiers(columnas);
+
+        for (String[] infoCliente : listaClientes) {
+            String[] fila = new String[cantColumnas+1];
+            fila[0] = infoCliente[0];
+            fila[1] = infoCliente[1];
+            fila[2] = infoCliente[2];
+            modelo.addRow(fila);
+        }
+
+        tabla.setModel(modelo);
+
+        for (int i = 0; i < cantColumnas; i++) {
+            tabla.getColumnModel().getColumn(i).setPreferredWidth(100);
+        }
+
+        // Agregar la tabla a un JScrollPane y añadirlo a la ventana
+        JScrollPane scrollPane = new JScrollPane(tabla);
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
+    }
+
 }

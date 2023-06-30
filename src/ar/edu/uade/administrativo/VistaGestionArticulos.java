@@ -68,7 +68,8 @@ public class VistaGestionArticulos extends JFrame {
 		JButton btnMonitorear = new JButton("Monitorear Articulos");
 		panelMenu.add(btnMonitorear, gbc);
 
-		this.setSize(300, 200);
+		this.setSize(800, 600);
+		setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 
@@ -122,39 +123,30 @@ public class VistaGestionArticulos extends JFrame {
 		lblErrorMessage.setForeground(Color.RED);
 
 		JButton btnAceptar = new JButton("Aceptar");
-        btnAceptar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-				try {
-					String categoriaArticulo = txtCategoriaArticulo.getText();
-					String marca = txtMarca.getText();
-					String descripcion = txtDescripcion.getText();
-					int usosAmortizacion = Integer.parseInt(txtUsosAmortizacion.getText());
-					boolean flagFecha = true;
-					// Lógica para procesar la información capturada
-					controller.agregarTipoArticulo(null, categoriaArticulo, marca, descripcion, usosAmortizacion, flagFecha);
+        btnAceptar.addActionListener(e -> {
+			try {
+				String categoriaArticulo = txtCategoriaArticulo.getText();
+				String marca = txtMarca.getText();
+				String descripcion = txtDescripcion.getText();
+				int usosAmortizacion = Integer.parseInt(txtUsosAmortizacion.getText());
+				boolean flagFecha = true;
+				// Lógica para procesar la información capturada
+				controller.agregarTipoArticulo(null, categoriaArticulo, marca, descripcion, usosAmortizacion, flagFecha);
 
-					// Cerrar el diálogo
-					lblError.setVisible(false);
-					lblErrorMessage.setVisible(false);
-					dialogo.dispose();
-				} catch (NumberFormatException ex) {
-					lblErrorMessage.setText("Se debe ingresar un numero entero.");
-					lblError.setVisible(true);
-					lblErrorMessage.setVisible(true);
-					return; // Exit the method without processing the information
-				}
-            }
-        });
+				// Cerrar el diálogo
+				lblError.setVisible(false);
+				lblErrorMessage.setVisible(false);
+				dialogo.dispose();
+			} catch (NumberFormatException ex) {
+				lblErrorMessage.setText("Se debe ingresar un numero entero.");
+				lblError.setVisible(true);
+				lblErrorMessage.setVisible(true);
+				return; // Exit the method without processing the information
+			}
+		});
 
         JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cerrar el diálogo sin procesar la información
-                dialogo.dispose();
-            }
-        });
+        btnCancelar.addActionListener(e -> dialogo.dispose());
 
 
 		panel.add(lblCategoriaArticulo);
@@ -176,7 +168,6 @@ public class VistaGestionArticulos extends JFrame {
         dialogo.pack();
         dialogo.setLocationRelativeTo(this);
         dialogo.setVisible(true);
-
 
     }
 	
