@@ -347,4 +347,16 @@ public class Sede {
     	return "["+this.ubicacion+","+this.tipoNivel.toString()+"]";
     }
 
+
+	public String[] getInfo() {
+		String[] array = new String[7];
+		array[0] = ubicacion;
+		array[1] = tipoNivel.toString();
+		array[2] = String.valueOf(stockArticulos.size());
+		array[3] = emplazamientosDisponibles.toString();
+		array[4] = String.valueOf(listaClases.size());
+		array[5] = ejerciciosDisponibles.toString();
+		array[6] = String.valueOf(alquilerSede);
+		return array;
+	}
 }
