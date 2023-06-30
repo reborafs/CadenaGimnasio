@@ -31,5 +31,12 @@ public class Cliente extends Usuario {
     public boolean soyCliente() {
     	return true;
     }
-    
+
+    public String[] getInfo() {
+        String[] array = new String[3];
+        array[0] = String.valueOf(getID());
+        array[1] = getNombre();
+        array[2] = getTipoNivel().toString();
+        return array;
+    }
 }

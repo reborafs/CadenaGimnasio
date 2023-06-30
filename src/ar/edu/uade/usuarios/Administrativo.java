@@ -25,6 +25,14 @@ public class Administrativo extends Usuario {
 	public ArrayList<Sede> getSedesAsignadas() {
 		return this.sedesAsignadas;
 	}
+
+    public ArrayList<String> getNombreSedesAsignadas() {
+        ArrayList<String> nombresSedes = new ArrayList<>();
+        for (Sede sede : getSedesAsignadas()) {
+            nombresSedes.add(sede.getUbicacion());
+        }
+        return nombresSedes;
+    }
 	
     public void agendarClasesDisponibles() {
         // Code for scheduling available classes

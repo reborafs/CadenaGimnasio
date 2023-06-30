@@ -57,12 +57,43 @@ public class VistaClaseAsignada extends JFrame {
 		gbc.gridwidth = 1;
 
 		this.add(panelMenu, BorderLayout.NORTH);
-        
+
+		mostrarTablaClasesAsignadas();
+
+		/*ASIGNACION DEL MANEJADOR AL BOTON*/
+		btnSueldo.addActionListener( e -> controller.abrirVistaSueldo());
+
+	}
+	
+    private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados,LocalDate dia, LocalTime hora) {
+		boolean flagOcupado = false;
+		for (LocalTime horarioOcupado : horariosOcupados.get(dia)) {
+            if (horarioOcupado.equals(hora)) {
+                flagOcupado = true;
+            }
+        }
+        return flagOcupado;
+    }
+
+	private String getDiaSemana(int dia) {
+		return switch (dia) {
+			case 1 -> "Lun";
+			case 2 -> "Mar";
+			case 3 -> "Mie";
+			case 4 -> "Jue";
+			case 5 -> "Vie";
+			case 6 -> "Sab";
+			case 7 -> "Dom";
+			default -> "xxx";
+		};
+	}
+
+	private void mostrarTablaClasesAsignadas() {
 		// Tabla de clases asignadas
 		JTable tabla = new JTable();
 		DefaultTableModel modelo = new DefaultTableModel();
-		
-		
+
+
 		// Definicion de columnas
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String[] header = new String[8];
@@ -103,69 +134,29 @@ public class VistaClaseAsignada extends JFrame {
 		DateTimeFormatter horasFormatter = DateTimeFormatter.ofPattern("HH");
 
 		for (int i = 1; i <= cantFilas-1; i++) {
-            String[] horarioDisponible = new String[cantColumnas+1];
-            horarioDisponible[0] = horas[i].format(horasFormatter) + "-" + horas[i].plusHours(1).format(horasFormatter);
-            for (int j = 1; j <= cantColumnas-1; j++) {
-            	LocalDate dia = semana.get(j - 1);
-                LocalTime horarioClase = horas[i];
-                if (horarioClase != null && contieneEjercicio(horariosOcupados, dia, horarioClase)) {
-                	horarioDisponible[j] = "Ocupado";
-                } else {
-                	horarioDisponible[j] = "Libre";
-                }
-            }
-            modelo.addRow(horarioDisponible);
-        }
-		
-		tabla.setModel(modelo);
-		
-        for (int i = 0; i < 4; i++) {
-            tabla.getColumnModel().getColumn(i).setPreferredWidth(100);
-        }
-
-        // Agregar la tabla a un JScrollPane y añadirlo a la ventana
-        JScrollPane scrollPane = new JScrollPane(tabla);
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
-
-
-
-
-		class HandlerBtnSueldo implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaSueldo();
+			String[] horarioDisponible = new String[cantColumnas+1];
+			horarioDisponible[0] = horas[i].format(horasFormatter) + "-" + horas[i].plusHours(1).format(horasFormatter);
+			for (int j = 1; j <= cantColumnas-1; j++) {
+				LocalDate dia = semana.get(j - 1);
+				LocalTime horarioClase = horas[i];
+				if (horarioClase != null && contieneEjercicio(horariosOcupados, dia, horarioClase)) {
+					horarioDisponible[j] = "Ocupado";
+				} else {
+					horarioDisponible[j] = "Libre";
+				}
 			}
+			modelo.addRow(horarioDisponible);
 		}
 
-		/*INSTANCIACION DEL MANEJADOR*/
-		HandlerBtnSueldo handlerBtnSueldo=new HandlerBtnSueldo();
+		tabla.setModel(modelo);
 
-		/*ASIGNACION DEL MANEJADOR AL BOTON*/
-		btnSueldo.addActionListener(handlerBtnSueldo);
+		for (int i = 0; i < 4; i++) {
+			tabla.getColumnModel().getColumn(i).setPreferredWidth(100);
+		}
 
-	}
-	
-    private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados,LocalDate dia, LocalTime hora) {
-		boolean flagOcupado = false;
-		for (LocalTime horarioOcupado : horariosOcupados.get(dia)) {
-            if (horarioOcupado.equals(hora)) {
-                flagOcupado = true;
-            }
-        }
-        return flagOcupado;
-    }
+		// Agregar la tabla a un JScrollPane y añadirlo a la ventana
+		JScrollPane scrollPane = new JScrollPane(tabla);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-	private String getDiaSemana(int dia) {
-		return switch (dia) {
-			case 1 -> "Lun";
-			case 2 -> "Mar";
-			case 3 -> "Mie";
-			case 4 -> "Jue";
-			case 5 -> "Vie";
-			case 6 -> "Sab";
-			case 7 -> "Dom";
-			default -> "xxx";
-		};
 	}
 }
