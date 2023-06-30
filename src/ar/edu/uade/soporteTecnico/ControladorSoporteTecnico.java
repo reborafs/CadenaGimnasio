@@ -157,6 +157,12 @@ public class ControladorSoporteTecnico {
     public ArrayList<String> getTiposMembresias() {
         return gym.getListaNiveles();
     }
+
+    public String[] getListaTiposUsuarios() {
+        return new String[]{"Administrativo", "Cliente", "Profesor", "Soporte Tecnico"};
+    }
+
+
 }
 
 

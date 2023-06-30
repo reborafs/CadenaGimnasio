@@ -107,6 +107,50 @@ public class VistaGestionUsuarios extends JFrame {
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2));
+
+        JLabel lblTipoUsuario = new JLabel("Elegir tipo Usuario:");
+        JComboBox<String> txtTipoUsuario = new JComboBox<>();
+        for (String tipoUser : controller.getListaTiposUsuarios())
+            txtTipoUsuario.addItem(tipoUser);
+
+        JButton btnAceptar = new JButton("Aceptar");
+        btnAceptar.addActionListener(e -> {
+            try {
+                String tipoUsuario = txtTipoUsuario.getItemAt(txtTipoUsuario.getSelectedIndex());
+                dialogo.dispose();
+                switch (tipoUsuario) {
+                    case "Administrativo" -> abrirCrearAdministrativo();
+                    case "Cliente" -> abrirCrearCliente();
+                    case "Profesor" -> abrirCrearProfesor();
+                    case "Soporte Tecnico" -> abrirCrearSoporteTecnico();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+
+        panel.add(lblTipoUsuario);
+        panel.add(txtTipoUsuario);
+        panel.add(btnAceptar);
+        panel.add(btnCancelar);
+
+        dialogo.add(panel);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
+    private void abrirCrearSoporteTecnico() {
+        // Implementación de la funcionalidad de creación de cliente
+        JDialog dialogo = new JDialog(this, "Crear Soporte Tecnico", true);
+        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(5, 2));
 
         JLabel lblNombre = new JLabel("Nombre:");
@@ -166,6 +210,205 @@ public class VistaGestionUsuarios extends JFrame {
         dialogo.setLocationRelativeTo(this);
         dialogo.setVisible(true);
     }
+
+    private void abrirCrearProfesor() {
+        // Implementación de la funcionalidad de creación de cliente
+        JDialog dialogo = new JDialog(this, "Crear Cliente", true);
+        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2));
+
+        JLabel lblNombre = new JLabel("Nombre:");
+        JTextField txtNombre = new JTextField();
+
+        JLabel lblContrasena = new JLabel("Contraseña:");
+        JTextField txtContrasena = new JTextField();
+
+        JLabel lblNivel = new JLabel("Nivel:");
+        JTextField txtNivel = new JTextField();
+
+        JLabel lblError = new JLabel("ERROR");
+        JLabel lblErrorMessage = new JLabel("ERROR");
+        lblError.setForeground(Color.RED);
+        lblErrorMessage.setForeground(Color.RED);
+
+        JButton btnAceptar = new JButton("Aceptar");
+        btnAceptar.addActionListener(e -> {
+            try {
+                String nombre = txtNombre.getText();
+                String contrasena = txtContrasena.getText();
+                String nivel = txtNivel.getText();
+                controller.agregarUsuario(nombre, contrasena, nivel);
+
+                // Cerrar el diálogo
+                lblError.setVisible(false);
+                lblErrorMessage.setVisible(false);
+                dialogo.dispose();
+            } catch (Exception ex) {
+                lblErrorMessage.setText("Error.");
+                lblError.setVisible(true);
+                lblErrorMessage.setVisible(true);
+                return; // Exit the method without processing the information
+            }
+        });
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+
+        panel.add(lblNombre);
+        panel.add(txtNombre);
+        panel.add(lblContrasena);
+        panel.add(txtContrasena);
+        panel.add(lblNivel);
+        panel.add(txtNivel );
+
+        panel.add(lblError);
+        panel.add(lblErrorMessage);
+        panel.add(btnAceptar);
+        panel.add(btnCancelar);
+        lblError.setVisible(false);
+        lblErrorMessage.setVisible(false);
+
+        dialogo.add(panel);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
+    private void abrirCrearAdministrativo() {
+        // Implementación de la funcionalidad de creación de cliente
+        JDialog dialogo = new JDialog(this, "Crear Cliente", true);
+        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2));
+
+        JLabel lblNombre = new JLabel("Nombre:");
+        JTextField txtNombre = new JTextField();
+
+        JLabel lblContrasena = new JLabel("Contraseña:");
+        JTextField txtContrasena = new JTextField();
+
+        JLabel lblNivel = new JLabel("Nivel:");
+        JTextField txtNivel = new JTextField();
+
+        JLabel lblError = new JLabel("ERROR");
+        JLabel lblErrorMessage = new JLabel("ERROR");
+        lblError.setForeground(Color.RED);
+        lblErrorMessage.setForeground(Color.RED);
+
+        JButton btnAceptar = new JButton("Aceptar");
+        btnAceptar.addActionListener(e -> {
+            try {
+                String nombre = txtNombre.getText();
+                String contrasena = txtContrasena.getText();
+                String nivel = txtNivel.getText();
+                controller.agregarUsuario(nombre, contrasena, nivel);
+
+                // Cerrar el diálogo
+                lblError.setVisible(false);
+                lblErrorMessage.setVisible(false);
+                dialogo.dispose();
+            } catch (Exception ex) {
+                lblErrorMessage.setText("Error.");
+                lblError.setVisible(true);
+                lblErrorMessage.setVisible(true);
+                return; // Exit the method without processing the information
+            }
+        });
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+
+        panel.add(lblNombre);
+        panel.add(txtNombre);
+        panel.add(lblContrasena);
+        panel.add(txtContrasena);
+        panel.add(lblNivel);
+        panel.add(txtNivel );
+
+        panel.add(lblError);
+        panel.add(lblErrorMessage);
+        panel.add(btnAceptar);
+        panel.add(btnCancelar);
+        lblError.setVisible(false);
+        lblErrorMessage.setVisible(false);
+
+        dialogo.add(panel);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
+    private void abrirCrearCliente() {
+        // Implementación de la funcionalidad de creación de cliente
+        JDialog dialogo = new JDialog(this, "Crear Cliente", true);
+        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2));
+
+        JLabel lblNombre = new JLabel("Nombre:");
+        JTextField txtNombre = new JTextField();
+
+        JLabel lblContrasena = new JLabel("Contraseña:");
+        JTextField txtContrasena = new JTextField();
+
+        JLabel lblNivel = new JLabel("Nivel:");
+        JTextField txtNivel = new JTextField();
+
+        JLabel lblError = new JLabel("ERROR");
+        JLabel lblErrorMessage = new JLabel("ERROR");
+        lblError.setForeground(Color.RED);
+        lblErrorMessage.setForeground(Color.RED);
+
+        JButton btnAceptar = new JButton("Aceptar");
+        btnAceptar.addActionListener(e -> {
+            try {
+                String nombre = txtNombre.getText();
+                String contrasena = txtContrasena.getText();
+                String nivel = txtNivel.getText();
+                controller.agregarUsuario(nombre, contrasena, nivel);
+
+                // Cerrar el diálogo
+                lblError.setVisible(false);
+                lblErrorMessage.setVisible(false);
+                dialogo.dispose();
+            } catch (Exception ex) {
+                lblErrorMessage.setText("Error.");
+                lblError.setVisible(true);
+                lblErrorMessage.setVisible(true);
+                return; // Exit the method without processing the information
+            }
+        });
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+
+        panel.add(lblNombre);
+        panel.add(txtNombre);
+        panel.add(lblContrasena);
+        panel.add(txtContrasena);
+        panel.add(lblNivel);
+        panel.add(txtNivel );
+
+        panel.add(lblError);
+        panel.add(lblErrorMessage);
+        panel.add(btnAceptar);
+        panel.add(btnCancelar);
+        lblError.setVisible(false);
+        lblErrorMessage.setVisible(false);
+
+        dialogo.add(panel);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(this);
+        dialogo.setVisible(true);
+    }
+
 
     private void eliminarUsuario() {
         // Implementación de la funcionalidad de creación de cliente
@@ -312,5 +555,7 @@ public class VistaGestionUsuarios extends JFrame {
         JScrollPane scrollPane = new JScrollPane(tabla);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
     }
+
+
 
 }
