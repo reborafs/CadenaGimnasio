@@ -61,8 +61,12 @@ public class VistaClaseAsignada extends JFrame {
 		mostrarTablaClasesAsignadas();
 
 		/*ASIGNACION DEL MANEJADOR AL BOTON*/
-		btnSueldo.addActionListener( e -> controller.abrirVistaSueldo());
+		btnSueldo.addActionListener( e -> abrirVistaSueldo());
 
+		this.setSize(800, 600);
+		setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setVisible(true);
 	}
 	
     private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados,LocalDate dia, LocalTime hora) {
@@ -158,5 +162,10 @@ public class VistaClaseAsignada extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
+	}
+
+	private void abrirVistaSueldo() {
+		this.dispose();
+		controller.abrirVistaSueldo();
 	}
 }
