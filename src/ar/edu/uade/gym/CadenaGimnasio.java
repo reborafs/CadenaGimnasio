@@ -472,6 +472,10 @@ public class CadenaGimnasio {
 			 *                    AGREGAR ARTICULOS
 			 * =====================================================*/
 			this.agregarTipoArticuloPorFecha("Colchoneta", "COLCHONETA","Pepito", "Colchoneta de 2m x 0.75m", 200);
+			this.agregarTipoArticuloPorFecha("Disco", "PESA","Fulanito", "Disco marca Fulanito de 25kg", 500);
+			this.agregarTipoArticuloPorFecha("Macuerna", "PESA","Pepito", "Macuerna de 4kg", 300);
+			this.agregarTipoArticuloPorUso("Pelota medica", "PESA","Mengano", "Pelota marca Mengano de 10kg", 150);
+			this.agregarTipoArticuloPorUso("Alfombre de yoga", "COLCHONETA","Pepito", "Alfombre de yoga marca Pepito de 2m x 0.75m", 50);
 			this.agregarTipoArticuloPorUso("Pesa", "PESA","Pepito", "Pesa marca Pepito de 20kg", 50);
 
 			TipoArticulo tipoArticulo = this.getCatalogoDeArticulos().get(0);
@@ -481,16 +485,40 @@ public class CadenaGimnasio {
 
 			this.agregarArticulo(sedeBelgrano, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
 			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeBelgrano, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedeCaballito, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+
+			this.agregarArticulo(sedePalermo, tipoArticulo, 2000 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
+			this.agregarArticulo(sedePalermo, tipoArticulo, 1500 , fechaCompra, fechaFabricacion);
 
 			
 			//AGREGAR EJERCICIO
 			TipoArticulo tipoArticulo1 = this.getCatalogoDeArticulos().get(0);
 			TipoArticulo tipoArticulo2 = this.getCatalogoDeArticulos().get(1);
+			TipoArticulo tipoArticulo3 = this.getCatalogoDeArticulos().get(2);
+			TipoArticulo tipoArticulo4 = this.getCatalogoDeArticulos().get(3);
+			TipoArticulo tipoArticulo5 = this.getCatalogoDeArticulos().get(4);
+			TipoArticulo tipoArticulo6 = this.getCatalogoDeArticulos().get(5);
 			this.agregarEjercicio("Crossfit", true, 10, tipoArticulo1);
 			this.agregarEjercicio("Yoga", true, 15 ,tipoArticulo2);
-			
+			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
+			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
+			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
+			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
 
-			
 			//CLASE
 			// Invento dos alumnos, uno con nivel suficiente y otro no.
 			ArrayList<Cliente> listaAlumnos = new ArrayList<Cliente>();
@@ -504,7 +532,7 @@ public class CadenaGimnasio {
 			//listaAlumnos.add(cliente2);
 
 			// Agendo la clase
-			Profesor profesor = this.getProfesor(3);
+			Profesor profesor = this.getProfesor(25);
 			Ejercicio ejercicio = this.getEjercicio("Crossfit");
 			LocalDate fecha = LocalDate.of(2023,7,1);
 			LocalTime horarioInicio = LocalTime.of(19,0,0);
@@ -516,8 +544,8 @@ public class CadenaGimnasio {
 			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,6,29), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
 			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,1), LocalTime.of(20,0,0), emplazamiento, listaArticulos, esVirtual);
 			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,2), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,4), LocalTime.of(15,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,8), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
+//			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,4), LocalTime.of(15,0,0), emplazamiento, listaArticulos, esVirtual);
+//			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,7,8), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
 
 			
 			//ALMACENAR CLASE EN BBDD
@@ -529,8 +557,25 @@ public class CadenaGimnasio {
 			
 			//Agregar Ejercicio
 			Ejercicio ejercicio1 = this.getEjercicio("Crossfit");
+			Ejercicio ejercicio2 = this.getEjercicio("Yoga");
+			Ejercicio ejercicio3 = this.getEjercicio("Boxing");
+			Ejercicio ejercicio4 = this.getEjercicio("Karate");
+			Ejercicio ejercicio5 = this.getEjercicio("Bailoterapia");
+			Ejercicio ejercicio6 = this.getEjercicio("Yudo");
+
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
-			
+			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio2);
+			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio4);
+			this.agregarEjerciciosDisponibles(sedeCaballito, ejercicio2);
+			this.agregarEjerciciosDisponibles(sedeCaballito, ejercicio3);
+			this.agregarEjerciciosDisponibles(sedeCaballito, ejercicio6);
+			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio1);
+			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio2);
+			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio3);
+			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio4);
+			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio5);
+			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio6);
+
 		} catch (GymException e) {
 			e.printStackTrace();
 		}
