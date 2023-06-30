@@ -570,6 +570,13 @@ public class CadenaGimnasio {
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Yoga"));
 
 
+			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
+			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
+			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
+			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
+
+
+
 			//CLASE
 			// Invento dos alumnos, uno con nivel suficiente y otro no.
 			ArrayList<Cliente> listaAlumnos = new ArrayList<Cliente>();
@@ -648,6 +655,10 @@ public class CadenaGimnasio {
 			Ejercicio ejercicio4 = this.getEjercicio("Karate");
 			Ejercicio ejercicio5 = this.getEjercicio("Bailoterapia");
 			Ejercicio ejercicio6 = this.getEjercicio("Yudo");
+
+			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
+
+
 
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio2);

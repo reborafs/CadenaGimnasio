@@ -1,13 +1,13 @@
 package ar.edu.uade.cliente;
 
-import ar.edu.uade.gym.CadenaGimnasio;
-import ar.edu.uade.gym.Ejercicio;
-import ar.edu.uade.gym.Sede;
+import ar.edu.uade.gym.*;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.Profesor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -93,7 +93,7 @@ public class ControladorCliente {
             System.out.print("aqui -->" +ejercicios.toString());
             ArrayList<String> ejerciciosDisponibles = new ArrayList<>();
             for(Ejercicio ejercicio: ejercicios) {
-                if (sede.getEjerciciosDisponibles() != null) {
+                if (ejercicio != null) {
                     ejerciciosDisponibles.add(ejercicio.getNombre());
                 }
             }
@@ -111,6 +111,47 @@ public class ControladorCliente {
         return false;
     }
 
+    /* =======================================================
+     *                  CLASES POR SEDE
+     * =======================================================
+     */
+
+    //arreglar problema de sobreescritura de la key, porque pueden haber más de una clase con el mismo ejercicio
+    public HashMap<String, ArrayList<LocalDateTime>> getClasesPorSede(String sede){
+        HashMap<String, ArrayList<LocalDateTime>> clasesPorSede = new HashMap<String, ArrayList<LocalDateTime>>();
+        ArrayList<Clase> clases = gym.getSede(sede).getListaClases();
+        for(Clase clase : clases){
+            System.out.print("aqui -->" + clases.toString());
+            LocalDateTime horariosDisponibles = clase.getHorarioInicioFecha();
+            String key = clase.getEjercicio().getNombre();
+            agregarValor(clasesPorSede, key, horariosDisponibles);
+        }
+        return clasesPorSede;
+    }
+
+    public static void agregarValor(HashMap<String, ArrayList<LocalDateTime>> hashMap, String key, LocalDateTime value) {
+        if (hashMap.containsKey(key)) {
+            ArrayList<LocalDateTime> values = hashMap.get(key);
+            values.add(value);
+        } else {
+            ArrayList<LocalDateTime> values = new ArrayList<>();
+            values.add(value);
+            hashMap.put(key, values);
+        }
+    }
+
+    public void inscibirAlumno(String claseElegida, String horarioSeleccionado, String sede) throws GymException {
+        Sede sedeClase = gym.getSede(sede);
+        ArrayList<Clase> clases = sedeClase.getListaClases();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
+        LocalDateTime fechaHoraDesformateada = LocalDateTime.parse(horarioSeleccionado, formato);
+        LocalDateTime fechaHorario = fechaHoraDesformateada;
+        for (Clase clase : clases){
+            if(clase.getEjercicio().getNombre().equals(claseElegida) && clase.getHorarioInicioFecha() == fechaHorario){
+                sedeClase.agregarAlumno(clase.getClaseID(), this.usuario);
+            }
+        }
+    }
     /* =======================================================
      *                    GETTERS / SETTERS
      * =======================================================

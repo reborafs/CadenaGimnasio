@@ -1,5 +1,7 @@
 package ar.edu.uade.cliente;
 
+import ar.edu.uade.gym.GymException;
+
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -8,6 +10,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -80,13 +83,6 @@ public class VistaPrincipalClaseAsignada extends JFrame {
 		// Tabla de clases asignadas
 		JTable tabla = new JTable();
 		DefaultTableModel modelo = new DefaultTableModel();
-		
-		
-		
-		// Definicion de columnas
-		//ControladorProfesor test = new ControladorProfesor();
-//		String[] columnas = {"Horario", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"};
-//		modelo.setColumnIdentifiers(columnas);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String[] header = new String[8];
@@ -99,16 +95,6 @@ public class VistaPrincipalClaseAsignada extends JFrame {
         }
 
         modelo.setColumnIdentifiers(header);
-
-		// Definición de filas
-//		String[] fila = {"7:00 - 8:00", "8:00 - 9:00", "9:00 - 10:00", "11:00 - 12:00", "13:00 - 14:00", "15:00 - 16:00", "18:00 - 19:00", "20:00 - 21:00"};
-//		int cantColumnas = header.length;
-//
-//		String[] horario1 = {"8:00 - 9:00", "Yoga"};
-//		String[] horario2 = {"11:00 - 12:00", "Crossfit"};
-//		String[] horario3 = {"15:00 - 16:00", "Crossfit"};
-//		String[] horario4 = {"7:00 - 8:00", "Yoga"};
-//		String[] horario5 = {};
 
         LocalTime[] horas = {
                 LocalTime.of(7,0),
@@ -135,13 +121,6 @@ public class VistaPrincipalClaseAsignada extends JFrame {
 
         DateTimeFormatter horasFormatter = DateTimeFormatter.ofPattern("HH");
 
-//		HashMap<String, String[]> calendario = new HashMap<String, String[]>();
-//		calendario.put("Lunes", horario1);
-//		calendario.put("Martes", horario2);
-//		calendario.put("Miercoles", horario3);
-//		calendario.put("Viernes", horario4);
-//		calendario.put("Sabado", horario5);
-
         for (int i = 1; i <= cantFilas-1; i++) {
             String[] horarioDisponible = new String[cantColumnas+1];
             horarioDisponible[0] = horas[i].format(horasFormatter) + "-" + horas[i].plusHours(1).format(horasFormatter);
@@ -151,26 +130,12 @@ public class VistaPrincipalClaseAsignada extends JFrame {
                 if (horarioClase != null && contieneEjercicio(horariosOcupados, dia, horarioClase)) {
                     horarioDisponible[j] = "Ocupado";
                 } else {
+
                     horarioDisponible[j] = "Libre";
                 }
             }
             modelo.addRow(horarioDisponible);
         }
-
-//        for (String horario : fila) {
-//            String[] horarioDisponible = new String[cantColumnas+1];
-//            horarioDisponible[0] = horario;
-//            for (int j = 1; j <= cantColumnas-1; j++) {
-//            	String dia = columnas[j];
-//                String[] Clase = calendario.get(dia);
-//                if (Clase != null && contieneEjercicio(Clase, horario)) {
-//                	horarioDisponible[j] = nombreEjercicio(Clase, horario);
-//                } else {
-//                	horarioDisponible[j] = "Libre";
-//                }
-//            }
-//            modelo.addRow(horarioDisponible);
-//        }
 		
 		tabla.setModel(modelo);
 		
@@ -182,24 +147,26 @@ public class VistaPrincipalClaseAsignada extends JFrame {
         JScrollPane scrollPane = new JScrollPane(tabla);
         panelContenido.add(scrollPane, BorderLayout.CENTER);
 
+
         // Inscripcion
         JPanel panelInscripcion = new JPanel();
         panelContenido.add(panelInscripcion, BorderLayout.SOUTH);
-        
-        HashMap<String, String[]> clasesExistentes = new HashMap<String, String[]>();
-        
-        String[] horario6 = {"15/05/2023 - 8:00 - 9:00","15/05/2023 - 7:00 - 8:00","22/05/2023 - 7:00 - 8:00","02/05/2023 - 7:00 - 8:00"};
-		String[] horario7 = {"15/05/2023 - 11:00 - 12:00"};
-		String[] horario8 = {"15/05/2023 - 15:00 - 16:00"};
-		String[] horario9 = {"15/05/2023 - 7:00 - 8:00"};
-		String[] horario10 = {};
-        
-        clasesExistentes.put("Yoga", horario6);
-        clasesExistentes.put("Crossfit", horario7);
-        clasesExistentes.put("Boxing", horario8);
-        clasesExistentes.put("Bailoterapia", horario9);
-        clasesExistentes.put("Karate", horario10);
-        
+        String sede = "Belgrano";
+
+        HashMap<String, ArrayList<LocalDateTime>> clasesExistentes = controller.getClasesPorSede(sede);
+
+//        String[] horario6 = {"15/05/2023 - 8:00 - 9:00","15/05/2023 - 7:00 - 8:00","22/05/2023 - 7:00 - 8:00","02/05/2023 - 7:00 - 8:00"};
+//		String[] horario7 = {"15/05/2023 - 11:00 - 12:00"};
+//		String[] horario8 = {"15/05/2023 - 15:00 - 16:00"};
+//		String[] horario9 = {"15/05/2023 - 7:00 - 8:00"};
+//		String[] horario10 = {};
+//
+//        clasesExistentes.put("Yoga", horario6);
+//        clasesExistentes.put("Crossfit", horario7);
+//        clasesExistentes.put("Boxing", horario8);
+//        clasesExistentes.put("Bailoterapia", horario9);
+//        clasesExistentes.put("Karate", horario10);
+
         panelInscripcion.setLayout(new GridBagLayout());
         GridBagConstraints gbcInscripcion = new GridBagConstraints();
         gbcInscripcion.insets = new Insets(5, 5, 5, 5);
@@ -217,9 +184,11 @@ public class VistaPrincipalClaseAsignada extends JFrame {
             gbcInscripcion.gridy = i;
             JComboBox<String> comboBoxHorarios = new JComboBox<>();
             comboBoxHorarios.addItem("---"); // Opción por defecto
-            String[] horarios = clasesExistentes.get(clase);
-            for (String horario : horarios) {
-                comboBoxHorarios.addItem(horario);
+            ArrayList<LocalDateTime> horarios = clasesExistentes.get(clase);
+            for (LocalDateTime horario : horarios) {
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
+                String fechaHoraFormateada = horario.format(formato);
+                comboBoxHorarios.addItem(fechaHoraFormateada);
             }
             panelInscripcion.add(comboBoxHorarios, gbcInscripcion);
             comboBoxesHorarios.add(comboBoxHorarios);
@@ -242,7 +211,14 @@ public class VistaPrincipalClaseAsignada extends JFrame {
                     String clase = clasesExistentes.keySet().toArray(new String[0])[i];
                     JComboBox<String> comboBoxHorarios = comboBoxesHorarios.get(i);
                     String horarioSeleccionado = (String) comboBoxHorarios.getSelectedItem();
-                    System.out.println("Clase: " + clase + ", Horario: " + horarioSeleccionado);
+                    if (!horarioSeleccionado.equals("---")){
+                        try {
+                            controller.inscibirAlumno(clase,horarioSeleccionado,sede);
+                        } catch (GymException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        System.out.println("Clase: " + clase + ", Horario: " + horarioSeleccionado);
+                    }
                 }
             }
         });
