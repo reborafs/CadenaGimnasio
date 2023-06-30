@@ -37,10 +37,6 @@ public class Emplazamiento {
 	}
 
 	public String toString() {
-		return "{" + 
-				"tipoEmplazamiento: " + this.tipoEmplazamiento + ", " + 
-				"capacidad: " + this.capacidad + ", " + 
-				"metrosCuadrados: " + this.metrosCuadrados + 
-				"}";
+		return 	this.tipoEmplazamiento + " para " + this.capacidad + " personas de " + 	this.metrosCuadrados + 	"m2";
 	}
 }

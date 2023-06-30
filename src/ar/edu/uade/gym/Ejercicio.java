@@ -45,7 +45,7 @@ public class Ejercicio {
     }
     
     public String toString() {
-    	return "{nombre: " + this.nombre + ", " + "esVirtual: " + this.puedeSerVirtual + "}";
+    	return this.nombre;
     }
 
     public ArrayList<TipoArticulo> getArticuloNecesarios() {

@@ -561,13 +561,21 @@ public class CadenaGimnasio {
 			TipoArticulo tipoArticulo6 = this.getCatalogoDeArticulos().get(5);
 			this.agregarEjercicio("Crossfit", true, 10, tipoArticulo1);
 			this.agregarEjercicio("Yoga", true, 15 ,tipoArticulo2);
+			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
+			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
+			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
+			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
+
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Yoga"));
+
 
 			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
 			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
 			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
 			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
+
+
 
 			//CLASE
 			// Invento dos alumnos, uno con nivel suficiente y otro no.
@@ -600,7 +608,6 @@ public class CadenaGimnasio {
 			//listaAlumnos.add(cliente2);
 
 			// Agendo la clase
-
 			Profesor profesor = this.getProfesor(25);
 			Profesor profesor2 = this.getProfesor(26);
 			Profesor profesor3 = this.getProfesor(27);
@@ -648,8 +655,12 @@ public class CadenaGimnasio {
 			Ejercicio ejercicio4 = this.getEjercicio("Karate");
 			Ejercicio ejercicio5 = this.getEjercicio("Bailoterapia");
 			Ejercicio ejercicio6 = this.getEjercicio("Yudo");
+
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
 
+
+
+			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio2);
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio4);
 			this.agregarEjerciciosDisponibles(sedeCaballito, ejercicio2);
@@ -778,5 +789,51 @@ public class CadenaGimnasio {
 			}
 		}
 		return listaInfoClases;
+	}
+
+	public ArrayList<String[]> getListaStringUsuarios() {
+		ArrayList<Usuario> usuarios = getListaUsuarios();
+		ArrayList<String[]> listaStringUsuarios = new ArrayList<>();
+		for (Usuario usuario : usuarios) {
+			String[] info = new String[3];
+			info[0] = String.valueOf(usuario.getID());
+			info[1] = usuario.getStringTipoUsuario();
+			info[2] = usuario.getNombre();
+			listaStringUsuarios.add(info);
+		}
+		return listaStringUsuarios;
+	}
+
+	public void eliminarUsuario(int id) throws GymException {
+		Usuario user = getUsuario(id);
+		if (user.soyAdministrativo()) {this.usuariosAdministrativo.remove(user);}
+		if (user.soyCliente()) {this.usuariosClientes.remove(user);}
+		if (user.soyProfesor()) {this.usuariosProfesores.remove(user);}
+		if (user.soySoporteTecnico()) {this.usuariosSoporteTecnico.remove(user);}
+	}
+
+	public ArrayList<String[]> getListaInfoSedes() {
+		ArrayList<Sede> sedes = getListaSedes();
+		ArrayList<String[]> listaSedesInfo = new ArrayList<>();
+		for (Sede sede : sedes) {
+			listaSedesInfo.add(sede.getInfo());
+		}
+		return listaSedesInfo;
+	}
+
+	public void agregarSedeString(String ubicacion, String tipoNivel, String emplazamientos,
+								  String ejerciciosDisponibles, String alquilerSede) throws GymException {
+
+		TipoNivel nivel = TipoNivel.BLACK;
+		if (tipoNivel.equalsIgnoreCase("BLACK")) {nivel = TipoNivel.BLACK;}
+		if (tipoNivel.equalsIgnoreCase("ORO")) {nivel = TipoNivel.ORO;}
+		if (tipoNivel.equalsIgnoreCase("PLATINUM")) {nivel = TipoNivel.PLATINUM;}
+
+		if (!sedeYaExiste(ubicacion)) {
+			Sede newSede = new Sede(ubicacion, nivel, null, null, Double.valueOf(alquilerSede));
+			this.sedes.add(newSede);
+		} else {
+			throw new GymException("La sede ya existe.");
+		}
 	}
 }
