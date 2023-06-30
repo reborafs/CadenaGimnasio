@@ -567,19 +567,23 @@ public class CadenaGimnasio {
 			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
 
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
-			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Yoga"));
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Yudo"));
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Boxing"));
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Bailoterapia"));
 
-
-			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
-			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
-			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
-			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
+//			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
+//			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
+//			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
+//			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
 
 
 
 			//CLASE
 			// Invento dos alumnos, uno con nivel suficiente y otro no.
 			ArrayList<Cliente> listaAlumnos = new ArrayList<Cliente>();
+			ArrayList<Cliente> listaAlumnos2 = new ArrayList<Cliente>();
 
 			Cliente cliente4 = new Cliente("Ivan","rodriguez", TipoNivel.PLATINUM);
 			Cliente cliente5 = new Cliente("Franco","Franco", TipoNivel.PLATINUM);
@@ -587,6 +591,8 @@ public class CadenaGimnasio {
 			Cliente cliente7 = new Cliente("Maria","rodriguez", TipoNivel.PLATINUM);
 			Cliente cliente8 = new Cliente("Juan","rodriguez", TipoNivel.PLATINUM);
 			Cliente cliente9 = new Cliente("Fulanito","Perez", TipoNivel.PLATINUM);
+			Cliente cliente99 = new Cliente("Pepsi","123", TipoNivel.PLATINUM);
+
 			Cliente cliente10 = this.getCliente(6);
 
 			this.agregarUsuario(cliente4);
@@ -596,12 +602,19 @@ public class CadenaGimnasio {
 			this.agregarUsuario(cliente8);
 			this.agregarUsuario(cliente9);
 			this.agregarUsuario(cliente10);
+			this.agregarUsuario(cliente99);
 			listaAlumnos.add(cliente10);
-			listaAlumnos.add(cliente4);
+			//listaAlumnos.add(cliente4);
 			listaAlumnos.add(cliente5);
 			listaAlumnos.add(cliente6);
 			listaAlumnos.add(cliente7);
 			listaAlumnos.add(cliente8);
+
+			listaAlumnos2.add(cliente10);
+			listaAlumnos2.add(cliente5);
+			listaAlumnos2.add(cliente6);
+			listaAlumnos2.add(cliente7);
+			listaAlumnos2.add(cliente8);
 
 			//Cliente cliente2 = new Cliente("Sabrina", TipoNivel.BLACK);
 			//this.agregarUsuario(cliente2);
@@ -626,10 +639,14 @@ public class CadenaGimnasio {
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
 			ArrayList<Articulo> listaArticulos = null;
 			boolean esVirtual = true;
-			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos, LocalDate.of(2023,6,29), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
-
-			this.agendarClase(sedeBelgrano, profesor2, ejercicio7, listaAlumnos, LocalDate.of(2023,7,1), LocalTime.of(20,0,0), emplazamiento, listaArticulos, esVirtual);
+			System.out.print("listaAlumnos "+listaAlumnos.toString()+" \n");
+			System.out.print("listaAlumnos2 "+listaAlumnos2.toString()+" \n");
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos2, LocalDate.of(2023,7,1), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor2, ejercicio7, listaAlumnos, LocalDate.of(2023,7,1), LocalTime.of(12,0,0), emplazamiento, listaArticulos, esVirtual);
 			this.agendarClase(sedeBelgrano, profesor3, ejercicio8, listaAlumnos, LocalDate.of(2023,7,2), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor3, ejercicio9, listaAlumnos2, LocalDate.of(2023,7,3), LocalTime.of(8,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio10, listaAlumnos, LocalDate.of(2023,7,4), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor2, ejercicio11, listaAlumnos, LocalDate.of(2023,7,5), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
 			this.agendarClase(sedeCaballito, profesor, ejercicio9, listaAlumnos, LocalDate.of(2023,7,3), LocalTime.of(13,0,0), emplazamiento, listaArticulos, esVirtual);
 			this.agendarClase(sedeCaballito, profesor2, ejercicio10, listaAlumnos, LocalDate.of(2023,7,4), LocalTime.of(12,0,0), emplazamiento, listaArticulos, esVirtual);
 			this.agendarClase(sedeCaballito, profesor3, ejercicio11, listaAlumnos, LocalDate.of(2023,7,5), LocalTime.of(14,0,0), emplazamiento, listaArticulos, esVirtual);
@@ -673,9 +690,20 @@ public class CadenaGimnasio {
 			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio5);
 			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio6);
 
+
+			System.out.print("--------------------------------------- Clases Belgrano INICIO ---------------------------------------\n");
 			for(Clase claseSede:sedeBelgrano.getListaClases()){
+				System.out.print("------------------------------------------------------------------------------\n");
+				System.out.print(claseSede.getClaseID()+"\n");
+				System.out.print(claseSede.getEjercicio()+"\n");
+				System.out.print(claseSede.getEstado()+"\n");
+				System.out.print(claseSede.getProfesor()+"\n");
 				System.out.print(claseSede.getListaAlumnos()+"\n");
+
+				System.out.print("------------------------------------------------------------------------------\n");
+				//System.out.print(claseSede.getListaAlumnos()+"\n");
 			}
+			System.out.print("--------------------------------------- Clases Belgrano FIN ------------------------------------------\n");
 			//this.agregarAlumnoClase(sedeBelgrano, 1,cliente10);
 //			this.agregarAlumnoClase(sedeBelgrano, 2,cliente9);
 //			this.agregarAlumnoClase(sedeBelgrano, 3,cliente8);

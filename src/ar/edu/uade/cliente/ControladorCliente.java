@@ -13,6 +13,8 @@ import java.util.HashMap;
 
 import javax.swing.*;
 
+import static ar.edu.uade.gym.EstadoClase.FINALIZADA;
+
 public class ControladorCliente {
     private static ControladorCliente instancia;
     private final CadenaGimnasio gym;
@@ -121,10 +123,13 @@ public class ControladorCliente {
         HashMap<String, ArrayList<LocalDateTime>> clasesPorSede = new HashMap<String, ArrayList<LocalDateTime>>();
         ArrayList<Clase> clases = gym.getSede(sede).getListaClases();
         for(Clase clase : clases){
-            System.out.print("aqui -->" + clases.toString());
-            LocalDateTime horariosDisponibles = clase.getHorarioInicioFecha();
-            String key = clase.getEjercicio().getNombre();
-            agregarValor(clasesPorSede, key, horariosDisponibles);
+
+            if(clase.getEstado().equals(FINALIZADA)){
+                System.out.print("finalizada -->" + clase.getEjercicio() + ": " + !clase.getEstado().equals(FINALIZADA) + "\n");
+                LocalDateTime horariosDisponibles = clase.getHorarioInicioFecha();
+                String key = clase.getEjercicio().getNombre();
+                agregarValor(clasesPorSede, key, horariosDisponibles);
+            }
         }
         return clasesPorSede;
     }
@@ -142,12 +147,18 @@ public class ControladorCliente {
 
     public void inscibirAlumno(String claseElegida, String horarioSeleccionado, String sede) throws GymException {
         Sede sedeClase = gym.getSede(sede);
+        System.out.println("la sede es -->"+sedeClase.getUbicacion()+"\n");
         ArrayList<Clase> clases = sedeClase.getListaClases();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
         LocalDateTime fechaHoraDesformateada = LocalDateTime.parse(horarioSeleccionado, formato);
-        LocalDateTime fechaHorario = fechaHoraDesformateada;
+        LocalDate fechaDesformateada = fechaHoraDesformateada.toLocalDate();
+        LocalTime horaDesformateada = fechaHoraDesformateada.toLocalTime();
         for (Clase clase : clases){
-            if(clase.getEjercicio().getNombre().equals(claseElegida) && clase.getHorarioInicioFecha() == fechaHorario){
+            String claseEjercicio = clase.getEjercicio().getNombre();
+            LocalDate claseFecha = clase.getFecha();
+            LocalTime claseHora = clase.getHorarioInicio();
+            if(claseEjercicio.equals(claseElegida) && claseFecha.equals(fechaDesformateada) && claseHora.equals(horaDesformateada)){
+                System.out.println("el id de la clase es -->\n"+clase.getClaseID());
                 sedeClase.agregarAlumno(clase.getClaseID(), this.usuario);
             }
         }
