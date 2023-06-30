@@ -1,11 +1,15 @@
 package ar.edu.uade.administrativo;
 
-import ar.edu.uade.gym.CadenaGimnasio;
-import ar.edu.uade.gym.GymException;
+import ar.edu.uade.gym.*;
+import ar.edu.uade.gym.articulos.Articulo;
 import ar.edu.uade.gym.articulos.CategoriaArticulo;
 import ar.edu.uade.usuarios.Administrativo;
+import ar.edu.uade.usuarios.Cliente;
+import ar.edu.uade.usuarios.Profesor;
 
 import javax.swing.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -98,5 +102,35 @@ public class ControladorAdministrativo {
 
     public ArrayList<String[]> getListaClientes() {
         return gym.getListaClientes();
+    }
+
+    public void eliminarCliente(int id) throws GymException {
+        gym.eliminarCliente(id);
+    }
+
+    public void modificarCliente(int id, String nombre, String contrasenia, String nivel) throws GymException {
+        gym.modificarCliente(id, nombre, contrasenia, nivel);
+    }
+
+    public HashMap<LocalDate, ArrayList<LocalTime>> getClasesAsignadas() {
+        return gym.getHorariosClasesAsignadasAdmin(this.usuario);
+    }
+
+    public void agregarClase(String sede, String profesor, String ejercicio, String listaAlumnos, String fecha,
+                             String horarioInicio, String emplazamiento, String listaArticulos, boolean esVirtual) {
+        //gym.agendarClase(sede, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, emplazamiento, listaArticulos, esVirtual);
+        System.out.println(sede);
+    }
+
+    public ArrayList<String> getListaSedes() {
+        return this.usuario.getNombreSedesAsignadas();
+    }
+
+    public ArrayList<String> getListaEjercicios(String sede) {
+        return this.gym.getEjerciciosDisponiblesSede(sede);
+    }
+
+    public ArrayList<String> getListaNiveles() {
+        return gym.getListaNiveles();
     }
 }
