@@ -1,6 +1,7 @@
 package ar.edu.uade.soporteTecnico;
 
 import ar.edu.uade.gym.CadenaGimnasio;
+import ar.edu.uade.usuarios.Administrativo;
 import ar.edu.uade.usuarios.SoporteTecnico;
 import ar.edu.uade.login.Login;
 
@@ -25,6 +26,10 @@ public class ControladorSoporteTecnico {
     public void setUsuario(SoporteTecnico usuario) {
         this.usuario = usuario;
     }
+    
+    public SoporteTecnico getUsuario() {
+        return this.usuario;
+    }
 
     public void abrirVistaPrincipal(SoporteTecnico usuario) {
         setUsuario(usuario);
@@ -33,6 +38,37 @@ public class ControladorSoporteTecnico {
             vistaSoporteTecnico.setVisible(true);
         });
     }
+    
+    public void abrirVistaSedes(SoporteTecnico usuario) {
+		setUsuario(usuario);
+		SwingUtilities.invokeLater(() -> {
+			VistaGestionSedes vistaSedes = new VistaGestionSedes();;
+			vistaSedes.setVisible(true);
+		});
+    }
 
+    public void abrirVistaUsuarios(SoporteTecnico usuario) {
+		setUsuario(usuario);
+		SwingUtilities.invokeLater(() -> {
+			VistaGestionUsuarios vistaUsuarios = new VistaGestionUsuarios();;
+			vistaUsuarios.setVisible(true);
+		});
+    }
+
+    public void abrirVistaEjercicios(SoporteTecnico usuario) {
+		setUsuario(usuario);
+		SwingUtilities.invokeLater(() -> {
+			VistaGestionEjercicios vistaEjercicios = new VistaGestionEjercicios();;
+			vistaEjercicios.setVisible(true);
+		});
+    }
+
+    public void abrirVistaArticulos(SoporteTecnico usuario) {
+		setUsuario(usuario);
+		SwingUtilities.invokeLater(() -> {
+			VistaGestionArticulosST vistaArticulosST = new VistaGestionArticulosST();;
+			vistaArticulosST.setVisible(true);
+		});
+    }
 }
 

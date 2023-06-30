@@ -19,7 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class VistaSoporteTecnico  extends JFrame{
-
+	
+	private ControladorSoporteTecnico controller;
 	private SoporteTecnico usuario;
 
 	public VistaSoporteTecnico() {
@@ -64,6 +65,46 @@ public class VistaSoporteTecnico  extends JFrame{
         this.setSize(300, 200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+        
+        class HandlerBtnSedes implements ActionListener {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		controller.abrirVistaSedes(controller.getUsuario());
+        	}
+        }
+
+        class HandlerBtnUsuarios implements ActionListener {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		controller.abrirVistaUsuarios(controller.getUsuario());
+        	}
+        }
+
+        class HandlerBtnEjercicios implements ActionListener {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		controller.abrirVistaEjercicios(controller.getUsuario());
+        	}
+        }
+
+    	class HandlerBtnArticulos implements ActionListener {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+    			controller.abrirVistaArticulos(controller.getUsuario());
+    		}
+    	}
+
+    	/* INSTANCIACION DE LOS MANEJADORES */
+    	HandlerBtnSedes handlerBtnSedes = new HandlerBtnSedes();
+    	HandlerBtnUsuarios handlerBtnUsuarios = new HandlerBtnUsuarios();
+    	HandlerBtnEjercicios handlerBtnEjercicios = new HandlerBtnEjercicios();
+    	HandlerBtnArticulos handlerBtnArticulos = new HandlerBtnArticulos();
+
+    	/* ASIGNACION DE LOS MANEJADORES A LOS BOTONES */
+    	btnSedes.addActionListener(handlerBtnSedes);
+    	btnUsuarios.addActionListener(handlerBtnUsuarios);
+    	btnEjercicios.addActionListener(handlerBtnEjercicios);
+    	btnArticulos.addActionListener(handlerBtnArticulos);
 	}
 	
     public static void main(String[] args) {

@@ -3,6 +3,7 @@ package ar.edu.uade.soporteTecnico;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import ar.edu.uade.usuarios.SoporteTecnico;
 
@@ -56,6 +61,13 @@ public class VistaGestionSedes extends JFrame{
 		JButton btnArticulos = new JButton("Gestion de Articulos");
 		panelMenu.add(btnArticulos, gbc);
 		
+		/* Crear Sede */
+		gbc.gridx = 9;
+		gbc.gridy = 0;
+		gbc.gridwidth = 2;
+		JButton btnCrearSede = new JButton("Crear Sede");
+		panelMenu.add(btnCrearSede, gbc);
+		
         this.setSize(300, 200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -99,6 +111,61 @@ public class VistaGestionSedes extends JFrame{
     	btnUsuarios.addActionListener(handlerBtnUsuarios);
     	btnEjercicios.addActionListener(handlerBtnEjercicios);
     	btnArticulos.addActionListener(handlerBtnArticulos);
+    	
+    	btnCrearSede.addActionListener(new ActionListener() {
+    	    @Override
+    	    public void actionPerformed(ActionEvent e) {
+    	        mostrarDialogoCrearSede();
+    	    }
+    	});
+	}
+	
+	private void mostrarDialogoCrearSede() {
+	    JDialog dialogo = new JDialog(this, "Crear Sede", true);
+	    dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+	    JPanel panel = new JPanel();
+	    panel.setLayout(new GridLayout(3, 2));
+
+	    JLabel lblNombreSede = new JLabel("Nombre de la Sede:");
+	    JTextField txtNombreSede = new JTextField();
+
+	    JLabel lblNivel = new JLabel("Nivel:");
+	    JTextField txtNivel = new JTextField();
+
+	    JButton btnAceptar = new JButton("Aceptar");
+	    btnAceptar.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            String nombreSede = txtNombreSede.getText();
+	            String nivel = txtNivel.getText();
+	            // Lógica para procesar la información capturada
+
+	            // Cerrar el diálogo
+	            dialogo.dispose();
+	        }
+	    });
+
+	    JButton btnCancelar = new JButton("Cancelar");
+	    btnCancelar.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            // Cerrar el diálogo sin procesar la información
+	            dialogo.dispose();
+	        }
+	    });
+
+	    panel.add(lblNombreSede);
+	    panel.add(txtNombreSede);
+	    panel.add(lblNivel);
+	    panel.add(txtNivel);
+	    panel.add(btnAceptar);
+	    panel.add(btnCancelar);
+
+	    dialogo.add(panel);
+	    dialogo.pack();
+	    dialogo.setLocationRelativeTo(this);
+	    dialogo.setVisible(true);
 	}
 	
     public static void main(String[] args) {
