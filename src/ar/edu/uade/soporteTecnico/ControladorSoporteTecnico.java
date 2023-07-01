@@ -1,6 +1,7 @@
 package ar.edu.uade.soporteTecnico;
 
 import ar.edu.uade.gym.*;
+import ar.edu.uade.gym.articulos.TipoArticulo;
 import ar.edu.uade.usuarios.SoporteTecnico;
 
 import javax.swing.*;
@@ -101,8 +102,8 @@ public class ControladorSoporteTecnico {
         gym.modificarCliente(id, nombre, contrasenia, nivel);
     }
 
-    public ArrayList<String> getListaEjercicios(String sede) {
-        return this.gym.getEjerciciosDisponiblesSede(sede);
+    public ArrayList<String> getListaNombresEjercicios() {
+        return this.gym.getListaNombresEjercicios();
     }
 
     public ArrayList<String> getListaNiveles() {
@@ -164,6 +165,19 @@ public class ControladorSoporteTecnico {
 
     public void modificarAdministrativo(int id, ArrayList<String> selectedSedes) throws GymException {
         gym.asignarNuevaListaSedes(id, selectedSedes);
+    }
+
+    public void agregarEjercicio(String nombre, int numVirtuales, String articulos, boolean flagVirtual) throws GymException {
+        String[] articulosArray = articulos.trim().split(",");
+        ArrayList<String> articulosList = new ArrayList<>();
+        for (String art : articulosArray)
+            articulosList.add(art);
+
+        gym.agregarEjercicio(nombre, flagVirtual, numVirtuales, articulosList);
+    }
+
+    public ArrayList<String[]> getListaInfoEjercicios() {
+        return gym.getListaEjercicios();
     }
 }
 

@@ -272,11 +272,16 @@ public class CadenaGimnasio {
     			flagEjercicioFound = true;
     	return flagEjercicioFound;
     }
-    
+
     public void agregarEjercicio(String nombre, boolean puedeSerVirtual, int maxClasesVirtGuardadas,
-    		ArrayList<TipoArticulo> listaArticulosNecesarios) throws GymException {
+    		ArrayList<String> listaArticulosNecesarios) throws GymException {
+
+		ArrayList<TipoArticulo> catalogo = new ArrayList<>();
+		for (String id : listaArticulosNecesarios)
+			catalogo.add(getTipoArticulo(Integer.parseInt(id)));
+
     	if (!ejercicioYaExiste(nombre)) {
-        	Ejercicio newEjercicio = new Ejercicio(nombre, puedeSerVirtual, maxClasesVirtGuardadas ,listaArticulosNecesarios);
+        	Ejercicio newEjercicio = new Ejercicio(nombre, puedeSerVirtual, maxClasesVirtGuardadas , catalogo);
         	this.ejercicios.add(newEjercicio);
     	} else {
     		throw new GymException("El ejercicio ya existe.");
@@ -287,11 +292,20 @@ public class CadenaGimnasio {
     		TipoArticulo articuloNecesario) throws GymException {
     	ArrayList<TipoArticulo> listaArticulosNecesarios = new ArrayList<TipoArticulo>();
     	listaArticulosNecesarios.add(articuloNecesario);
-    	agregarEjercicio(nombre, puedeSerVirtual, maxClasesVirtGuardadas ,listaArticulosNecesarios);
-    }
+		if (!ejercicioYaExiste(nombre)) {
+			Ejercicio newEjercicio = new Ejercicio(nombre, puedeSerVirtual, maxClasesVirtGuardadas ,listaArticulosNecesarios);
+			this.ejercicios.add(newEjercicio);
+		} else {
+			throw new GymException("El ejercicio ya existe.");
+		}
+	}
     
-    public ArrayList<Ejercicio> getListaEjercicios() {
-    	return this.ejercicios;
+    public ArrayList<String> getListaNombresEjercicios() {
+		ArrayList<String> ejerciciosDisponibles = new ArrayList<>();
+		for (Ejercicio ejercicio : this.ejercicios){
+			ejerciciosDisponibles.add(ejercicio.getNombre());
+		}
+    	return ejerciciosDisponibles;
     }
 
     public String getStringListaEjercicios() {
@@ -391,6 +405,17 @@ public class CadenaGimnasio {
      *                    METODOS DE ARTICULOS 
      * =======================================================
      */
+
+	public TipoArticulo getTipoArticulo(int id) throws GymException {
+		ArrayList<TipoArticulo> listaTiposArticulos = getCatalogoDeArticulos();
+
+		for (TipoArticulo tipoArticulo: listaTiposArticulos)
+			if (id == tipoArticulo.getID())
+				return tipoArticulo;
+
+		throw new GymException("Tipo Articulo no existe.");
+	}
+
 	public ArrayList<TipoArticulo> getCatalogoDeArticulos() {
 		return catalogoDeArticulos;
 	}
@@ -912,5 +937,13 @@ public class CadenaGimnasio {
 		}
 		SoporteTecnico st = new SoporteTecnico(nombre,contrasena);
 		usuariosSoporteTecnico.add(st);
+	}
+
+	public ArrayList<String[]> getListaEjercicios() {
+		ArrayList<String[]> ejerciciosDisponibles = new ArrayList<>();
+		for (Ejercicio ejercicio : this.ejercicios){
+			ejerciciosDisponibles.add(ejercicio.getInfo());
+		}
+		return ejerciciosDisponibles;
 	}
 }

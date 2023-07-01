@@ -51,4 +51,27 @@ public class Ejercicio {
     public ArrayList<TipoArticulo> getArticuloNecesarios() {
         return this.listaArticulosNecesarios;
     }
+
+    public String[] getInfo() {
+        String[] array = new String[4];
+        array[0] = nombre;
+
+        if (puedeSerVirtual)
+            array[1] = "SI";
+        else
+            array[1] = "NO";
+
+        if (puedeSerVirtual)
+            array[1] = "SI";
+        else
+            array[1] = "NO";
+
+        if (puedeSerVirtual)
+            array[2] = String.valueOf(maxClasesVirtualesGuardadas);
+        else
+            array[2] = "-";
+
+        array[3] = listaArticulosNecesarios.toString();
+        return array;
+    }
 }

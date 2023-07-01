@@ -59,4 +59,8 @@ public class TipoArticulo {
     public CategoriaArticulo getCategoriaArticulo() {
         return this.categoria;
     }
+
+    public int getID() {
+        return this.id;
+    }
 }
