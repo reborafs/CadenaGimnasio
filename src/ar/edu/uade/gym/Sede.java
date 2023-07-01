@@ -369,4 +369,20 @@ public class Sede {
 	public ArrayList<Emplazamiento> getEmplazamientosDisponibles() {
 		return emplazamientosDisponibles;
 	}
+
+	public Clase getClase(int claseId) throws GymException {
+		for (Clase clase : listaClases)
+			if (clase.getClaseID() == claseId)
+				return clase;
+
+		throw new GymException("Clase no existe.");
+	}
+	public void cambiarEstadoClase(int claseId, String estado) throws GymException {
+		Clase clase = getClase(claseId);
+		switch (estado) {
+			case "Finalizada" -> finalizarClase(clase);
+			case "Agendada" -> clase.setEstadoAgendada();
+			case "Confirmada" -> validarYConfirmarClase(clase);
+		}
+	}
 }
