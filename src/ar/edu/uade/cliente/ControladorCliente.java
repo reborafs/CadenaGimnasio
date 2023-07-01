@@ -118,6 +118,17 @@ public class ControladorCliente {
      * =======================================================
      */
 
+    public ArrayList<String> getSedeCliente(){
+        ArrayList<Sede> listaSedes = gym.getListaSedes();
+        ArrayList<String> listaSedesDisponibles = new ArrayList<String>();
+        for(Sede sede: listaSedes){
+            if(usuario.getTipoNivel().getValue() >= sede.getTipoNivel().getValue()){
+                listaSedesDisponibles.add(sede.getUbicacion());
+            }
+        }
+        return listaSedesDisponibles;
+    }
+
     //arreglar problema de sobreescritura de la key, porque pueden haber más de una clase con el mismo ejercicio
     public HashMap<String, ArrayList<LocalDateTime>> getClasesPorSede(String sede){
         HashMap<String, ArrayList<LocalDateTime>> clasesPorSede = new HashMap<String, ArrayList<LocalDateTime>>();
@@ -172,4 +183,7 @@ public class ControladorCliente {
         return gym.getHorariosClasesAsignadasClientes(ubicacionSede, this.usuario);
     }
 
+    public Cliente getUsuario() {
+        return usuario;
+    }
 }

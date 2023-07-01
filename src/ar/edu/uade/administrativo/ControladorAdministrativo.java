@@ -134,7 +134,6 @@ public class ControladorAdministrativo {
 
 
         gym.agendarClase(sedeFormato, profesorFormato, ejercicioFormato, listaAlumnosFormato, fechaFormato, horarioInicioFormato, emplazamientoFormato, listaArticulosFormato, esVirtual);
-        System.out.println(sede);
     }
 
     public ArrayList<String> getListaSedes() {

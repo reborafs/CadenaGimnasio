@@ -31,7 +31,7 @@ public class VistaPrincipalGestionClases extends JFrame{
 		panelMenu.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(5, 5, 5, 5);
-		
+
 		/* Gestion de Cliente*/
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -113,7 +113,7 @@ public class VistaPrincipalGestionClases extends JFrame{
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(9, 2));
 
-		JLabel lblSede = new JLabel("Ingrese la sede de la clase::");
+		JLabel lblSede = new JLabel("Ingrese la sede de la clase:");
 		JComboBox<String> txtSede = new JComboBox<>();
 		for (String sede : controller.getListaSedes()) {
 			txtSede.addItem(sede);

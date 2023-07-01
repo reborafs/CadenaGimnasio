@@ -566,6 +566,8 @@ public class CadenaGimnasio {
 
 
 			asignarSede(usuariosAdministrativo.get(0).getID(), sedeBelgrano.getUbicacion());
+			asignarSede(usuariosAdministrativo.get(0).getID(), sedeCaballito.getUbicacion());
+			asignarSede(usuariosAdministrativo.get(0).getID(), sedePalermo.getUbicacion());
 
 
 			/* =======================================================
