@@ -10,7 +10,7 @@ public class VistaGestionUsuarios extends JFrame {
     private final ControladorSoporteTecnico controller;
 
     public VistaGestionUsuarios() {
-		super("Administrativo: Gestion de Usuarios");
+		super("Soporte Tecnico: Gestion de Usuarios");
         this.controller = ControladorSoporteTecnico.getInstance();
         this.setLayout(new BorderLayout());
 		
