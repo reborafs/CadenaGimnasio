@@ -122,7 +122,9 @@ public class VistaGestionClientes extends JFrame {
         JTextField txtContrasena = new JTextField();
 
         JLabel lblNivel = new JLabel("Nivel:");
-        JTextField txtNivel = new JTextField();
+        JComboBox<String> txtTipoUsuario = new JComboBox<>();
+        for (String tipoUser : controller.getListaNiveles())
+            txtTipoUsuario.addItem(tipoUser);
 
         JLabel lblError = new JLabel("ERROR");
         JLabel lblErrorMessage = new JLabel("ERROR");
@@ -134,7 +136,7 @@ public class VistaGestionClientes extends JFrame {
             try {
                 String nombre = txtNombre.getText();
                 String contrasena = txtContrasena.getText();
-                String nivel = txtNivel.getText();
+                String nivel = txtTipoUsuario.getSelectedItem().toString();
                 controller.agregarCliente(nombre, contrasena, nivel);
 
                 // Cerrar el diálogo
@@ -158,7 +160,7 @@ public class VistaGestionClientes extends JFrame {
         panel.add(lblContrasena);
         panel.add(txtContrasena);
         panel.add(lblNivel);
-        panel.add(txtNivel );
+        panel.add(txtTipoUsuario );
 
         panel.add(lblError);
         panel.add(lblErrorMessage);

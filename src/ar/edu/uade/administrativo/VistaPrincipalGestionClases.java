@@ -1,5 +1,8 @@
 package ar.edu.uade.administrativo;
 
+import ar.edu.uade.gym.Emplazamiento;
+import ar.edu.uade.gym.GymException;
+import ar.edu.uade.gym.articulos.Articulo;
 import ar.edu.uade.profesor.ControladorProfesor;
 
 import java.awt.*;
@@ -120,16 +123,26 @@ public class VistaPrincipalGestionClases extends JFrame{
 		JLabel lblEjercicio = new JLabel("Ingrese el tipo de ejercicio:");
 		JComboBox<String> txtEjercicio = new JComboBox<>();
 		txtEjercicio.addItem("---");
+		ArrayList<String> listaEjercicios = controller.getListaEjercicios(txtSede.getSelectedItem().toString());
+		for (String ejercicio : listaEjercicios) {
+			if (!estaEnLista(txtEjercicio, ejercicio)){
+				txtEjercicio.addItem(ejercicio);
+			}
+		}
 
-
-		JLabel lblProfesor = new JLabel("Ingrese el nombre del profesor:");
-		JTextField txtProfesor = new JTextField();
+		JLabel lblIdProfesor = new JLabel("Ingrese el id del profesor:");
+		JTextField txtIdProfesor = new JTextField();
 
 		JLabel lblFecha = new JLabel("Ingrese la fecha (dd-MM-yyyy):");
 		JTextField txtFecha = new JTextField();
 
 		JLabel lblEmplazamiento = new JLabel("Ingrese el Emplazamiento:");
-		JTextField txtEmplazamiento = new JTextField();
+		JComboBox<String> txtEmplazamiento = new JComboBox<>();
+		ArrayList<Emplazamiento> listaEmplazamiento = controller.getEmplazamiento(txtSede.getSelectedItem().toString());
+		for (Emplazamiento tipoEmplazamiento : listaEmplazamiento)
+			if (!estaEnLista(txtEmplazamiento, tipoEmplazamiento.toString())){
+				txtEmplazamiento.addItem(tipoEmplazamiento.toString());
+			}
 
 		JLabel lblHorarioInicio = new JLabel("Horario de Inicio:");
 		JTextField txtHorarioInicio = new JTextField();
@@ -148,16 +161,16 @@ public class VistaPrincipalGestionClases extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String sede = txtSede.getItemAt(txtSede.getSelectedIndex());
-					String ejercicio = txtEjercicio.getItemAt(txtSede.getSelectedIndex());
-					String profesor = txtProfesor.getText();
+					String ejercicio = txtEjercicio.getItemAt(txtEjercicio.getSelectedIndex());
+					String idProfesor = txtIdProfesor.getText();
 					String fecha = txtFecha.getText();
-					String emplazamiento = txtEmplazamiento.getText();
-					String listaArticulos = null;// txtListaArticulos.getText();
+					String emplazamiento = txtEmplazamiento.getItemAt(txtEmplazamiento.getSelectedIndex());
+					ArrayList<Articulo> listaArticulos = null;// txtListaArticulos.getText();
 					String horarioInicio = txtHorarioInicio.getText();
 					boolean esVirtual = false;
 					// Lógica para procesar la información capturada
 
-					controller.agregarClase(sede, profesor, ejercicio, null, fecha, horarioInicio,
+					controller.agregarClase(sede, idProfesor, ejercicio, null, fecha, horarioInicio,
 							emplazamiento, listaArticulos, esVirtual);
 
 					// Cerrar el diálogo
@@ -169,6 +182,8 @@ public class VistaPrincipalGestionClases extends JFrame{
 					lblError.setVisible(true);
 					lblErrorMessage.setVisible(true);
 					return; // Exit the method without processing the information
+				} catch (GymException ex) {
+					throw new RuntimeException(ex);
 				}
 			}
 		});
@@ -196,8 +211,8 @@ public class VistaPrincipalGestionClases extends JFrame{
 		panel.add(txtSede);
 		panel.add(lblEjercicio);
 		panel.add(txtEjercicio);
-		panel.add(lblProfesor);
-		panel.add(txtProfesor);
+		panel.add(lblIdProfesor);
+		panel.add(txtIdProfesor);
 		panel.add(lblFecha);
 		panel.add(txtFecha);
 		panel.add(lblEmplazamiento);
@@ -249,7 +264,7 @@ public class VistaPrincipalGestionClases extends JFrame{
 		ArrayList<String[]> listaClasesPorSede = controller.getListaClasesPorSede();
 
 		// Definicion de columnas
-		String[] columnas = {"Sede","Profesor","Fecha","Horario","Ejercicio","Estado","Cantidad de Alumnos",
+		String[] columnas = {"Sede", "Id Profesor","Profesor","Fecha","Horario","Ejercicio","Estado","Cantidad de Alumnos",
 				"Emplazamiento","Cant. Articulos","Es virtual?"};
 		int cantColumnas = columnas.length;
 
@@ -377,5 +392,17 @@ public class VistaPrincipalGestionClases extends JFrame{
 		}
 		return flagOcupado;
 	}
+
+	private boolean estaEnLista(JComboBox<String>  lista, String valor){
+		for (int i = 0; i < lista.getItemCount(); i++) {
+			String elemento = lista.getItemAt(i);
+			if (valor.equals(elemento)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 
 }

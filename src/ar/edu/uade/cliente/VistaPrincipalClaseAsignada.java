@@ -155,18 +155,6 @@ public class VistaPrincipalClaseAsignada extends JFrame {
 
         HashMap<String, ArrayList<LocalDateTime>> clasesExistentes = controller.getClasesPorSede(sede);
 
-//        String[] horario6 = {"15/05/2023 - 8:00 - 9:00","15/05/2023 - 7:00 - 8:00","22/05/2023 - 7:00 - 8:00","02/05/2023 - 7:00 - 8:00"};
-//		String[] horario7 = {"15/05/2023 - 11:00 - 12:00"};
-//		String[] horario8 = {"15/05/2023 - 15:00 - 16:00"};
-//		String[] horario9 = {"15/05/2023 - 7:00 - 8:00"};
-//		String[] horario10 = {};
-//
-//        clasesExistentes.put("Yoga", horario6);
-//        clasesExistentes.put("Crossfit", horario7);
-//        clasesExistentes.put("Boxing", horario8);
-//        clasesExistentes.put("Bailoterapia", horario9);
-//        clasesExistentes.put("Karate", horario10);
-
         panelInscripcion.setLayout(new GridBagLayout());
         GridBagConstraints gbcInscripcion = new GridBagConstraints();
         gbcInscripcion.insets = new Insets(5, 5, 5, 5);

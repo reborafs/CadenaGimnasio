@@ -212,6 +212,7 @@ public class Clase {
 
 	public ArrayList<String> getInfo() {
 		ArrayList<String> array = new ArrayList<>();
+		array.add(String.valueOf(profesorAsignado.getID()));
 		array.add(profesorAsignado.getNombre());
 		array.add(fecha.toString());
 		array.add(horarioInicio.toString());

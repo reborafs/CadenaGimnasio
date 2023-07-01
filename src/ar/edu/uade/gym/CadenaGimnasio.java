@@ -691,19 +691,19 @@ public class CadenaGimnasio {
 			this.agregarEjerciciosDisponibles(sedePalermo, ejercicio6);
 
 
-			System.out.print("--------------------------------------- Clases Belgrano INICIO ---------------------------------------\n");
-			for(Clase claseSede:sedeBelgrano.getListaClases()){
-				System.out.print("------------------------------------------------------------------------------\n");
-				System.out.print(claseSede.getClaseID()+"\n");
-				System.out.print(claseSede.getEjercicio()+"\n");
-				System.out.print(claseSede.getEstado()+"\n");
-				System.out.print(claseSede.getProfesor()+"\n");
-				System.out.print(claseSede.getListaAlumnos()+"\n");
-
-				System.out.print("------------------------------------------------------------------------------\n");
-				//System.out.print(claseSede.getListaAlumnos()+"\n");
-			}
-			System.out.print("--------------------------------------- Clases Belgrano FIN ------------------------------------------\n");
+//			System.out.print("--------------------------------------- Clases Belgrano INICIO ---------------------------------------\n");
+//			for(Clase claseSede:sedeBelgrano.getListaClases()){
+//				System.out.print("------------------------------------------------------------------------------\n");
+//				System.out.print(claseSede.getClaseID()+"\n");
+//				System.out.print(claseSede.getEjercicio()+"\n");
+//				System.out.print(claseSede.getEstado()+"\n");
+//				System.out.print(claseSede.getProfesor()+"\n");
+//				System.out.print(claseSede.getListaAlumnos()+"\n");
+//
+//				System.out.print("------------------------------------------------------------------------------\n");
+//				//System.out.print(claseSede.getListaAlumnos()+"\n");
+//			}
+//			System.out.print("--------------------------------------- Clases Belgrano FIN ------------------------------------------\n");
 			//this.agregarAlumnoClase(sedeBelgrano, 1,cliente10);
 //			this.agregarAlumnoClase(sedeBelgrano, 2,cliente9);
 //			this.agregarAlumnoClase(sedeBelgrano, 3,cliente8);
@@ -762,8 +762,8 @@ public class CadenaGimnasio {
 
 	public void modificarCliente(int id, String nombre, String contrasenia, String nivel) throws GymException {
 		Cliente cliente = getCliente(id);
-		if (nombre != null) { cliente.setNombre(nombre); };
-		if (contrasenia != null) { cliente.setContrasenia(contrasenia); };
+		if (nombre != null && !nombre.equals("")) { cliente.setNombre(nombre); };
+		if (contrasenia != null && !contrasenia.equals("")) { cliente.setContrasenia(contrasenia); };
 		if (nivel != null) { cliente.setTipoNivel(stringToTipoNivel(nivel)); };
 	}
 
@@ -776,11 +776,11 @@ public class CadenaGimnasio {
 		return niveles;
 	}
 
-	public void modificarProfesor(int id, String nombre, String contrasena, Integer sueldo) throws GymException {
+	public void modificarProfesor(int id, String nombre, String contrasena, Double sueldo) throws GymException {
 		Profesor profe = getProfesor(id);
-		if (nombre != null) { profe.setNombre(nombre); };
-		if (contrasena != null) { profe.setContrasenia(contrasena); };
-		if (sueldo != null) { profe.setSueldo(Double.valueOf(sueldo)); };
+		if (nombre != null && !nombre.equals("")) { profe.setNombre(nombre); };
+		if (contrasena != null && !contrasena.equals("")) { profe.setContrasenia(contrasena); };
+		if (sueldo != null) { profe.setSueldo(sueldo); };
 	}
 
 	public void eliminarProfesor(int id) throws GymException {
