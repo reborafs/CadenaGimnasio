@@ -8,8 +8,10 @@ import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.Profesor;
 
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -116,9 +118,22 @@ public class ControladorAdministrativo {
         return gym.getHorariosClasesAsignadasAdmin(this.usuario);
     }
 
-    public void agregarClase(String sede, String profesor, String ejercicio, String listaAlumnos, String fecha,
-                             String horarioInicio, String emplazamiento, String listaArticulos, boolean esVirtual) {
-        //gym.agendarClase(sede, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, emplazamiento, listaArticulos, esVirtual);
+    public void agregarClase(String sede, String idProfesor, String ejercicio, ArrayList<Cliente> listaAlumnos, String fecha,
+                             String horarioInicio, String emplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
+        Sede sedeFormato = gym.getSede(sede);
+        Profesor profesorFormato = gym.getProfesor(Integer.valueOf(idProfesor));
+        Ejercicio ejercicioFormato = gym.getEjercicio(ejercicio);
+        ArrayList<Cliente> listaAlumnosFormato = listaAlumnos;
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate fechaFormato = LocalDate.parse(fecha,formatoFecha);
+        DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime horarioInicioFormato = LocalTime.parse(horarioInicio, formatoHora);
+        Emplazamiento emplazamientoFormato = getEmplazamiento(sedeFormato, emplazamiento);
+        ArrayList<Articulo> listaArticulosFormato = null;
+        //Boolean esVirtual = false;
+
+
+        gym.agendarClase(sedeFormato, profesorFormato, ejercicioFormato, listaAlumnosFormato, fechaFormato, horarioInicioFormato, emplazamientoFormato, listaArticulosFormato, esVirtual);
         System.out.println(sede);
     }
 
@@ -134,11 +149,15 @@ public class ControladorAdministrativo {
         return gym.getListaNiveles();
     }
 
+    public ArrayList<Emplazamiento> getEmplazamiento(String sede) {
+        return gym.getSede(sede).getEmplazamientosDisponibles();
+    }
+
     public void agregarProfesor(String nombre, String contrasena, double sueldo) {
         gym.agregarProfesor(nombre, contrasena, sueldo);
     }
 
-    public void modificarProfesor(int id, String nombre, String contrasena, Integer sueldo) throws GymException {
+    public void modificarProfesor(int id, String nombre, String contrasena, Double sueldo) throws GymException {
         gym.modificarProfesor(id, nombre, contrasena, sueldo);
     }
 
@@ -157,5 +176,15 @@ public class ControladorAdministrativo {
     public ArrayList<String[]> getListaClasesPorSede() {
         ArrayList<Sede> sedesAsignadas = this.usuario.getSedesAsignadas();
         return gym.getListaClasesPorSede(sedesAsignadas);
+    }
+
+    private Emplazamiento getEmplazamiento(Sede sede, String valor){
+        ArrayList<Emplazamiento> lista = sede.getEmplazamientosDisponibles();
+        for(Emplazamiento emplazmiento : lista){
+            if(valor.equals(emplazmiento.toString())){
+                return emplazmiento;
+            }
+        }
+        return null;
     }
 }

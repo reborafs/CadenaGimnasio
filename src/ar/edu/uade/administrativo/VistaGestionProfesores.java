@@ -131,7 +131,7 @@ public class VistaGestionProfesores extends JFrame{
 			try {
 				String nombre = txtNombre.getText();
 				String contrasena = txtContrasena.getText();
-				double sueldo = Double.parseDouble(txtSueldo.getText());
+				double sueldo = Double.valueOf(txtSueldo.getText());
 				controller.agregarProfesor(nombre, contrasena, sueldo);
 
 				// Cerrar el diálogo
@@ -233,7 +233,7 @@ public class VistaGestionProfesores extends JFrame{
 		JTextField txtContrasena = new JTextField();
 
 		JLabel lblSueldo = new JLabel("Sueldo:");
-		JTextField txtSueldo = new JFormattedTextField(NumberFormat.getNumberInstance());
+		JTextField txtSueldo = new JTextField();
 
 		JLabel lblError = new JLabel("ERROR");
 		JLabel lblErrorMessage = new JLabel("ERROR");
@@ -246,7 +246,8 @@ public class VistaGestionProfesores extends JFrame{
 				int id = Integer.parseInt(txtID.getText());
 				String nombre = txtNombre.getText();
 				String contrasena = txtContrasena.getText();
-				Integer sueldo = Integer.valueOf((txtSueldo.getText()));
+				Double sueldo = Double.valueOf(txtSueldo.getText());
+				System.out.print(sueldo);
 				controller.modificarProfesor(id,nombre,contrasena,sueldo);
 				dialogo.dispose(); // Cerrar el diálogo
 			} catch (Exception ex) {

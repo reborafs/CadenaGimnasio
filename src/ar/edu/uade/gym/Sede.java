@@ -192,7 +192,6 @@ public class Sede {
 		if (validarRentabilidad(clase)) {
 			if (validarArticulosNecesarios(clase, clase.getEjercicio())) {
 				clase.confirmarClase();
-				System.out.print("Se confirmo la clase\n");
 			}
 		}
 	}
@@ -365,5 +364,9 @@ public class Sede {
 		array[5] = ejerciciosDisponibles.toString();
 		array[6] = String.valueOf(alquilerSede);
 		return array;
+	}
+
+	public ArrayList<Emplazamiento> getEmplazamientosDisponibles() {
+		return emplazamientosDisponibles;
 	}
 }
