@@ -54,8 +54,8 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
-		JButton btnCrearProfesor = new JButton("Crear Profesor");
-		panelMenu.add(btnCrearProfesor, gbc);
+		JButton btnCrearEjercicio = new JButton("Crear Tipo Ejercicio");
+		panelMenu.add(btnCrearEjercicio, gbc);
 
 		/* Eliminar Profesor */
 		gbc.gridx = 3;
@@ -82,11 +82,11 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		btnSedes.addActionListener(actionEvent -> abrirVistaClases());
 		btnArticulos.addActionListener(actionEvent -> abrirVistaArticulos());
 
-		btnCrearProfesor.addActionListener(actionEvent -> crearProfesor());
+		btnCrearEjercicio.addActionListener(actionEvent -> crearEjercicio());
 		btnEliminarProfesor.addActionListener(actionEvent -> eliminarProfesor());
 		btnModificarProfesor.addActionListener(actionEvent -> modificarProfesor());
 
-		mostrarTablaProfesor();
+		mostrarTablaEjercicio();
 	}
 
 	private void abrirVistaArticulos() {
@@ -104,21 +104,31 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		controller.abrirVistaUsuarios();
 	}
 
-	private void crearProfesor() {
-		JDialog dialogo = new JDialog(this, "Crear Profesor", true);
+	private void crearEjercicio() {
+		JDialog dialogo = new JDialog(this, "Crear Ejercicio", true);
 		dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+		ArrayList<String> ejercicios = controller.getListaNombresEjercicios();
+		ArrayList<String[]> tiposArticulos = controller.getListaTiposArticulos();
+
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(5, 2));
+		panel.setLayout(new GridLayout(6, 2));
 
 		JLabel lblNombre = new JLabel("Nombre:");
 		JTextField txtNombre = new JTextField();
 
-		JLabel lblContrasena = new JLabel("Contraseña:");
-		JTextField txtContrasena = new JTextField();
+		JLabel lblNumVirtuales = new JLabel("Clases Virtuales a Guardar:");
+		JTextField txtNumVirtuales = new JFormattedTextField(NumberFormat.getNumberInstance());
 
-		JLabel lblSueldo = new JLabel("Sueldo:");
-		JTextField txtSueldo = new JFormattedTextField(NumberFormat.getNumberInstance());
+		JRadioButton btnPresencial = new JRadioButton("Presencial");
+		JRadioButton btnVirtual = new JRadioButton("Virtual");
+		ButtonGroup buttonGroup = new ButtonGroup();
+		btnPresencial.setSelected(true);
+		buttonGroup.add(btnPresencial);
+		buttonGroup.add(btnVirtual);
+
+		JLabel lblArticulos = new JLabel("Articulos Necesarios");
+		JTextField txtArticulos = new JTextField();
 
 		JLabel lblError = new JLabel("ERROR");
 		JLabel lblErrorMessage = new JLabel("ERROR");
@@ -129,9 +139,10 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		btnAceptar.addActionListener(e -> {
 			try {
 				String nombre = txtNombre.getText();
-				String contrasena = txtContrasena.getText();
-				String sueldo = txtSueldo.getText();
-				controller.agregarCliente(nombre, contrasena, sueldo);
+				int numVirtuales = Integer.parseInt(txtNumVirtuales.getText());
+				String articulos = txtArticulos.getText();
+				boolean flagVirtual = btnVirtual.isSelected();
+				controller.agregarEjercicio(nombre, numVirtuales, articulos, flagVirtual);
 
 				// Cerrar el diálogo
 				lblError.setVisible(false);
@@ -151,10 +162,12 @@ public class VistaGestionTipoEjercicio extends JFrame{
 
 		panel.add(lblNombre);
 		panel.add(txtNombre);
-		panel.add(lblContrasena);
-		panel.add(txtContrasena);
-		panel.add(lblSueldo);
-		panel.add(txtSueldo );
+		panel.add(lblNumVirtuales);
+		panel.add(txtNumVirtuales);
+		panel.add(lblArticulos);
+		panel.add(txtArticulos);
+		panel.add(btnPresencial);
+		panel.add(btnVirtual);
 
 		panel.add(lblError);
 		panel.add(lblErrorMessage);
@@ -279,12 +292,12 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		dialogo.setVisible(true);
 	}
 
-	private void mostrarTablaProfesor() {
+	private void mostrarTablaEjercicio() {
 		// Tabla de clases asignadas
 		JTable tabla = new JTable();
 		DefaultTableModel modelo = new DefaultTableModel();
 
-		ArrayList<String[]> listaProfesors = controller.getListaProfesores();
+		ArrayList<String[]> listaEjercicios = controller.getListaInfoEjercicios();
 
 		// Definicion de columnas
 		String[] columnas = {"ID","Nombre","Sueldo"};
@@ -292,7 +305,7 @@ public class VistaGestionTipoEjercicio extends JFrame{
 
 		modelo.setColumnIdentifiers(columnas);
 
-		for (String[] infoProfesor : listaProfesors) {
+		for (String[] infoProfesor : listaEjercicios) {
 			String[] fila = new String[cantColumnas+1];
 			fila[0] = infoProfesor[0];
 			fila[1] = infoProfesor[1];
