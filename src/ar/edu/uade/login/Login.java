@@ -8,11 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class Login extends JFrame{
 	
@@ -64,7 +60,7 @@ public class Login extends JFrame{
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        campoContrasenia = new JTextField();
+        campoContrasenia = new JPasswordField();
         campoContrasenia.setPreferredSize(new Dimension(150, 30));
         panel.add(campoContrasenia, gbc);
 

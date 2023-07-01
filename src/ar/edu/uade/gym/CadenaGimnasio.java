@@ -97,8 +97,11 @@ public class CadenaGimnasio {
     	return listaUsuarios;
     }
 
-	public void agregarProfesor(String nombre, String contrasenia, double sueldo) {
-		Usuario user = new Profesor(nombre, contrasenia, sueldo);
+	public void agregarProfesor(String nombre, String contrasena, double sueldo) throws GymException {
+		if (nombre.isBlank() || contrasena.isBlank())
+			throw new GymException("El usuario/contrasena no puede estar vacio.");
+
+		Usuario user = new Profesor(nombre, contrasena, sueldo);
 		agregarUsuario(user);
 	}
 
@@ -113,6 +116,9 @@ public class CadenaGimnasio {
 	}
 
 	public void agregarCliente(String nombre, String contrasenia, String nivel) throws GymException {
+		if (nombre.isBlank() || contrasenia.isBlank())
+			throw new GymException("El usuario/contrasena no puede estar vacio.");
+
 		TipoNivel tipoNivel = stringToTipoNivel(nivel);
 		Usuario user = new Cliente(nombre, contrasenia, tipoNivel);
 		agregarUsuario(user);
@@ -129,12 +135,35 @@ public class CadenaGimnasio {
      		usuariosProfesores.add((Profesor) usuario);
     }
 
-	public void asignarSede(Administrativo admin, Sede sedeNueva) {
-		if (!(admin.getSedesAsignadas().contains(sedeNueva)))
-			admin.asignarSede(sedeNueva);
+	public void asignarSede(int id, String sedeNueva) throws GymException {
+		Administrativo admin = getAdministrativo(id);
+		Sede sede = getSede(sedeNueva);
+		if (!(admin.getSedesAsignadas().contains(sede)))
+			admin.asignarSede(sede);
 		else {
-			System.out.println("La sede ya estaba asignada.");
+			throw new GymException("La sede ya estaba asignada.");
 		}
+	}
+
+	public void asignarNuevaListaSedes(int id, ArrayList<String> sedesStringNuevas) throws GymException {
+		Administrativo admin = getAdministrativo(id);
+		ArrayList<Sede> sedesViejas = admin.getSedesAsignadas();
+		ArrayList<Sede> sedesNuevas = new ArrayList<>();
+
+		for (String ubicacion : sedesStringNuevas) {
+			sedesNuevas.add(getSede(ubicacion));
+		}
+
+		try{
+			admin.removeAllSedes();
+			admin.asignarListaSede(sedesNuevas);
+		} catch (GymException ex) {
+			admin.removeAllSedes();
+			admin.asignarListaSede(sedesViejas);
+			throw new GymException("La sede ya estaba asignada.");
+		}
+
+
 	}
     
     public Usuario getUsuario(int id) throws GymException {
@@ -163,31 +192,31 @@ public class CadenaGimnasio {
     		if (id == user.getID()) 
     			return user;
     	
-		throw new GymException("User Not Found.");
+		throw new GymException("Usuario no existe/no es Admin.");
 	}
 	
 	public Cliente getCliente(int id) throws GymException{
     	for (Cliente user: this.usuariosClientes) 
     		if (id == user.getID()) 
     			return user;
-    	
-		throw new GymException("User Not Found.");
+
+		throw new GymException("Usuario no existe/no es Cliente.");
 	}
 
 	public Profesor getProfesor(int id) throws GymException{
     	for (Profesor user: this.usuariosProfesores) 
     		if (id == user.getID()) 
     			return user;
-    	
-		throw new GymException("User Not Found.");
+
+		throw new GymException("Usuario no existe/no es Profesor.");
 	}
     
 	public SoporteTecnico getSoporteTecnico(int id) throws GymException{
     	for (SoporteTecnico user: this.usuariosSoporteTecnico) 
     		if (id == user.getID()) 
     			return user;
-    	
-		throw new GymException("User Not Found.");
+
+		throw new GymException("Usuario no existe/no es Soporte.");
 	}
 	
     /* =======================================================
@@ -511,7 +540,7 @@ public class CadenaGimnasio {
 			}
 
 
-			asignarSede(usuariosAdministrativo.get(0), sedeBelgrano);
+			asignarSede(usuariosAdministrativo.get(0).getID(), sedeBelgrano.getUbicacion());
 
 
 			/* =======================================================
@@ -858,10 +887,30 @@ public class CadenaGimnasio {
 		if (tipoNivel.equalsIgnoreCase("PLATINUM")) {nivel = TipoNivel.PLATINUM;}
 
 		if (!sedeYaExiste(ubicacion)) {
-			Sede newSede = new Sede(ubicacion, nivel, null, null, Double.valueOf(alquilerSede));
+			Sede newSede = new Sede(ubicacion, nivel, null, null, Double.parseDouble(alquilerSede));
 			this.sedes.add(newSede);
 		} else {
 			throw new GymException("La sede ya existe.");
 		}
+	}
+
+    public void agregarAdministrativo(String nombre, String contrasena, ArrayList<String> listaSedes) throws GymException {
+		if (nombre.isBlank() || contrasena.isBlank()) {
+			throw new GymException("El usuario/contraseña no puede estar vacio.");
+		}
+		ArrayList<Sede> sedes = new ArrayList<>();
+		for (String ubicacion : listaSedes) {
+			sedes.add(getSede(ubicacion));
+		}
+		Administrativo admin = new Administrativo(nombre,contrasena,sedes);
+		usuariosAdministrativo.add(admin);
+    }
+
+	public void agregarSoporteTecnico(String nombre, String contrasena) throws GymException {
+		if (nombre.isBlank() || contrasena.isBlank()) {
+			throw new GymException("El usuario/contrasena no puede estar vacio.");
+		}
+		SoporteTecnico st = new SoporteTecnico(nombre,contrasena);
+		usuariosSoporteTecnico.add(st);
 	}
 }

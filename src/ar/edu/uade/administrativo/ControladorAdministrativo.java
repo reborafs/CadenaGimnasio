@@ -153,7 +153,7 @@ public class ControladorAdministrativo {
         return gym.getSede(sede).getEmplazamientosDisponibles();
     }
 
-    public void agregarProfesor(String nombre, String contrasena, double sueldo) {
+    public void agregarProfesor(String nombre, String contrasena, double sueldo) throws GymException {
         gym.agregarProfesor(nombre, contrasena, sueldo);
     }
 

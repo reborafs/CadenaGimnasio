@@ -7,7 +7,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class VistaGestionUsuarios extends JFrame {
-    private ControladorSoporteTecnico controller;
+    private final ControladorSoporteTecnico controller;
 
     public VistaGestionUsuarios() {
 		super("Administrativo: Gestion de Usuarios");
@@ -67,8 +67,8 @@ public class VistaGestionUsuarios extends JFrame {
         gbc.gridx = 5;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
-        JButton btnModificarUsuario = new JButton("Asignar Sede a Admin");
-        panelMenu.add(btnModificarUsuario, gbc);
+        JButton btnAsignarSede = new JButton("Asignar Sede a Admin");
+        panelMenu.add(btnAsignarSede, gbc);
 
         this.setSize(800, 600);
         setLocationRelativeTo(null);
@@ -77,7 +77,7 @@ public class VistaGestionUsuarios extends JFrame {
 
         btnCrearUsuario.addActionListener(actionEvent -> crearUsuario());
         btnEliminarUsuario.addActionListener(actionEvent -> eliminarUsuario());
-        btnModificarUsuario.addActionListener(actionEvent -> modificarUsuario());
+        btnAsignarSede.addActionListener(actionEvent -> asignarSede());
 
         btnSedes.addActionListener(actionEvent -> abrirVistaClases());
         btnProfesor.addActionListener(actionEvent -> abrirVistaProfesores());
@@ -151,16 +151,13 @@ public class VistaGestionUsuarios extends JFrame {
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 2));
+        panel.setLayout(new GridLayout(4, 2));
 
         JLabel lblNombre = new JLabel("Nombre:");
         JTextField txtNombre = new JTextField();
 
         JLabel lblContrasena = new JLabel("Contraseña:");
         JTextField txtContrasena = new JTextField();
-
-        JLabel lblNivel = new JLabel("Nivel:");
-        JTextField txtNivel = new JTextField();
 
         JLabel lblError = new JLabel("ERROR");
         JLabel lblErrorMessage = new JLabel("ERROR");
@@ -172,8 +169,7 @@ public class VistaGestionUsuarios extends JFrame {
             try {
                 String nombre = txtNombre.getText();
                 String contrasena = txtContrasena.getText();
-                String nivel = txtNivel.getText();
-                controller.agregarUsuario(nombre, contrasena, nivel);
+                controller.agregarSoporteTecnico(nombre, contrasena);
 
                 // Cerrar el diálogo
                 lblError.setVisible(false);
@@ -183,7 +179,6 @@ public class VistaGestionUsuarios extends JFrame {
                 lblErrorMessage.setText("Error.");
                 lblError.setVisible(true);
                 lblErrorMessage.setVisible(true);
-                return; // Exit the method without processing the information
             }
         });
 
@@ -195,8 +190,6 @@ public class VistaGestionUsuarios extends JFrame {
         panel.add(txtNombre);
         panel.add(lblContrasena);
         panel.add(txtContrasena);
-        panel.add(lblNivel);
-        panel.add(txtNivel );
 
         panel.add(lblError);
         panel.add(lblErrorMessage);
@@ -213,7 +206,7 @@ public class VistaGestionUsuarios extends JFrame {
 
     private void abrirCrearProfesor() {
         // Implementación de la funcionalidad de creación de cliente
-        JDialog dialogo = new JDialog(this, "Crear Cliente", true);
+        JDialog dialogo = new JDialog(this, "Crear Profesor", true);
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
@@ -225,8 +218,8 @@ public class VistaGestionUsuarios extends JFrame {
         JLabel lblContrasena = new JLabel("Contraseña:");
         JTextField txtContrasena = new JTextField();
 
-        JLabel lblNivel = new JLabel("Nivel:");
-        JTextField txtNivel = new JTextField();
+        JLabel lblSueldo = new JLabel("Sueldo:");
+        JTextField txtSueldo = new JFormattedTextField(NumberFormat.getNumberInstance());
 
         JLabel lblError = new JLabel("ERROR");
         JLabel lblErrorMessage = new JLabel("ERROR");
@@ -238,18 +231,17 @@ public class VistaGestionUsuarios extends JFrame {
             try {
                 String nombre = txtNombre.getText();
                 String contrasena = txtContrasena.getText();
-                String nivel = txtNivel.getText();
-                controller.agregarUsuario(nombre, contrasena, nivel);
+                double sueldo = Double.parseDouble(txtSueldo.getText());
+                controller.agregarProfesor(nombre, contrasena, sueldo);
 
                 // Cerrar el diálogo
                 lblError.setVisible(false);
                 lblErrorMessage.setVisible(false);
                 dialogo.dispose();
             } catch (Exception ex) {
-                lblErrorMessage.setText("Error.");
+                lblErrorMessage.setText(ex.getMessage());
                 lblError.setVisible(true);
                 lblErrorMessage.setVisible(true);
-                return; // Exit the method without processing the information
             }
         });
 
@@ -261,8 +253,8 @@ public class VistaGestionUsuarios extends JFrame {
         panel.add(txtNombre);
         panel.add(lblContrasena);
         panel.add(txtContrasena);
-        panel.add(lblNivel);
-        panel.add(txtNivel );
+        panel.add(lblSueldo);
+        panel.add(txtSueldo);
 
         panel.add(lblError);
         panel.add(lblErrorMessage);
@@ -279,11 +271,13 @@ public class VistaGestionUsuarios extends JFrame {
 
     private void abrirCrearAdministrativo() {
         // Implementación de la funcionalidad de creación de cliente
-        JDialog dialogo = new JDialog(this, "Crear Cliente", true);
+        JDialog dialogo = new JDialog(this, "Crear Administrativo", true);
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        ArrayList<String> listaSedes = controller.getListaSedes();
+
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 2));
+        panel.setLayout(new GridLayout(3+listaSedes.size(), 2));
 
         JLabel lblNombre = new JLabel("Nombre:");
         JTextField txtNombre = new JTextField();
@@ -291,8 +285,20 @@ public class VistaGestionUsuarios extends JFrame {
         JLabel lblContrasena = new JLabel("Contraseña:");
         JTextField txtContrasena = new JTextField();
 
-        JLabel lblNivel = new JLabel("Nivel:");
-        JTextField txtNivel = new JTextField();
+        panel.add(lblNombre);
+        panel.add(txtNombre);
+        panel.add(lblContrasena);
+        panel.add(txtContrasena);
+
+        JLabel lblSedes = new JLabel("Sedes Asignadas:");
+        panel.add(lblSedes);
+        ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
+
+        for (String sede : listaSedes) {
+            JCheckBox checkBox = new JCheckBox(sede);
+            panel.add(checkBox);
+            checkBoxes.add(checkBox);
+        }
 
         JLabel lblError = new JLabel("ERROR");
         JLabel lblErrorMessage = new JLabel("ERROR");
@@ -304,41 +310,37 @@ public class VistaGestionUsuarios extends JFrame {
             try {
                 String nombre = txtNombre.getText();
                 String contrasena = txtContrasena.getText();
-                String nivel = txtNivel.getText();
-                controller.agregarUsuario(nombre, contrasena, nivel);
-
-                // Cerrar el diálogo
-                lblError.setVisible(false);
-                lblErrorMessage.setVisible(false);
+                ArrayList<String> selectedSedes = new ArrayList<>();
+                for (JCheckBox check : checkBoxes) {
+                    if (check.isSelected()) {
+                        selectedSedes.add(check.getText());
+                    }
+                }
+                controller.agregarAdministrativo(nombre, contrasena, selectedSedes);
                 dialogo.dispose();
             } catch (Exception ex) {
-                lblErrorMessage.setText("Error.");
+                lblErrorMessage.setText(ex.getMessage());
                 lblError.setVisible(true);
                 lblErrorMessage.setVisible(true);
-                return; // Exit the method without processing the information
             }
         });
 
         JButton btnCancelar = new JButton("Cancelar");
         btnCancelar.addActionListener(e -> dialogo.dispose());
 
-
-        panel.add(lblNombre);
-        panel.add(txtNombre);
-        panel.add(lblContrasena);
-        panel.add(txtContrasena);
-        panel.add(lblNivel);
-        panel.add(txtNivel );
-
         panel.add(lblError);
         panel.add(lblErrorMessage);
-        panel.add(btnAceptar);
-        panel.add(btnCancelar);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(btnAceptar);
+        buttonPanel.add(btnCancelar);
+        panel.add(buttonPanel);
+
         lblError.setVisible(false);
         lblErrorMessage.setVisible(false);
-
         dialogo.add(panel);
-        dialogo.pack();
+        dialogo.setSize(600,250);
         dialogo.setLocationRelativeTo(this);
         dialogo.setVisible(true);
     }
@@ -358,7 +360,10 @@ public class VistaGestionUsuarios extends JFrame {
         JTextField txtContrasena = new JTextField();
 
         JLabel lblNivel = new JLabel("Nivel:");
-        JTextField txtNivel = new JTextField();
+        JComboBox<String> txtNivel = new JComboBox<>();
+        for (String nivel : controller.getListaNiveles()) {
+            txtNivel.addItem(nivel);
+        }
 
         JLabel lblError = new JLabel("ERROR");
         JLabel lblErrorMessage = new JLabel("ERROR");
@@ -370,15 +375,15 @@ public class VistaGestionUsuarios extends JFrame {
             try {
                 String nombre = txtNombre.getText();
                 String contrasena = txtContrasena.getText();
-                String nivel = txtNivel.getText();
-                controller.agregarUsuario(nombre, contrasena, nivel);
+                String nivel = txtNivel.getItemAt(txtNivel.getSelectedIndex());
+                controller.agregarCliente(nombre, contrasena, nivel);
 
                 // Cerrar el diálogo
                 lblError.setVisible(false);
                 lblErrorMessage.setVisible(false);
                 dialogo.dispose();
             } catch (Exception ex) {
-                lblErrorMessage.setText("Error.");
+                lblErrorMessage.setText(ex.getMessage());
                 lblError.setVisible(true);
                 lblErrorMessage.setVisible(true);
                 return; // Exit the method without processing the information
@@ -457,26 +462,27 @@ public class VistaGestionUsuarios extends JFrame {
         dialogo.setVisible(true);
     }
 
-    private void modificarUsuario() {
-        JDialog dialogo = new JDialog(this, "Modificar Usuario", true);
+    private void asignarSede() {
+        JDialog dialogo = new JDialog(this, "Asignar Sede", true);
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ArrayList<String> listaSedes = controller.getListaSedes();
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(6, 2));
 
         JLabel lblID = new JLabel("ID de Usuario:");
         JTextField txtID = new JFormattedTextField(NumberFormat.getIntegerInstance());
+        panel.add(lblID);
+        panel.add(txtID);
 
-        JLabel lblNombre = new JLabel("Nombre:");
-        JTextField txtNombre = new JTextField();
+        JLabel lblSedes = new JLabel("Sedes Asignadas:");
+        panel.add(lblSedes);
+        ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
 
-        JLabel lblContrasena = new JLabel("Contraseña:");
-        JTextField txtContrasena = new JTextField();
-
-        JLabel lblNivel = new JLabel("Nivel:");
-        JComboBox<String> txtNivel = new JComboBox<>();
-        for (String nivel : controller.getListaNiveles()) {
-            txtNivel.addItem(nivel);
+        for (String sede : listaSedes) {
+            JCheckBox checkBox = new JCheckBox(sede);
+            panel.add(checkBox);
+            checkBoxes.add(checkBox);
         }
 
         JLabel lblError = new JLabel("ERROR");
@@ -488,11 +494,14 @@ public class VistaGestionUsuarios extends JFrame {
         btnAceptar.addActionListener(e -> {
             try {
                 int id = Integer.parseInt(txtID.getText());
-                String nombre = txtNombre.getText();
-                String contrasena = txtContrasena.getText();
-                String nivel  = txtNivel.getItemAt(txtNivel.getSelectedIndex());
-                controller.modificarUsuario(id,nombre,contrasena,nivel);
-                dialogo.dispose(); // Cerrar el diálogo
+                ArrayList<String> selectedSedes = new ArrayList<>();
+                for (JCheckBox check : checkBoxes) {
+                    if (check.isSelected()) {
+                        selectedSedes.add(check.getText());
+                    }
+                }
+                controller.modificarAdministrativo(id, selectedSedes);
+                dialogo.dispose();
             } catch (Exception ex) {
                 lblErrorMessage.setText(ex.getMessage());
                 lblError.setVisible(true);
@@ -503,14 +512,7 @@ public class VistaGestionUsuarios extends JFrame {
         JButton btnCancelar = new JButton("Cancelar");
         btnCancelar.addActionListener(e -> dialogo.dispose());
 
-        panel.add(lblID);
-        panel.add(txtID);
-        panel.add(lblNombre);
-        panel.add(txtNombre);
-        panel.add(lblContrasena);
-        panel.add(txtContrasena);
-        panel.add(lblNivel);
-        panel.add(txtNivel);
+
         panel.add(lblError);
         panel.add(lblErrorMessage);
         panel.add(btnAceptar);
