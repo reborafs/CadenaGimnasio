@@ -981,4 +981,11 @@ public class CadenaGimnasio {
 
 		return tipos;
 	}
+
+
+
+	public void cambiarEstadoClase(String nombreSede, int claseId, String estado) throws GymException {
+		Sede sede = getSede(nombreSede);
+		sede.cambiarEstadoClase(claseId, estado);
+	}
 }

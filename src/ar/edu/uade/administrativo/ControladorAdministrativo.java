@@ -186,4 +186,8 @@ public class ControladorAdministrativo {
         }
         return null;
     }
+
+    public void cambiarEstadoClase(String sede, String claseId, String estado) throws GymException {
+        gym.cambiarEstadoClase(sede, Integer.parseInt(claseId) ,estado);
+    }
 }

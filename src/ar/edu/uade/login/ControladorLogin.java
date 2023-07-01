@@ -25,13 +25,9 @@ public class ControladorLogin {
         return instancia;
     }
 
-    public void loginUsuario(String nombreUsuario, String contraseniaUsuario) {
-        try {
-            Usuario user = gym.getUsuario(nombreUsuario, contraseniaUsuario);
-            abrirVistaUsuario(user);
-        } catch (GymException e)  {
-            e.printStackTrace();
-        }
+    public void loginUsuario(String nombreUsuario, String contraseniaUsuario) throws GymException {
+        Usuario user = gym.getUsuario(nombreUsuario, contraseniaUsuario);
+        abrirVistaUsuario(user);
     }
 
     private void abrirVistaUsuario(Usuario user) {
