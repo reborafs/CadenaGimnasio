@@ -85,12 +85,8 @@ public class ControladorSoporteTecnico {
         return gym.getListaCatalogoDeArticulos();
     }
 
-    public void agregarCliente(String nombre, String contrasena, String nivel) {
-        try {
-            gym.agregarCliente(nombre,contrasena,nivel);
-        } catch (GymException e) {
-            e.printStackTrace();
-        }
+    public void agregarCliente(String nombre, String contrasena, String nivel) throws GymException{
+        gym.agregarCliente(nombre,contrasena,nivel);
     }
 
     public ArrayList<String[]> getListaUsuarios() {
@@ -103,13 +99,6 @@ public class ControladorSoporteTecnico {
 
     public void modificarCliente(int id, String nombre, String contrasenia, String nivel) throws GymException {
         gym.modificarCliente(id, nombre, contrasenia, nivel);
-    }
-
-
-    public void agregarClase(String sede, String profesor, String ejercicio, String listaAlumnos, String fecha,
-                             String horarioInicio, String emplazamiento, String listaArticulos, boolean esVirtual) {
-        //gym.agendarClase(sede, profesor, ejercicio, listaAlumnos, fecha, horarioInicio, emplazamiento, listaArticulos, esVirtual);
-        System.out.println(sede);
     }
 
     public ArrayList<String> getListaEjercicios(String sede) {
@@ -134,11 +123,9 @@ public class ControladorSoporteTecnico {
     }
 
     public void eliminarUsuario(int id) throws GymException {
+        if (id == this.usuario.getID())
+            throw new GymException("No puede borrarse a si mismo.");
         gym.eliminarUsuario(id);
-    }
-
-    public void modificarUsuario(int id, String nombre, String contrasena, String nivel) {
-        //gym.modificarProfesor(id, nombre, contrasena);
     }
 
     public ArrayList<String> getListaSedes() {
@@ -163,6 +150,21 @@ public class ControladorSoporteTecnico {
     }
 
 
+    public void agregarAdministrativo(String nombre, String contrasena, ArrayList<String> listaSedes) throws GymException {
+        gym.agregarAdministrativo(nombre, contrasena, listaSedes);
+    }
+
+    public void agregarProfesor(String nombre, String contrasena, double sueldo) throws GymException {
+        gym.agregarProfesor(nombre, contrasena, sueldo);
+    }
+
+    public void agregarSoporteTecnico(String nombre, String contrasena) throws GymException {
+        gym.agregarSoporteTecnico(nombre,contrasena);
+    }
+
+    public void modificarAdministrativo(int id, ArrayList<String> selectedSedes) throws GymException {
+        gym.asignarNuevaListaSedes(id, selectedSedes);
+    }
 }
 
 
