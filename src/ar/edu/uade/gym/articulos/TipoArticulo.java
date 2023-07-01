@@ -35,14 +35,8 @@ public class TipoArticulo {
 	
 	@Override
 	public String toString() {
-		return  "id: " + this.id + ", " +
-				"categoria: " + this.nombre + ", " +
-				"marca: " + this.marca + ", " + 
-				"descripcion: " + this.descripcion + ", " + 
-				"formaAmortizacion: " + this.formaAmortizacion + ", " + 
-				"cantidad: " + this.cantidadAmortizacion;
+		return  "ID:" + this.id + " " + this.descripcion;
 	}
-
 
     public String[] getInfo() {
         String[] array = new String[7];

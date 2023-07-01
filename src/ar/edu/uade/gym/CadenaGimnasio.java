@@ -257,7 +257,6 @@ public class CadenaGimnasio {
     	for (Sede sede: sedes) 
     		if (sede.getUbicacion().equals(ubicacion.toLowerCase())) 
     			return sede;
-    	
     	return null;
     }
     
@@ -903,16 +902,26 @@ public class CadenaGimnasio {
 		return listaSedesInfo;
 	}
 
-	public void agregarSedeString(String ubicacion, String tipoNivel, String emplazamientos,
-								  String ejerciciosDisponibles, String alquilerSede) throws GymException {
+	public void agregarSedeString(String ubicacion, String tipoNivel, ArrayList<String[]> emplazamientos,
+								  ArrayList<String> ejerciciosDisponibles, double alquilerSede) throws GymException {
 
 		TipoNivel nivel = TipoNivel.BLACK;
 		if (tipoNivel.equalsIgnoreCase("BLACK")) {nivel = TipoNivel.BLACK;}
 		if (tipoNivel.equalsIgnoreCase("ORO")) {nivel = TipoNivel.ORO;}
 		if (tipoNivel.equalsIgnoreCase("PLATINUM")) {nivel = TipoNivel.PLATINUM;}
 
+		ArrayList<Emplazamiento> listaEmplazamientos = new ArrayList<>();
+		for (String[] arrEmplazamiento : emplazamientos)
+			// parsea TipoEmplazamiento, Capacidad y Metros cuadrados.
+			listaEmplazamientos.add(new Emplazamiento(arrEmplazamiento[0], Integer.parseInt(arrEmplazamiento[1]), Integer.parseInt(arrEmplazamiento[2])));
+
+		ArrayList<Ejercicio> listaEjercicios = new ArrayList<>();
+		for (String nombreEjercicio : ejerciciosDisponibles) {
+			System.out.println("QUIERO AGREGAR AL EJ " + nombreEjercicio);
+			listaEjercicios.add(this.getEjercicio(nombreEjercicio));
+		}
 		if (!sedeYaExiste(ubicacion)) {
-			Sede newSede = new Sede(ubicacion, nivel, null, null, Double.parseDouble(alquilerSede));
+			Sede newSede = new Sede(ubicacion, nivel, listaEmplazamientos, listaEjercicios, alquilerSede);
 			this.sedes.add(newSede);
 		} else {
 			throw new GymException("La sede ya existe.");
@@ -945,5 +954,29 @@ public class CadenaGimnasio {
 			ejerciciosDisponibles.add(ejercicio.getInfo());
 		}
 		return ejerciciosDisponibles;
+	}
+
+	public void eliminarSede(String ubicacion) throws GymException {
+		Sede sede = getSede(ubicacion);
+		if (sede == null)
+			throw new GymException("No existe la sede.");
+		else
+			this.sedes.remove(sede);
+	}
+
+	public void eliminarEjercicio(String nombreEjercicio) throws GymException {
+		Ejercicio ejercicio = getEjercicio(nombreEjercicio);
+		if (ejercicio == null)
+			throw new GymException("No existe el ejercicio.");
+		else
+			this.ejercicios.remove(ejercicio);
+	}
+
+	public ArrayList<String> getListaTiposEmplazamientos() {
+		ArrayList<String> tipos = new ArrayList<>();
+		for (TipoEmplazamiento tipo : TipoEmplazamiento.values())
+			tipos.add(tipo.name());
+
+		return tipos;
 	}
 }

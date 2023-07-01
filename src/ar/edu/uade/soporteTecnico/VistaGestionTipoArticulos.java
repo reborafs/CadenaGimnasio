@@ -11,7 +11,7 @@ public class VistaGestionTipoArticulos extends JFrame {
 	private ControladorSoporteTecnico controller;
 
 	public VistaGestionTipoArticulos() {
-		super("Administrativo: Gestion de articulos");
+		super("Soporte Tecnico: Gestion de articulos");
 		this.controller = ControladorSoporteTecnico.getInstance();
 		this.setLayout(new BorderLayout());
 

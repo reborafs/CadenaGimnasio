@@ -12,6 +12,15 @@ public class Emplazamiento {
         this.setMetrosCuadrados(metrosCuadrados);
     }
 
+	public Emplazamiento(String tipoEmplazamiento, int capacidad, int metrosCuadrados) {
+		switch (tipoEmplazamiento) {
+			case "SALON" -> this.setTipoEmplazamiento(TipoEmplazamiento.SALON);
+			case "PILETA" -> this.setTipoEmplazamiento(TipoEmplazamiento.PILETA);
+			case "AIRE_LIBRE" -> this.setTipoEmplazamiento(TipoEmplazamiento.AIRE_LIBRE);
+		}
+		this.setCapacidad(capacidad);
+		this.setMetrosCuadrados(metrosCuadrados);
+	}
 	public int getMetrosCuadrados() {
 		return metrosCuadrados;
 	}
