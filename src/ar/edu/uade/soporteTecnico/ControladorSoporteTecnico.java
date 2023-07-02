@@ -5,6 +5,7 @@ import ar.edu.uade.gym.articulos.TipoArticulo;
 import ar.edu.uade.usuarios.SoporteTecnico;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class ControladorSoporteTecnico {
@@ -27,7 +28,7 @@ public class ControladorSoporteTecnico {
     public void setUsuario(SoporteTecnico usuario) {
         this.usuario = usuario;
     }
-    
+
     public SoporteTecnico getUsuario() {
         return this.usuario;
     }
@@ -39,28 +40,28 @@ public class ControladorSoporteTecnico {
             vistaAdmin.setVisible(true);
         });
     }
-    
+
     public void abrirVistaArticulos() {
         SwingUtilities.invokeLater(() -> {
             VistaGestionTipoArticulos vistaArticulos = new VistaGestionTipoArticulos();;
             vistaArticulos.setVisible(true);
         });
     }
-    
+
     public void abrirVistaClases() {
         SwingUtilities.invokeLater(() -> {
             VistaPrincipalGestionSedes vistaClases = new VistaPrincipalGestionSedes();;
             vistaClases.setVisible(true);
         });
     }
-    
+
     public void abrirVistaUsuarios() {
         SwingUtilities.invokeLater(() -> {
         	VistaGestionUsuarios vistaClientes = new VistaGestionUsuarios();;
         	vistaClientes.setVisible(true);
         });
     }
-    
+
     public void abrirVistaProfesores() {
         SwingUtilities.invokeLater(() -> {
         	VistaGestionTipoEjercicio vistaProfesores = new VistaGestionTipoEjercicio();;
@@ -138,7 +139,8 @@ public class ControladorSoporteTecnico {
     }
 
 
-    public void agregarSede(String ubicacion, String tipoNivel, String emplazamientos, String ejerciciosDisponibles, String alquilerSede) throws GymException {
+    public void agregarSede(String ubicacion, String tipoNivel, ArrayList<String[]> emplazamientos,
+                            ArrayList<String> ejerciciosDisponibles, double alquilerSede) throws GymException {
         gym.agregarSedeString(ubicacion, tipoNivel, emplazamientos, ejerciciosDisponibles, alquilerSede);
     }
 
@@ -178,6 +180,18 @@ public class ControladorSoporteTecnico {
 
     public ArrayList<String[]> getListaInfoEjercicios() {
         return gym.getListaEjercicios();
+    }
+
+    public void eliminarSede(String ubicacion) throws GymException {
+        gym.eliminarSede(ubicacion);
+    }
+
+    public void eliminarEjercicio(String nombreEjercicio) throws GymException {
+        gym.eliminarEjercicio(nombreEjercicio);
+    }
+
+    public ArrayList<String> getListaTiposEmplazamientos() {
+        return gym.getListaTiposEmplazamientos();
     }
 }
 

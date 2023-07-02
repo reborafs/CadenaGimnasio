@@ -10,7 +10,7 @@ public class VistaGestionTipoEjercicio extends JFrame{
 	private ControladorSoporteTecnico controller;
 
 	public VistaGestionTipoEjercicio() {
-		super("Administrativo: Gestion de Ejercicios");
+		super("Soporte Tecnico: Gestion de Ejercicios");
 		this.controller = ControladorSoporteTecnico.getInstance();
 
 		this.setLayout(new BorderLayout());
@@ -20,12 +20,6 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(5, 5, 5, 5);
 
-		/* Gestion de Sedes */
-		gbc.gridx = 3;
-		gbc.gridy = 0;
-		gbc.gridwidth = 2;
-		JButton btnSedes = new JButton("Gestion de Sedes");
-		panelMenu.add(btnSedes, gbc);
 
 		/* Gestion de Usuarios*/
 		gbc.gridx = 0;
@@ -33,6 +27,13 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		gbc.gridwidth = 2;
 		JButton btnUsuarios = new JButton("Gestion de Usuarios");
 		panelMenu.add(btnUsuarios, gbc);
+
+		/* Gestion de Sedes */
+		gbc.gridx = 3;
+		gbc.gridy = 0;
+		gbc.gridwidth = 2;
+		JButton btnSedes = new JButton("Gestion de Sedes");
+		panelMenu.add(btnSedes, gbc);
 
 		this.add(panelMenu, BorderLayout.NORTH);
 
@@ -51,25 +52,18 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		panelMenu.add(btnArticulos, gbc);
 
 		/* Crear Profesor */
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridwidth = 2;
-		JButton btnCrearEjercicio = new JButton("Crear Tipo Ejercicio");
-		panelMenu.add(btnCrearEjercicio, gbc);
-
-		/* Eliminar Profesor */
 		gbc.gridx = 3;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
-		JButton btnEliminarProfesor = new JButton("Eliminar Profesor");
-		panelMenu.add(btnEliminarProfesor, gbc);
+		JButton btnCrearEjercicio = new JButton("Crear Ejercicio");
+		panelMenu.add(btnCrearEjercicio, gbc);
 
-		/* Modificar Profesor */
+		/* Eliminar Profesor */
 		gbc.gridx = 5;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
-		JButton btnModificarProfesor = new JButton("Modificar Profesor");
-		panelMenu.add(btnModificarProfesor, gbc);
+		JButton btnEliminarEjercicio = new JButton("Eliminar Ejercicio");
+		panelMenu.add(btnEliminarEjercicio, gbc);
 
 
 		this.setSize(800, 600);
@@ -83,8 +77,7 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		btnArticulos.addActionListener(actionEvent -> abrirVistaArticulos());
 
 		btnCrearEjercicio.addActionListener(actionEvent -> crearEjercicio());
-		btnEliminarProfesor.addActionListener(actionEvent -> eliminarProfesor());
-		btnModificarProfesor.addActionListener(actionEvent -> modificarProfesor());
+		btnEliminarEjercicio.addActionListener(actionEvent -> eliminarEjercicio());
 
 		mostrarTablaEjercicio();
 	}
@@ -182,15 +175,15 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		dialogo.setVisible(true);
 	}
 
-	private void eliminarProfesor() {
-		JDialog dialogo = new JDialog(this, "Eliminar Profesor", true);
+	private void eliminarEjercicio() {
+		JDialog dialogo = new JDialog(this, "Eliminar Ejercicio", true);
 		dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(3, 2));
 
-		JLabel lblID = new JLabel("ID de Profesor a Eliminar:");
-		JTextField txtID = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		JLabel lblEjercicio = new JLabel("Nombre de Ejercicio:");
+		JTextField txtEjercicio = new JTextField();
 
 		JLabel lblError = new JLabel("ERROR");
 		JLabel lblErrorMessage = new JLabel("ERROR");
@@ -200,8 +193,8 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(e -> {
 			try {
-				int id = Integer.parseInt(txtID.getText());
-				controller.eliminarCliente(id);
+				String nombre = txtEjercicio.getText();
+				controller.eliminarEjercicio(nombre);
 				dialogo.dispose(); // Cerrar el diálogo
 			} catch (Exception ex) {
 				lblErrorMessage.setText(ex.getMessage());
@@ -213,8 +206,8 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(e -> dialogo.dispose());
 
-		panel.add(lblID);
-		panel.add(txtID);
+		panel.add(lblEjercicio);
+		panel.add(txtEjercicio);
 		panel.add(lblError);
 		panel.add(lblErrorMessage);
 		panel.add(btnAceptar);
@@ -293,23 +286,23 @@ public class VistaGestionTipoEjercicio extends JFrame{
 	}
 
 	private void mostrarTablaEjercicio() {
-		// Tabla de clases asignadas
 		JTable tabla = new JTable();
 		DefaultTableModel modelo = new DefaultTableModel();
 
 		ArrayList<String[]> listaEjercicios = controller.getListaInfoEjercicios();
 
-		// Definicion de columnas
-		String[] columnas = {"ID","Nombre","Sueldo"};
+		String[] columnas = {"ID","Nombre","Es Virtual?","Max clases guardadas", "Articulos necesarios"};
 		int cantColumnas = columnas.length;
 
 		modelo.setColumnIdentifiers(columnas);
 
-		for (String[] infoProfesor : listaEjercicios) {
+		for (String[] infoEjercicio : listaEjercicios) {
 			String[] fila = new String[cantColumnas+1];
-			fila[0] = infoProfesor[0];
-			fila[1] = infoProfesor[1];
-			fila[2] = infoProfesor[2];
+			fila[0] = infoEjercicio[0];
+			fila[1] = infoEjercicio[1];
+			fila[2] = infoEjercicio[2];
+			fila[3] = infoEjercicio[3];
+			fila[4] = infoEjercicio[4];
 			modelo.addRow(fila);
 		}
 
@@ -319,7 +312,6 @@ public class VistaGestionTipoEjercicio extends JFrame{
 			tabla.getColumnModel().getColumn(i).setPreferredWidth(100);
 		}
 
-		// Agregar la tabla a un JScrollPane y añadirlo a la ventana
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 	}

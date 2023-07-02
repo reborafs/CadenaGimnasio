@@ -25,17 +25,17 @@ public class Sede {
 				ArrayList<Ejercicio> ejercicios, double alquilerSede) {
     	this.ubicacion = ubicacion.toLowerCase();
     	this.tipoNivel = tipoNivel;
-    	this.listaClases = new ArrayList<Clase>();
-    	this.stockArticulos = new ArrayList<Articulo>();
+    	this.listaClases = new ArrayList<>();
+    	this.stockArticulos = new ArrayList<>();
 		this.alquilerSede = alquilerSede;
 
         if (emplazamientos == null)
-        	this.emplazamientosDisponibles = new ArrayList<Emplazamiento>();
+        	this.emplazamientosDisponibles = new ArrayList<>();
         else
         	this.emplazamientosDisponibles = emplazamientos;
 
-        if (ejerciciosDisponibles == null)
-	        this.ejerciciosDisponibles = new ArrayList<Ejercicio>();
+        if (ejercicios == null){
+			this.ejerciciosDisponibles = new ArrayList<>();}
         else
         	this.ejerciciosDisponibles = ejercicios;
 
@@ -368,5 +368,21 @@ public class Sede {
 
 	public ArrayList<Emplazamiento> getEmplazamientosDisponibles() {
 		return emplazamientosDisponibles;
+	}
+
+	public Clase getClase(int claseId) throws GymException {
+		for (Clase clase : listaClases)
+			if (clase.getClaseID() == claseId)
+				return clase;
+
+		throw new GymException("Clase no existe.");
+	}
+	public void cambiarEstadoClase(int claseId, String estado) throws GymException {
+		Clase clase = getClase(claseId);
+		switch (estado) {
+			case "Finalizada" -> finalizarClase(clase);
+			case "Agendada" -> clase.setEstadoAgendada();
+			case "Confirmada" -> validarYConfirmarClase(clase);
+		}
 	}
 }

@@ -36,7 +36,7 @@ public class Clase {
 		this.id = nextID++;
     	asignarProfesor(profesor);
         this.ejercicio = ejercicio;
-        this.estado = EstadoClase.AGENDADA;
+        setEstadoAgendada();
         this.emplazamiento = emplazamiento;
         this.esVirtual = esVirtual;
 		this.fecha = fecha;
@@ -212,6 +212,7 @@ public class Clase {
 
 	public ArrayList<String> getInfo() {
 		ArrayList<String> array = new ArrayList<>();
+		array.add(String.valueOf(getClaseID()));
 		array.add(String.valueOf(profesorAsignado.getID()));
 		array.add(profesorAsignado.getNombre());
 		array.add(fecha.toString());
@@ -228,5 +229,9 @@ public class Clase {
 
 	public EstadoClase getEstado() {
 		return estado;
+	}
+
+	public void setEstadoAgendada() {
+		this.estado = EstadoClase.AGENDADA;
 	}
 }

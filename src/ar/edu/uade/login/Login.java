@@ -73,18 +73,14 @@ public class Login extends JFrame{
 
         this.add(panel, BorderLayout.CENTER);
 
-        class HandlerBtnConectar implements ActionListener{
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
+		/*ASIGNACION DEL MANEJADOR AL BOTON*/
+		btnConectar.addActionListener(e -> {
+            try {
                 controladorLogin.loginUsuario(campoUsuario.getText(), campoContrasenia.getText());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
-		/*INSTANCIACION DEL MANEJADOR*/
-		HandlerBtnConectar handlerBtnConectar=new HandlerBtnConectar();
-		
-		/*ASIGNACION DEL MANEJADOR AL BOTON*/
-		btnConectar.addActionListener(handlerBtnConectar);
+        );
     }
 }

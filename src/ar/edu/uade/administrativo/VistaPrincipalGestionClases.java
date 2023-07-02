@@ -240,21 +240,40 @@ public class VistaPrincipalGestionClases extends JFrame{
 
 
 	private void cambiarEstadoClase() {
-    	// Aquí puedes implementar la lógica para cambiar el estado de una clase
-        String[] opciones = {"Finalizada", "Agendada", "Confirmada"};
-        String opcionSeleccionada = (String) JOptionPane.showInputDialog(
-                this,
-                "Seleccione el nuevo estado de la clase:",
-                "Cambiar Estado Clase",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                opciones,
-                opciones[0]);
+		JTextField txtClaseId = new JTextField();
 
-        if (opcionSeleccionada != null) {
-            // Realizar la acción correspondiente al nuevo estado de la clase
-            JOptionPane.showMessageDialog(this, "Estado de la clase cambiado a: " + opcionSeleccionada);
-        }
+		String[] opciones = {"Finalizada", "Agendada", "Confirmada"};
+		JComboBox<String> txtEstado = new JComboBox<>(opciones);
+
+		JPanel panel = new JPanel(new GridLayout(2, 2));
+		panel.add(new JLabel("Seleccione el ID de la clase:"));
+		panel.add(txtClaseId);
+		panel.add(new JLabel("Seleccione el nuevo estado:"));
+		panel.add(txtEstado);
+
+		int result = JOptionPane.showConfirmDialog(null, panel, "Cambiar Estado Clase",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		try {
+			if (result == JOptionPane.OK_OPTION) {
+				String claseId = txtClaseId.getText();
+				String estado = txtEstado.getItemAt(txtEstado.getSelectedIndex());
+				ArrayList<String[]> listaClasesPorSede = controller.getListaClasesPorSede();
+				boolean flagFound = false;
+				for (String[] clase : listaClasesPorSede)
+					if (clase[1].equals(claseId)){
+						flagFound = true;
+						controller.cambiarEstadoClase(clase[0],claseId,estado);
+					}
+
+				if (!flagFound) {throw new GymException("No existe la clase.");}
+				JOptionPane.showMessageDialog(null, "Estado de la clase cambiado a: " + estado);
+			}
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(null, ex.getMessage());
+			ex.printStackTrace();
+		}
+
     }
 
 	private void mostrarTablaClases() {
@@ -264,8 +283,8 @@ public class VistaPrincipalGestionClases extends JFrame{
 		ArrayList<String[]> listaClasesPorSede = controller.getListaClasesPorSede();
 
 		// Definicion de columnas
-		String[] columnas = {"Sede", "Id Profesor","Profesor","Fecha","Horario","Ejercicio","Estado","Cantidad de Alumnos",
-				"Emplazamiento","Cant. Articulos","Es virtual?"};
+		String[] columnas = {"Sede", "ID Clase", "ID Profesor", "Profesor","Fecha","Horario","Ejercicio","Estado",
+				"Cantidad de Alumnos","Emplazamiento","Cant. Articulos","Es virtual?"};
 		int cantColumnas = columnas.length;
 
 		modelo.setColumnIdentifiers(columnas);
@@ -282,6 +301,7 @@ public class VistaPrincipalGestionClases extends JFrame{
 			fila[7] = infoClasePorSede[7];
 			fila[8] = infoClasePorSede[8];
 			fila[9] = infoClasePorSede[9];
+			fila[10] = infoClasePorSede[10];
 			modelo.addRow(fila);
 		}
 
@@ -295,103 +315,8 @@ public class VistaPrincipalGestionClases extends JFrame{
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-
-		/*
-		// Tabla de clases asignadas
-		JTable tabla = new JTable();
-		DefaultTableModel modelo = new DefaultTableModel();
-
-
-		// Definicion de columnas
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		String[] header = new String[8];
-		ArrayList<LocalDate> semana = new ArrayList<LocalDate>();
-		header[0] = "Horario";
-		for (int day=1; day<=7; day++) {
-			LocalDate fecha = LocalDate.now().plusDays(day-1);
-			semana.add(fecha);
-			header[day] = getDiaSemana(fecha.getDayOfWeek().getValue()) + " " + fecha.format(formatter);
-		}
-
-		modelo.setColumnIdentifiers(header);
-
-		// Definición de filas
-		LocalTime[] horas = {
-				LocalTime.of(7,0),
-				LocalTime.of(8,0),
-				LocalTime.of(9,0),
-				LocalTime.of(10,0),
-				LocalTime.of(11,0),
-				LocalTime.of(12,0),
-				LocalTime.of(13,0),
-				LocalTime.of(14,0),
-				LocalTime.of(15,0),
-				LocalTime.of(16,0),
-				LocalTime.of(17,0),
-				LocalTime.of(18,0),
-				LocalTime.of(19,0),
-				LocalTime.of(20,0),
-				LocalTime.of(21,0)};
-
-		int cantColumnas = header.length;
-		int cantFilas = horas.length;
-
-		HashMap<LocalDate, ArrayList<LocalTime>>
-				horariosOcupados = controller.getClasesAsignadas();
-
-		DateTimeFormatter horasFormatter = DateTimeFormatter.ofPattern("HH");
-
-		for (int i = 1; i <= cantFilas-1; i++) {
-			String[] horarioDisponible = new String[cantColumnas+1];
-			horarioDisponible[0] = horas[i].format(horasFormatter) + "-" + horas[i].plusHours(1).format(horasFormatter);
-			for (int j = 1; j <= cantColumnas-1; j++) {
-				LocalDate dia = semana.get(j - 1);
-				LocalTime horarioClase = horas[i];
-				if (horarioClase != null && contieneEjercicio(horariosOcupados, dia, horarioClase)) {
-					horarioDisponible[j] = "Ocupado";
-				} else {
-					horarioDisponible[j] = "Libre";
-				}
-			}
-			modelo.addRow(horarioDisponible);
-		}
-
-		tabla.setModel(modelo);
-
-		for (int i = 0; i < 4; i++) {
-			tabla.getColumnModel().getColumn(i).setPreferredWidth(100);
-		}
-
-		// Agregar la tabla a un JScrollPane y añadirlo a la ventana
-		JScrollPane scrollPane = new JScrollPane(tabla);
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
-
-		 */
-
 	}
-/*
-	private String getDiaSemana(int dia) {
-		return switch (dia) {
-			case 1 -> "Lun";
-			case 2 -> "Mar";
-			case 3 -> "Mie";
-			case 4 -> "Jue";
-			case 5 -> "Vie";
-			case 6 -> "Sab";
-			case 7 -> "Dom";
-			default -> "xxx";
-		};
-	}*/
 
-	private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados,LocalDate dia, LocalTime hora) {
-		boolean flagOcupado = false;
-		for (LocalTime horarioOcupado : horariosOcupados.get(dia)) {
-			if (horarioOcupado.equals(hora)) {
-				flagOcupado = true;
-			}
-		}
-		return flagOcupado;
-	}
 
 	private boolean estaEnLista(JComboBox<String>  lista, String valor){
 		for (int i = 0; i < lista.getItemCount(); i++) {
