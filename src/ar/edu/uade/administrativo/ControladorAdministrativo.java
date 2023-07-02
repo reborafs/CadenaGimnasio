@@ -3,6 +3,7 @@ package ar.edu.uade.administrativo;
 import ar.edu.uade.gym.*;
 import ar.edu.uade.gym.articulos.Articulo;
 import ar.edu.uade.gym.articulos.CategoriaArticulo;
+import ar.edu.uade.gym.articulos.TipoArticulo;
 import ar.edu.uade.usuarios.Administrativo;
 import ar.edu.uade.usuarios.Cliente;
 import ar.edu.uade.usuarios.Profesor;
@@ -76,23 +77,39 @@ public class ControladorAdministrativo {
         });
     }
 
-    public void agregarTipoArticulo(String nombre, String categoriaArticulo, String marca, String descripcion,
-                                    int usosAmortizacion, boolean flagFecha) {
-        try {
-            if (flagFecha) {
-                gym.agregarTipoArticuloPorFecha(nombre, categoriaArticulo, marca, descripcion, usosAmortizacion);
-            } else {
-                gym.agregarTipoArticuloPorUso(nombre, categoriaArticulo, marca, descripcion, usosAmortizacion);
+    public void agregarArticulo(int cantidad, String nombreSede, String nomnreTipoArticulo, double precio, String fechaCompra, String fechaFabricacion) {
+        Sede sede = gym.getSede(nombreSede);
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate fechaCompraFormato = LocalDate.parse(fechaCompra,formatoFecha);
+        LocalDate fechaFabricacionFormato = LocalDate.parse(fechaFabricacion,formatoFecha);
+        TipoArticulo tipoArticulo = null;
+        for(TipoArticulo articulo: gym.getCatalogoDeArticulos()){
+            if(nomnreTipoArticulo.equals(articulo.getInfo()[1])){
+                tipoArticulo = articulo;
             }
-        } catch (GymException e) {
-            e.printStackTrace();
         }
+        for(int i = 0; i < cantidad; i++)
+        {
+            if (fechaCompra.equals("")) {
+                gym.agregarArticulo(sede, tipoArticulo, precio, fechaCompraFormato, fechaFabricacionFormato);
+            } else {
+                gym.agregarArticulo(sede, tipoArticulo, precio, fechaCompraFormato, fechaFabricacionFormato);
+            }
+        }
+    }
 
+    public void eliminarArticulo(int id) throws GymException {
+        gym.darDeBajaArticulo(id);
     }
 
     public ArrayList<String[]> getListaTiposArticulos() {
         return gym.getListaCatalogoDeArticulos();
     }
+
+    public HashMap<String,ArrayList<String[]>> getListaArticulos() {
+        return gym.getListaArticulos();
+    }
+
 
     public void agregarCliente(String nombre, String contrasena, String nivel) {
         try {

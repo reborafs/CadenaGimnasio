@@ -426,12 +426,35 @@ public class CadenaGimnasio {
 		}
 		return catalogo;
 	}
-	public void eliminarArticulo(Sede sede, Articulo articulo) {
-		sede.eliminarArticulo(articulo);
+
+	public HashMap<String,ArrayList<String[]>> getListaArticulos() {
+		HashMap<String,ArrayList<String[]>> articulosSede= new HashMap<String,ArrayList<String[]>>();
+		for (Sede sede: sedes ) {
+			ArrayList<String[]> listaArticulos = new ArrayList<>();
+			for(Articulo articulo: sede.getListaArticulos()) {
+				listaArticulos.add(articulo.getInfo());
+			}
+			articulosSede.put(sede.getUbicacion(),listaArticulos);
+		}
+		return articulosSede;
 	}
 
-	public void darDeBajaArticulo(Sede sede, Articulo articulo) {
-		sede.darDeBajaArticulo(articulo);
+	public Articulo getArticulo(int id) throws GymException{
+		for(Sede sede : getListaSedes()) {
+			for (Articulo articulo : sede.getListaArticulos())
+				if (id == articulo.getID())
+					return articulo;
+		}
+		throw new GymException("Usuario no existe/no es Cliente.");
+	}
+
+	public void darDeBajaArticulo(int id) {
+		for(Sede sede : getListaSedes()) {
+			for (Articulo articulo : sede.getListaArticulos())
+				if (id == articulo.getID()){
+					sede.darDeBajaArticulo(articulo);
+				}
+		}
 	}
 
 	public void agregarTipoArticuloPorFecha(String nombre, String categoria, String marca, String descripcion,
