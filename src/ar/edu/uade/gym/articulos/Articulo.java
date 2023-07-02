@@ -94,6 +94,17 @@ public class Articulo {
         return this.tipoArticulo;
     }
 
+    public String[] getInfo() {
+        String[] array = new String[7];
+        array[0] = String.valueOf(id);
+        array[1] = this.tipoArticulo.getInfo()[1];
+        array[2] = String.valueOf(this.fechaCompra);
+        array[3] = String.valueOf(this.fechaFabricacion);
+        array[4] = String.valueOf(this.usos);
+        array[5] = String.valueOf(this.flagDesgastado);
+        return array;
+    }
+
     @Override
     public String toString() {
     	return "{" +
