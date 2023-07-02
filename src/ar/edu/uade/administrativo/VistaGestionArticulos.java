@@ -114,7 +114,7 @@ public class VistaGestionArticulos extends JFrame {
 		JTextField txtDescripcion = new JTextField();
 
 		JLabel lblUsosAmortizacion = new JLabel("Cantidad de Usos/Dias hasta renovar:");
-		JTextField txtUsosAmortizacion = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		JTextField txtUsosAmortizacion = new JTextField();
 
 		JRadioButton btnPorUsos = new JRadioButton("Amortizacion por Usos");
 		JRadioButton btnPorFecha = new JRadioButton("Amortizacion por Fecha");
