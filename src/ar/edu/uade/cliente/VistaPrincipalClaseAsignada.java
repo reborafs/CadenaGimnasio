@@ -107,63 +107,9 @@ public class VistaPrincipalClaseAsignada extends JFrame {
         panelContenido.add(scrollPane, BorderLayout.CENTER);
 
 
-        // Inscripcion
-//        JPanel panelInscripcion = new JPanel();
-//        panelContenido.add(panelInscripcion, BorderLayout.SOUTH);
-//        String sede = txtSedePrincipal.getSelectedItem().toString();
-//
-//        HashMap<String, ArrayList<LocalDateTime>> clasesExistentes = controller.getClasesPorSede(sede);
-//
-//        panelInscripcion.setLayout(new GridBagLayout());
-//        GridBagConstraints gbcInscripcion = new GridBagConstraints();
-//        gbcInscripcion.insets = new Insets(5, 5, 5, 5);
-//        gbcInscripcion.anchor = GridBagConstraints.WEST;
-//
-//        List<JComboBox<String>> comboBoxesHorarios = new ArrayList<>();
-//        int i = 0;
-//        for (String clase : clasesExistentes.keySet()) {
-//            gbcInscripcion.gridx = 0;
-//            gbcInscripcion.gridy = i;
-//            JLabel labelClase = new JLabel(clase + ":");
-//            panelInscripcion.add(labelClase, gbcInscripcion);
-//
-//            gbcInscripcion.gridx = 1;
-//            gbcInscripcion.gridy = i;
-//            JComboBox<String> comboBoxHorarios = new JComboBox<>();
-//            comboBoxHorarios.addItem("---"); // Opción por defecto
-//            ArrayList<LocalDateTime> horarios = clasesExistentes.get(clase);
-//            for (LocalDateTime horario : horarios) {
-//                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
-//                String fechaHoraFormateada = horario.format(formato);
-//                comboBoxHorarios.addItem(fechaHoraFormateada);
-//            }
-//            panelInscripcion.add(comboBoxHorarios, gbcInscripcion);
-//            comboBoxesHorarios.add(comboBoxHorarios);
-//            i++;
-//        }
-
 
         this.add(panelContenido, BorderLayout.CENTER);
 
-        //Boton Incripcion
-//        btnInscribirse.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                for (int i = 0; i < comboBoxesHorarios.size(); i++) {
-//                    String clase = clasesExistentes.keySet().toArray(new String[0])[i];
-//                    JComboBox<String> comboBoxHorarios = comboBoxesHorarios.get(i);
-//                    String horarioSeleccionado = (String) comboBoxHorarios.getSelectedItem();
-//                    if (!horarioSeleccionado.equals("---")){
-//                        try {
-//                            controller.inscibirAlumno(clase,horarioSeleccionado,sede);
-//                        } catch (GymException ex) {
-//                            throw new RuntimeException(ex);
-//                        }
-//                        System.out.println("Clase: " + clase + ", Horario: " + horarioSeleccionado);
-//                    }
-//                }
-//            }
-//        });
 
         //Botones Menu
         class HandlerBtnEjerciciosSedes implements ActionListener{
@@ -171,11 +117,10 @@ public class VistaPrincipalClaseAsignada extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.abrirVistaEjercicioPorSede();
-                //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
             }
         }
 
-       // btnInscribirse.addActionListener(actionEvent -> abrirAgregarClase());
+        btnInscribirse.addActionListener(actionEvent ->    abrirAgregarClase(txtSedePrincipal.getSelectedItem().toString()));
 
 		/*INSTANCIACION DEL MANEJADOR*/
 		HandlerBtnEjerciciosSedes handlerBtnEjerciciosSedes=new HandlerBtnEjerciciosSedes();
@@ -202,7 +147,6 @@ public class VistaPrincipalClaseAsignada extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String sede = (String) txtSedePrincipal.getSelectedItem();
                 actualizarTabla(tabla, sede);
-                // Aquí puedes llamar a la función que desees con la selección actual
             }
         });
     }
@@ -248,8 +192,9 @@ public class VistaPrincipalClaseAsignada extends JFrame {
         int cantColumnas = header.length;
         int cantFilas = horas.length;
 
-        HashMap<LocalDate, ArrayList<LocalTime>>
-                horariosOcupados = controller.getClasesAsignadas(sede);
+        HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados = controller.getClasesAsignadas(sede);
+
+        System.out.print("");
 
         DateTimeFormatter horasFormatter = DateTimeFormatter.ofPattern("HH");
 
@@ -260,7 +205,7 @@ public class VistaPrincipalClaseAsignada extends JFrame {
                 LocalDate dia = semana.get(j - 1);
                 LocalTime horarioClase = horas[i];
                 if (horarioClase != null && contieneEjercicio(horariosOcupados, dia, horarioClase)) {
-                    horarioDisponible[j] = "Ocupado";
+                    horarioDisponible[j] = controller.getClase(sede,dia,horarioClase).toUpperCase();
                 } else {
 
                     horarioDisponible[j] = "Libre";
@@ -276,89 +221,80 @@ public class VistaPrincipalClaseAsignada extends JFrame {
         }
     }
 
-//    private void abrirAgregarClase() {
-//
-//        JDialog dialogo = new JDialog(this, "Agendar Clase", true);
-//        dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new GridLayout(9, 2));
-//
-//        JLabel lblUbicacion = new JLabel("Ejercicio:");
-//        JTextField txtUbicacion = new JTextField();
-//
-//        JLabel lblTipoNivel = new JLabel("Nivel:");
-//        JComboBox<String> txtTipoNivel = new JComboBox<>();
-//        for (String sede : controller.getTiposMembresias())
-//            txtTipoNivel.addItem(sede);
-//
-//        JLabel lblEmplazamiento = new JLabel("Emplazamientos:");
-//        JTextField txtEmplazamiento = new JTextField();
-//
-//        JLabel lblEjerciciosDisponibles = new JLabel("Ejercicios Disponibles");
-//        JTextField txtEjerciciosDisponibles = new JTextField();
-//
-//        JLabel lblAlquilerSede = new JLabel("Alquiler Sede");
-//        JTextField txtAlquilerSede = new JTextField();
-//
-//        JLabel lblError = new JLabel("ERROR");
-//        JLabel lblErrorMessage = new JLabel("ERROR");
-//        lblError.setForeground(Color.RED);
-//        lblErrorMessage.setForeground(Color.RED);
-//
-//        JButton btnAceptar = new JButton("Aceptar");
-//        btnAceptar.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    String ubicacion = txtUbicacion.getText();
-//                    String tipoNivel = txtTipoNivel.getItemAt(txtTipoNivel.getSelectedIndex());
-//                    String emplazamientos = txtEmplazamiento.getText();
-//                    String ejerciciosDisponibles = txtEjerciciosDisponibles.getText();
-//                    String alquilerSede = txtAlquilerSede.getText();
-//
-//                    // Lógica para procesar la información capturada
-//                    controller.agregarSede(ubicacion, tipoNivel, emplazamientos, ejerciciosDisponibles, alquilerSede);
-//
-//                    // Cerrar el diálogo
-//                    lblError.setVisible(false);
-//                    lblErrorMessage.setVisible(false);
-//                    dialogo.dispose();
-//                    JOptionPane.showMessageDialog(panel, "Sede creada exitosamente");
-//                } catch ( Exception ex ) {
-//                    lblErrorMessage.setText(ex.getMessage());
-//                    lblError.setVisible(true);
-//                    lblErrorMessage.setVisible(true);
-//                }
-//            }
-//        });
-//
-//        JButton btnCancelar = new JButton("Cancelar");
-//        btnCancelar.addActionListener(e -> dialogo.dispose());
-//
-//        panel.add(lblUbicacion);
-//        panel.add(txtUbicacion);
-//        panel.add(lblTipoNivel);
-//        panel.add(txtTipoNivel);
-//        panel.add(lblEmplazamiento);
-//        panel.add(txtEmplazamiento);
-//        panel.add(lblEjerciciosDisponibles);
-//        panel.add(txtEjerciciosDisponibles);
-//        panel.add(lblAlquilerSede);
-//        panel.add(txtAlquilerSede);
-//
-//        panel.add(lblError);
-//        panel.add(lblErrorMessage);
-//        panel.add(btnAceptar);
-//        panel.add(btnCancelar);
-//        lblError.setVisible(false);
-//        lblErrorMessage.setVisible(false);
-//
-//        dialogo.add(panel);
-//        dialogo.pack();
-//        dialogo.setLocationRelativeTo(this);
-//        dialogo.setVisible(true);
-//    }
+    private void abrirAgregarClase(String sede) {
+
+        HashMap<String, ArrayList<LocalDateTime>> clasesExistentes = controller.getClasesPorSede(sede);
+
+        if(!clasesExistentes.isEmpty()) {
+            JDialog dialogo = new JDialog(this, "Agendar Clase", true);
+            dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new GridLayout(9, 2));
+
+
+            panel.setLayout(new GridBagLayout());
+            GridBagConstraints gbcInscripcion = new GridBagConstraints();
+            gbcInscripcion.insets = new Insets(5, 5, 5, 5);
+            gbcInscripcion.anchor = GridBagConstraints.WEST;
+
+            List<JComboBox<String>> comboBoxesHorarios = new ArrayList<>();
+            int i = 0;
+            for (String clase : clasesExistentes.keySet()) {
+                gbcInscripcion.gridx = 0;
+                gbcInscripcion.gridy = i;
+                JLabel labelClase = new JLabel(clase + ":");
+                panel.add(labelClase, gbcInscripcion);
+
+                gbcInscripcion.gridx = 1;
+                gbcInscripcion.gridy = i;
+                JComboBox<String> comboBoxHorarios = new JComboBox<>();
+                comboBoxHorarios.addItem("---");
+                ArrayList<LocalDateTime> horarios = clasesExistentes.get(clase);
+                for (LocalDateTime horario : horarios) {
+                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
+                    String fechaHoraFormateada = horario.format(formato);
+                    comboBoxHorarios.addItem(fechaHoraFormateada);
+                }
+                panel.add(comboBoxHorarios, gbcInscripcion);
+                comboBoxesHorarios.add(comboBoxHorarios);
+                i++;
+            }
+
+            //Boton Incripcion
+            JButton btnInscribirse = new JButton("Inscribirse");
+            btnInscribirse.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    for (int i = 0; i < comboBoxesHorarios.size(); i++) {
+                        String clase = clasesExistentes.keySet().toArray(new String[0])[i];
+                        JComboBox<String> comboBoxHorarios = comboBoxesHorarios.get(i);
+                        String horarioSeleccionado = (String) comboBoxHorarios.getSelectedItem();
+                        if (!horarioSeleccionado.equals("---")) {
+                            try {
+                                controller.inscibirAlumno(clase, horarioSeleccionado, sede);
+                            } catch (GymException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            System.out.println("Clase: " + clase + ", Horario: " + horarioSeleccionado);
+                        }
+                    }
+                    dialogo.dispose();
+                }
+            });
+
+            JButton btnCancelar = new JButton("Cancelar");
+            btnCancelar.addActionListener(e -> dialogo.dispose());
+
+
+            panel.add(btnInscribirse);
+            panel.add(btnCancelar);
+            dialogo.add(panel);
+            dialogo.pack();
+            dialogo.setLocationRelativeTo(this);
+            dialogo.setVisible(true);
+        }
+    }
 
     private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados,LocalDate dia, LocalTime hora) {
         boolean flagOcupado = false;

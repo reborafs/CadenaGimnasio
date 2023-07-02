@@ -136,7 +136,6 @@ public class ControladorCliente {
         for(Clase clase : clases){
 
             if(clase.getEstado().equals(FINALIZADA)){
-                System.out.print("finalizada -->" + clase.getEjercicio() + ": " + !clase.getEstado().equals(FINALIZADA) + "\n");
                 LocalDateTime horariosDisponibles = clase.getHorarioInicioFecha();
                 String key = clase.getEjercicio().getNombre();
                 agregarValor(clasesPorSede, key, horariosDisponibles);
@@ -185,5 +184,18 @@ public class ControladorCliente {
 
     public Cliente getUsuario() {
         return usuario;
+    }
+
+    public String getClase(String sede, LocalDate dia, LocalTime horarioClase) {
+        ArrayList<Clase> clasesSede = gym.getSede(sede).getListaClases();
+        for(Clase clase: clasesSede){
+            LocalDate claseFecha = clase.getFecha();
+            LocalTime claseHora = clase.getHorarioInicio();
+            if(claseFecha.equals(dia) && claseHora.equals(horarioClase)){
+                System.out.println("el id de la clase es -->\n"+clase.getClaseID());
+                return clase.getEjercicio().getNombre();
+            }
+        }
+        return null;
     }
 }
