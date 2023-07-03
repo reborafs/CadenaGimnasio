@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -21,8 +22,7 @@ public class VistaMembresia extends JFrame {
     public VistaMembresia() {
         super("Cliente: Membresia");
         this.controller = ControladorCliente.getInstance();
-        setSize(600, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setLayout(new BorderLayout());
 
         JPanel panelMenu = new JPanel();
         panelMenu.setLayout(new GridBagLayout());
@@ -52,7 +52,7 @@ public class VistaMembresia extends JFrame {
 
         // Titulo
         JPanel panel = new JPanel();
-        JLabel labelTitulo = new JLabel("Membresias");
+        JLabel labelTitulo = new JLabel("Membresia Activa:");
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 32));
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -63,57 +63,64 @@ public class VistaMembresia extends JFrame {
         gbc.gridwidth = 1;
         this.add(panelMenu, BorderLayout.NORTH);
 
+        JLabel lblMembresiaActiva = new JLabel(controller.getMembresiaUsuario());
+        lblMembresiaActiva.setFont(new Font("Arial", Font.BOLD, 32));
+        gbc.gridx = 2;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.NORTH;
+        panelMenu.add(lblMembresiaActiva, gbc);
 
-        HashMap<String, String>  membresias = controller.getMembresias();
+        gbc.gridwidth = 1;
+        this.add(panelMenu, BorderLayout.NORTH);
 
+
+
+        JLabel labelDesc = new JLabel("Descripcion de membresias: ");
+        labelDesc.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 7;
         gbc.gridwidth = 0;
+        panelMenu.add(labelDesc, gbc);
 
-        for (String membresia : membresias.keySet()) {
+        //gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.gridy = 8;
+        ArrayList<String[]> membresias = controller.getMembresias();
 
-            JLabel labelMembresia1 = new JLabel(membresia);
+        for (String[] membresia : membresias) {
+            JLabel labelMembresia1 = new JLabel(membresia[0]);
             labelMembresia1.setFont(new Font("Arial", Font.BOLD, 20));
             gbc.anchor = GridBagConstraints.NORTHWEST;
             panelMenu.add(labelMembresia1, gbc);
             gbc.gridy++;
 
-            JLabel labelMembresia1Desc = new JLabel(membresias.get(membresia));
+            JLabel labelMembresia1Desc = new JLabel(membresia[1]);
             gbc.anchor = GridBagConstraints.NORTHWEST;
             panelMenu.add(labelMembresia1Desc, gbc);
             gbc.gridy++;
         }
 
-        class HandlerBtnClaseAsignada implements ActionListener {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.abrirVistaClaseAsignada();
-                //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
-            }
-        }
+        btnClaseAsignada.addActionListener(e -> abrirVistaClaseAsignada());
+        btnEjerciciosSedes.addActionListener(e -> abrirVistaEjercicioPorSede());
 
-        /*INSTANCIACION DEL MANEJADOR*/
-        HandlerBtnClaseAsignada handlerBtnClaseAsignada =new HandlerBtnClaseAsignada();
-
-        /*ASIGNACION DEL MANEJADOR AL BOTON*/
-        btnClaseAsignada.addActionListener(handlerBtnClaseAsignada);
-
-        class HandlerBtnEjerciciosSedes implements ActionListener{
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.abrirVistaEjercicioPorSede();
-                //controladorLogin.validarUsuarioExistente(campoUsuario.getText(), campoContrasenia.getText());
-            }
-        }
-
-        /*INSTANCIACION DEL MANEJADOR*/
-        HandlerBtnEjerciciosSedes handlerBtnEjerciciosSedes=new HandlerBtnEjerciciosSedes();
-
-        /*ASIGNACION DEL MANEJADOR AL BOTON*/
-        btnEjerciciosSedes.addActionListener(handlerBtnEjerciciosSedes);
+        this.setSize(800, 600);
+        setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setVisible(true);
 
     }
+
+    private void abrirVistaClaseAsignada() {
+        this.dispose();
+        controller.abrirVistaClaseAsignada();
+    }
+
+    private void abrirVistaEjercicioPorSede() {
+        this.dispose();
+        controller.abrirVistaEjercicioPorSede();
+    }
+
 
 }

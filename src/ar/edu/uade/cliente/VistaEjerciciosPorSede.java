@@ -25,9 +25,7 @@ public class VistaEjerciciosPorSede extends JFrame {
 	public VistaEjerciciosPorSede() {
 		super("Cliente: Ejercicios por sede");
 		this.controller = ControladorCliente.getInstance();
-
-        setSize(600, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setLayout(new BorderLayout());
 		
         JPanel panelMenu = new JPanel();
 		panelMenu.setLayout(new GridBagLayout());
@@ -125,7 +123,7 @@ public class VistaEjerciciosPorSede extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaClaseAsignada();
+				abrirVistaClaseAsignada();
 			}
 		}
 
@@ -139,7 +137,7 @@ public class VistaEjerciciosPorSede extends JFrame {
 		class HandlerBtnMembresia implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.abrirVistaMembresia();
+				abrirVistaMembresia();
 			}
 		}
 
@@ -149,9 +147,23 @@ public class VistaEjerciciosPorSede extends JFrame {
 		/*ASIGNACION DEL MANEJADOR AL BOTON*/
 		btnMembresia.addActionListener(handlerBtnMembresia);
 
+		this.setSize(800, 600);
+		setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setVisible(true);
 
 	}
-	
+
+	private void abrirVistaClaseAsignada() {
+		this.dispose();
+		controller.abrirVistaClaseAsignada();
+	}
+
+	private void abrirVistaMembresia() {
+		this.dispose();
+		controller.abrirVistaMembresia();
+	}
+
     private boolean contieneEjercicio(ArrayList<String> ejercicios, String ejercicio) {
         for (String e : ejercicios) {
             if (e.equals(ejercicio)) {

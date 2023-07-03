@@ -69,17 +69,17 @@ public class ControladorCliente {
      * =======================================================
      */
 
-    public HashMap<String, String> getMembresias(){
+    public ArrayList<String[]> getMembresias(){
 
-        HashMap<String, String>  membresias = new HashMap<String, String>();
+        ArrayList<String[]> membresias = new ArrayList<>();
 
-        String blackDesc = "La membresia basica solo puede ingresar a sedes Black";
-        String oroDesc = "La membresia intermedia solo puede ingresar a todas las sedes Black y oro";
-        String platinumDesc = "La membresia premiun puede ingresar a cualquiera de nuestars sedes";
+        String blackDesc = "La membresia basica solo puede ingresar a sedes Black.";
+        String oroDesc = "La membresia intermedia solo puede ingresar a todas las sedes Black y oro.";
+        String platinumDesc = "La membresia premium puede ingresar a cualquiera de nuestras sedes.";
 
-        membresias.put("Black", blackDesc);
-        membresias.put("Oro", oroDesc);
-        membresias.put("Platinum", platinumDesc);
+        membresias.add(new String[]{"Black", blackDesc});
+        membresias.add(new String[]{"Oro", oroDesc});
+        membresias.add(new String[]{"Platinum", platinumDesc});
         return membresias;
     }
 
@@ -92,7 +92,7 @@ public class ControladorCliente {
         ArrayList<Sede> sedes = gym.getListaSedes();
         for(Sede sede : sedes){
             ArrayList<Ejercicio> ejercicios = sede.getEjerciciosDisponibles();
-            System.out.print("aqui -->" +ejercicios.toString());
+            //System.out.print("aqui -->" +ejercicios.toString());
             ArrayList<String> ejerciciosDisponibles = new ArrayList<>();
             for(Ejercicio ejercicio: ejercicios) {
                 if (ejercicio != null) {
@@ -129,13 +129,11 @@ public class ControladorCliente {
         return listaSedesDisponibles;
     }
 
-    //arreglar problema de sobreescritura de la key, porque pueden haber más de una clase con el mismo ejercicio
     public HashMap<String, ArrayList<LocalDateTime>> getClasesPorSede(String sede){
         HashMap<String, ArrayList<LocalDateTime>> clasesPorSede = new HashMap<String, ArrayList<LocalDateTime>>();
         ArrayList<Clase> clases = gym.getSede(sede).getListaClases();
         for(Clase clase : clases){
-
-            if(clase.getEstado().equals(FINALIZADA)){
+            if(!(clase.getEstado().equals(FINALIZADA))){ // No traigo clases que ya fueron finalizadas.
                 LocalDateTime horariosDisponibles = clase.getHorarioInicioFecha();
                 String key = clase.getEjercicio().getNombre();
                 agregarValor(clasesPorSede, key, horariosDisponibles);
@@ -157,7 +155,7 @@ public class ControladorCliente {
 
     public void inscibirAlumno(String claseElegida, String horarioSeleccionado, String sede) throws GymException {
         Sede sedeClase = gym.getSede(sede);
-        System.out.println("la sede es -->"+sedeClase.getUbicacion()+"\n");
+        //System.out.println("la sede es -->"+sedeClase.getUbicacion()+"\n");
         ArrayList<Clase> clases = sedeClase.getListaClases();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
         LocalDateTime fechaHoraDesformateada = LocalDateTime.parse(horarioSeleccionado, formato);
@@ -168,7 +166,7 @@ public class ControladorCliente {
             LocalDate claseFecha = clase.getFecha();
             LocalTime claseHora = clase.getHorarioInicio();
             if(claseEjercicio.equals(claseElegida) && claseFecha.equals(fechaDesformateada) && claseHora.equals(horaDesformateada)){
-                System.out.println("el id de la clase es -->\n"+clase.getClaseID());
+                //System.out.println("el id de la clase es -->\n"+clase.getClaseID());
                 sedeClase.agregarAlumno(clase.getClaseID(), this.usuario);
             }
         }
@@ -192,10 +190,18 @@ public class ControladorCliente {
             LocalDate claseFecha = clase.getFecha();
             LocalTime claseHora = clase.getHorarioInicio();
             if(claseFecha.equals(dia) && claseHora.equals(horarioClase)){
-                System.out.println("el id de la clase es -->\n"+clase.getClaseID());
+                //System.out.println("el id de la clase es -->\n"+clase.getClaseID());
                 return clase.getEjercicio().getNombre();
             }
         }
         return null;
+    }
+
+    public String getMembresiaUsuario() {
+        return this.usuario.getTipoNivel().toString();
+    }
+
+    public boolean validarNivelCliente(String sede) {
+        return gym.validarNivelAlumnoSede(sede, this.usuario);
     }
 }

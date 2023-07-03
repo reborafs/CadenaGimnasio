@@ -106,7 +106,7 @@ public class VistaPrincipalGestionSedes extends JFrame{
 
 		ArrayList<String> listaEjercicios = controller.getListaNombresEjercicios();
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(9+listaEjercicios.size(), 2));
+		panel.setLayout(new GridLayout(9+listaEjercicios.size()/2, 2));
 
 		JLabel lblUbicacion = new JLabel("Ubicacion:");
 		JTextField txtUbicacion = new JTextField();

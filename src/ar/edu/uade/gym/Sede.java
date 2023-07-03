@@ -56,8 +56,10 @@ public class Sede {
 		// Chequear que el profesor no tenga otra clase en el mismo horario.
 		for (Clase clase: listaClasesMismoDia) {
 			Profesor profeAsignado = clase.getProfesor();
-			if (profeAsignado.equals(profesor) && clase.getFecha() == clase.getFecha()
+			if (profeAsignado.equals(profesor) && clase.getFecha() == claseNueva.getFecha()
 					&& clase.getHorarioInicio() == claseNueva.getHorarioInicio()) {
+				//System.out.println("Profesor: " + profeAsignado);
+				//System.out.println("Profesor: " + profeAsignado);
 				throw new GymException("El profesor tiene una clase asignada en el mismo horario.");
 			}
 		}

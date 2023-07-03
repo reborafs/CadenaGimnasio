@@ -1,6 +1,7 @@
 package ar.edu.uade.cliente;
 
 import ar.edu.uade.gym.GymException;
+import ar.edu.uade.soporteTecnico.ControladorSoporteTecnico;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,9 +25,7 @@ public class VistaPrincipalClaseAsignada extends JFrame {
 	public VistaPrincipalClaseAsignada() {
 		super("Cliente: Clases Asignadas");
         this.controller = ControladorCliente.getInstance();
-
-        setSize(600, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setLayout(new BorderLayout());
 
         JPanel panelMenu = new JPanel();
 		panelMenu.setLayout(new GridBagLayout());
@@ -105,51 +104,33 @@ public class VistaPrincipalClaseAsignada extends JFrame {
         // Agregar la tabla a un JScrollPane y añadirlo a la ventana
         JScrollPane scrollPane = new JScrollPane(tabla);
         panelContenido.add(scrollPane, BorderLayout.CENTER);
-
-
-
         this.add(panelContenido, BorderLayout.CENTER);
 
+        this.setSize(800, 600);
+        setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setVisible(true);
 
-        //Botones Menu
-        class HandlerBtnEjerciciosSedes implements ActionListener{
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.abrirVistaEjercicioPorSede();
-            }
-        }
-
-        btnInscribirse.addActionListener(actionEvent ->    abrirAgregarClase(txtSedePrincipal.getSelectedItem().toString()));
-
-		/*INSTANCIACION DEL MANEJADOR*/
-		HandlerBtnEjerciciosSedes handlerBtnEjerciciosSedes=new HandlerBtnEjerciciosSedes();
-
-		/*ASIGNACION DEL MANEJADOR AL BOTON*/
-		btnEjerciciosSedes.addActionListener(handlerBtnEjerciciosSedes);
-
-		//Boton Membresia
-        class HandlerBtnMembresia implements ActionListener{
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.abrirVistaMembresia();
-            }
-        }
-
-		/*INSTANCIACION DEL MANEJADOR*/
-		HandlerBtnMembresia handlerBtnMembresia=new HandlerBtnMembresia();
-
-		/*ASIGNACION DEL MANEJADOR AL BOTON*/
-		btnMembresia.addActionListener(handlerBtnMembresia);
-
-        txtSedePrincipal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String sede = (String) txtSedePrincipal.getSelectedItem();
-                actualizarTabla(tabla, sede);
-            }
+        btnInscribirse.addActionListener(e -> abrirAgregarClase(txtSedePrincipal.getSelectedItem().toString()));
+		btnEjerciciosSedes.addActionListener(e -> abrirVistaEjercicioPorSede());
+		btnMembresia.addActionListener(e -> abrirVistaMembresia());
+        txtSedePrincipal.addActionListener(e -> {
+            String sede = (String) txtSedePrincipal.getSelectedItem();
+            actualizarTabla(tabla, sede);
         });
     }
+
+    private void abrirVistaMembresia() {
+        this.dispose();
+        controller.abrirVistaMembresia();
+    }
+
+    private void abrirVistaEjercicioPorSede() {
+        this.dispose();
+        controller.abrirVistaEjercicioPorSede();
+    }
+
+
 
     private void actualizarTabla(JTable tabla, String sede) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
@@ -224,75 +205,82 @@ public class VistaPrincipalClaseAsignada extends JFrame {
     private void abrirAgregarClase(String sede) {
 
         HashMap<String, ArrayList<LocalDateTime>> clasesExistentes = controller.getClasesPorSede(sede);
-
         if(!clasesExistentes.isEmpty()) {
-            JDialog dialogo = new JDialog(this, "Agendar Clase", true);
-            dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            if (controller.validarNivelCliente(sede)){
+                JDialog dialogo = new JDialog(this, "Agendar Clase", true);
+                dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-            JPanel panel = new JPanel();
-            panel.setLayout(new GridLayout(9, 2));
+                JPanel panel = new JPanel();
+                panel.setLayout(new GridLayout(9, 2));
 
 
-            panel.setLayout(new GridBagLayout());
-            GridBagConstraints gbcInscripcion = new GridBagConstraints();
-            gbcInscripcion.insets = new Insets(5, 5, 5, 5);
-            gbcInscripcion.anchor = GridBagConstraints.WEST;
+                panel.setLayout(new GridBagLayout());
+                GridBagConstraints gbcInscripcion = new GridBagConstraints();
+                gbcInscripcion.insets = new Insets(5, 5, 5, 5);
+                gbcInscripcion.anchor = GridBagConstraints.WEST;
 
-            List<JComboBox<String>> comboBoxesHorarios = new ArrayList<>();
-            int i = 0;
-            for (String clase : clasesExistentes.keySet()) {
-                gbcInscripcion.gridx = 0;
-                gbcInscripcion.gridy = i;
-                JLabel labelClase = new JLabel(clase + ":");
-                panel.add(labelClase, gbcInscripcion);
+                List<JComboBox<String>> comboBoxesHorarios = new ArrayList<>();
+                int i = 0;
+                for (String clase : clasesExistentes.keySet()) {
+                    gbcInscripcion.gridx = 0;
+                    gbcInscripcion.gridy = i;
+                    JLabel labelClase = new JLabel(clase + ":");
+                    panel.add(labelClase, gbcInscripcion);
 
-                gbcInscripcion.gridx = 1;
-                gbcInscripcion.gridy = i;
-                JComboBox<String> comboBoxHorarios = new JComboBox<>();
-                comboBoxHorarios.addItem("---");
-                ArrayList<LocalDateTime> horarios = clasesExistentes.get(clase);
-                for (LocalDateTime horario : horarios) {
-                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
-                    String fechaHoraFormateada = horario.format(formato);
-                    comboBoxHorarios.addItem(fechaHoraFormateada);
-                }
-                panel.add(comboBoxHorarios, gbcInscripcion);
-                comboBoxesHorarios.add(comboBoxHorarios);
-                i++;
-            }
-
-            //Boton Incripcion
-            JButton btnInscribirse = new JButton("Inscribirse");
-            btnInscribirse.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    for (int i = 0; i < comboBoxesHorarios.size(); i++) {
-                        String clase = clasesExistentes.keySet().toArray(new String[0])[i];
-                        JComboBox<String> comboBoxHorarios = comboBoxesHorarios.get(i);
-                        String horarioSeleccionado = (String) comboBoxHorarios.getSelectedItem();
-                        if (!horarioSeleccionado.equals("---")) {
-                            try {
-                                controller.inscibirAlumno(clase, horarioSeleccionado, sede);
-                            } catch (GymException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                            System.out.println("Clase: " + clase + ", Horario: " + horarioSeleccionado);
-                        }
+                    gbcInscripcion.gridx = 1;
+                    gbcInscripcion.gridy = i;
+                    JComboBox<String> comboBoxHorarios = new JComboBox<>();
+                    comboBoxHorarios.addItem("---");
+                    ArrayList<LocalDateTime> horarios = clasesExistentes.get(clase);
+                    for (LocalDateTime horario : horarios) {
+                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
+                        String fechaHoraFormateada = horario.format(formato);
+                        comboBoxHorarios.addItem(fechaHoraFormateada);
                     }
-                    dialogo.dispose();
+                    panel.add(comboBoxHorarios, gbcInscripcion);
+                    comboBoxesHorarios.add(comboBoxHorarios);
+                    i++;
                 }
-            });
 
-            JButton btnCancelar = new JButton("Cancelar");
-            btnCancelar.addActionListener(e -> dialogo.dispose());
+                //Boton Incripcion
+                JButton btnInscribirse = new JButton("Inscribirse");
+                btnInscribirse.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        for (int i = 0; i < comboBoxesHorarios.size(); i++) {
+                            String clase = clasesExistentes.keySet().toArray(new String[0])[i];
+                            JComboBox<String> comboBoxHorarios = comboBoxesHorarios.get(i);
+                            String horarioSeleccionado = (String) comboBoxHorarios.getSelectedItem();
+                            if (!horarioSeleccionado.equals("---")) {
+                                try {
+                                    controller.inscibirAlumno(clase, horarioSeleccionado, sede);
+                                } catch (GymException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                                System.out.println("Clase: " + clase + ", Horario: " + horarioSeleccionado);
+                            }
+                        }
+                        dialogo.dispose();
+                    }
+                });
+
+                JButton btnCancelar = new JButton("Cancelar");
+                btnCancelar.addActionListener(e -> dialogo.dispose());
 
 
-            panel.add(btnInscribirse);
-            panel.add(btnCancelar);
-            dialogo.add(panel);
-            dialogo.pack();
-            dialogo.setLocationRelativeTo(this);
-            dialogo.setVisible(true);
+                panel.add(btnInscribirse);
+                panel.add(btnCancelar);
+                dialogo.add(panel);
+                dialogo.pack();
+                dialogo.setLocationRelativeTo(this);
+                dialogo.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "No tiene nivel para acceder a esta sede.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No existen clases en la sede seleccionada.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

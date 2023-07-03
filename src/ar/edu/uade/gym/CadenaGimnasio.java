@@ -597,7 +597,7 @@ public class CadenaGimnasio {
 			 * =====================================================*/
 			this.agregarTipoArticuloPorFecha("Colchoneta", "COLCHONETA","Pepito", "Colchoneta de 2m x 0.75m", 200);
 			this.agregarTipoArticuloPorFecha("Disco", "PESA","Fulanito", "Disco marca Fulanito de 25kg", 500);
-			this.agregarTipoArticuloPorFecha("Macuerna", "PESA","Pepito", "Macuerna de 4kg", 300);
+			this.agregarTipoArticuloPorFecha("Mancuerna", "PESA","Pepito", "Mancuerna de 4kg", 300);
 			this.agregarTipoArticuloPorUso("Pelota medica", "PESA","Mengano", "Pelota marca Mengano de 10kg", 150);
 			this.agregarTipoArticuloPorUso("Alfombre de yoga", "COLCHONETA","Pepito", "Alfombre de yoga marca Pepito de 2m x 0.75m", 50);
 			this.agregarTipoArticuloPorUso("Pesa", "PESA","Pepito", "Pesa marca Pepito de 20kg", 50);
@@ -641,20 +641,20 @@ public class CadenaGimnasio {
 			this.agregarEjercicio("Yoga", true, 15 ,tipoArticulo2);
 			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
 			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
-			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
-			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
+			this.agregarEjercicio("Judo", true, 10, tipoArticulo5);
+			this.agregarEjercicio("Zumba", true, 15 ,tipoArticulo6);
 
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
-			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Yudo"));
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Judo"));
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Boxing"));
 			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Crossfit"));
-			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Bailoterapia"));
+			sedeBelgrano.agregarEjerciciosDisponibles(this.getEjercicio("Zumba"));
 
 //			this.agregarEjercicio("Boxing", true, 10, tipoArticulo3);
 //			this.agregarEjercicio("Karate", true, 15 ,tipoArticulo4);
-//			this.agregarEjercicio("Yudo", true, 10, tipoArticulo5);
-//			this.agregarEjercicio("Bailoterapia", true, 15 ,tipoArticulo6);
+//			this.agregarEjercicio("Judo", true, 10, tipoArticulo5);
+//			this.agregarEjercicio("Zumba", true, 15 ,tipoArticulo6);
 
 
 
@@ -708,26 +708,26 @@ public class CadenaGimnasio {
 			Ejercicio ejercicio7 = this.getEjercicio("Yoga");
 			Ejercicio ejercicio8 = this.getEjercicio("Boxing");
 			Ejercicio ejercicio9 = this.getEjercicio("Karate");
-			Ejercicio ejercicio10 = this.getEjercicio("Bailoterapia");
-			Ejercicio ejercicio11 = this.getEjercicio("Yudo");
-			LocalDate fecha = LocalDate.of(2023,7,1);
-			LocalTime horarioInicio = LocalTime.of(19,0,0);
-			LocalTime horarioFin = LocalTime.of(20,0,0);
+			Ejercicio ejercicio10 = this.getEjercicio("Zumba");
+			Ejercicio ejercicio11 = this.getEjercicio("Judo");
 			ArrayList<Emplazamiento> listaEmplazamientos = this.getListaEmplazamientos(sedeBelgrano, TipoEmplazamiento.SALON);
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
-			ArrayList<Articulo> listaArticulos = null;
-			boolean esVirtual = true;
-			System.out.print("listaAlumnos "+listaAlumnos.toString()+" \n");
-			System.out.print("listaAlumnos2 "+listaAlumnos2.toString()+" \n");
-			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos2, LocalDate.of(2023,7,1), LocalTime.of(19,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeBelgrano, profesor2, ejercicio7, listaAlumnos, LocalDate.of(2023,7,1), LocalTime.of(12,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeBelgrano, profesor3, ejercicio8, listaAlumnos, LocalDate.of(2023,7,2), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeBelgrano, profesor3, ejercicio9, listaAlumnos2, LocalDate.of(2023,7,3), LocalTime.of(8,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeBelgrano, profesor, ejercicio10, listaAlumnos, LocalDate.of(2023,7,4), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeBelgrano, profesor2, ejercicio11, listaAlumnos, LocalDate.of(2023,7,5), LocalTime.of(21,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeCaballito, profesor, ejercicio9, listaAlumnos, LocalDate.of(2023,7,3), LocalTime.of(13,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeCaballito, profesor2, ejercicio10, listaAlumnos, LocalDate.of(2023,7,4), LocalTime.of(12,0,0), emplazamiento, listaArticulos, esVirtual);
-			this.agendarClase(sedeCaballito, profesor3, ejercicio11, listaAlumnos, LocalDate.of(2023,7,5), LocalTime.of(14,0,0), emplazamiento, listaArticulos, esVirtual);
+			LocalDate fechaHoy = LocalDate.now();
+			ArrayList<Articulo> listaArticulosBelgrano = sedeBelgrano.getListaArticulos();
+			ArrayList<Articulo> listaArticulosCaballito = sedeBelgrano.getListaArticulos();
+			boolean esVirtual = false;
+//			System.out.print("listaAlumnos "+listaAlumnos.toString()+" \n");
+//			System.out.print("listaAlumnos2 "+listaAlumnos2.toString()+" \n");
+			this.agendarClase(sedeBelgrano, profesor, ejercicio, listaAlumnos2, fechaHoy, LocalTime.of(19,0,0), emplazamiento, listaArticulosBelgrano, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor2, ejercicio7, listaAlumnos, fechaHoy, LocalTime.of(12,0,0), emplazamiento, listaArticulosBelgrano, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor3, ejercicio8, listaAlumnos, fechaHoy.plusDays(1), LocalTime.of(21,0,0), emplazamiento, listaArticulosBelgrano, true);
+			this.agendarClase(sedeBelgrano, profesor3, ejercicio9, listaAlumnos2, fechaHoy.plusDays(2), LocalTime.of(8,0,0), emplazamiento, listaArticulosBelgrano, true);
+			this.agendarClase(sedeBelgrano, profesor, ejercicio10, listaAlumnos, fechaHoy.plusDays(3), LocalTime.of(21,0,0), emplazamiento, listaArticulosBelgrano, esVirtual);
+			this.agendarClase(sedeBelgrano, profesor2, ejercicio11, listaAlumnos, fechaHoy.plusDays(4), LocalTime.of(21,0,0), emplazamiento, listaArticulosBelgrano, esVirtual);
+			this.agendarClase(sedeCaballito, profesor, ejercicio9, listaAlumnos, fechaHoy.plusDays(2), LocalTime.of(13,0,0), emplazamiento, listaArticulosCaballito, esVirtual);
+			this.agendarClase(sedeCaballito, profesor2, ejercicio10, listaAlumnos, fechaHoy.plusDays(4), LocalTime.of(12,0,0), emplazamiento, listaArticulosCaballito, esVirtual);
+			this.agendarClase(sedeCaballito, profesor3, ejercicio11, listaAlumnos, fechaHoy.plusDays(5), LocalTime.of(8,0,0), emplazamiento, listaArticulosCaballito, true);
+			this.agendarClase(sedeCaballito, profesor3, ejercicio11, listaAlumnos, fechaHoy.plusDays(6), LocalTime.of(8,0,0), emplazamiento, listaArticulosCaballito, true);
 			//this.agendarClase(sedePalermo, profesor, ejercicio7, listaAlumnos, LocalDate.of(2023,7,1), LocalTime.of(10,0,0), emplazamiento, listaArticulos, esVirtual);
 			//this.agendarClase(sedePalermo, profesor2, ejercicio11, listaAlumnos, LocalDate.of(2023,7,2), LocalTime.of(15,0,0), emplazamiento, listaArticulos, esVirtual);
 		//	this.agendarClase(sedePalermo, profesor3, ejercicio9, listaAlumnos, LocalDate.of(2023,7,3), LocalTime.of(11,0,0), emplazamiento, listaArticulos, esVirtual);
@@ -748,8 +748,8 @@ public class CadenaGimnasio {
 			Ejercicio ejercicio2 = this.getEjercicio("Yoga");
 			Ejercicio ejercicio3 = this.getEjercicio("Boxing");
 			Ejercicio ejercicio4 = this.getEjercicio("Karate");
-			Ejercicio ejercicio5 = this.getEjercicio("Bailoterapia");
-			Ejercicio ejercicio6 = this.getEjercicio("Yudo");
+			Ejercicio ejercicio5 = this.getEjercicio("Zumba");
+			Ejercicio ejercicio6 = this.getEjercicio("Judo");
 
 			this.agregarEjerciciosDisponibles(sedeBelgrano, ejercicio1);
 
@@ -1010,5 +1010,10 @@ public class CadenaGimnasio {
 	public void cambiarEstadoClase(String nombreSede, int claseId, String estado) throws GymException {
 		Sede sede = getSede(nombreSede);
 		sede.cambiarEstadoClase(claseId, estado);
+	}
+
+	public boolean validarNivelAlumnoSede(String sedeNombre, Cliente usuario) {
+		Sede sede = getSede(sedeNombre);
+		return (usuario.getTipoNivel().getValue() >= sede.getTipoNivel().getValue());
 	}
 }
