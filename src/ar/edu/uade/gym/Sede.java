@@ -163,6 +163,9 @@ public class Sede {
 		ArrayList<TipoArticulo> tiposArticulosNecesarios = ejercicio.getArticuloNecesarios();
 		ArrayList<Articulo> articulosClase = clase.getListaArticulos();
 
+		if (articulosClase.size() == 0)
+			return false;
+
 		for (TipoArticulo tipoArticulo : tiposArticulosNecesarios) {
 			boolean flagFound = false;
 			int index = 0;
@@ -180,7 +183,7 @@ public class Sede {
 		}
 
 		if (articulosClase.size() == 0) {
-			return true;
+				return true;
 		} else {
 			System.out.println("No se encuentran los articulos necesarios para confirmar esta clase.");
 			return false;
