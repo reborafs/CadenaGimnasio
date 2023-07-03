@@ -4,6 +4,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+
 import ar.edu.uade.gym.articulos.Articulo;
 import ar.edu.uade.gym.articulos.TipoArticulo;
 import ar.edu.uade.usuarios.Cliente;
@@ -150,7 +152,7 @@ public class Sede {
 							 LocalTime horarioInicio, Emplazamiento emplazamiento,
 							 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
 		Clase newClase = new Clase(profesor, ejercicio, listaAlumnos, this.getTipoNivel(), fecha, horarioInicio,
-				emplazamiento, listaArticulos, esVirtual);
+				emplazamiento, this.stockArticulos, esVirtual);
 		validarProfesor(newClase, profesor);
 		validarArticulosNecesarios(newClase, ejercicio);
     	validarEmplazamientoDisponible(emplazamiento, fecha, horarioInicio);
@@ -189,12 +191,16 @@ public class Sede {
 		}
 	}
 
-	public void validarYConfirmarClase(Clase clase) {
+	public void validarYConfirmarClase(Clase clase) throws GymException {
 		// TO-DO AGREGAR VALIDACIONES DE EMPLAZAMIENTO, PROFESOR Y OTROS SI ES NECESARIO.
 		if (validarRentabilidad(clase)) {
 			if (validarArticulosNecesarios(clase, clase.getEjercicio())) {
 				clase.confirmarClase();
+			} else {
+				//throw new GymException("No se puede confirmar la clase debido a que faltan asignar articulos.");
 			}
+		} else {
+			//throw new GymException("No se puede confirmar porque aun no es rentable.");
 		}
 	}
 	public void finalizarClase(Clase clase) {
@@ -386,5 +392,29 @@ public class Sede {
 			case "Agendada" -> clase.setEstadoAgendada();
 			case "Confirmada" -> validarYConfirmarClase(clase);
 		}
+	}
+
+	public HashMap<LocalDate, ArrayList<String[]>> getHorariosClasesAsignadasProfesor(Profesor profesor) {
+		/// TOMA LA SIGUIENTE SEMANA Y RETORNA UN HASHMAP. CLAVE ES EL LOCALDATE Y LOS VALUES SON ARRAYS DE LOCALTIME
+		//  QUE SON EL HORARIO DE INICIO DE LA CLASE.
+		HashMap<LocalDate, ArrayList<String[]>> horariosAsignados = new HashMap<>();
+		ArrayList<Clase> listaClases = this.getClasesProfesor(profesor);
+
+		ArrayList<LocalDate> semana = new ArrayList<>();
+		for (int day=0; day<7; day++) {	semana.add(LocalDate.now().plusDays(day));	}
+
+		for (LocalDate dia : semana) {
+			ArrayList<String[]> horarios = new ArrayList<>();
+			for (Clase clase : listaClases) {
+				if ( dia.isEqual(clase.getFecha()) ) {
+					ArrayList<String> claseinfo = clase.getInfo();
+					claseinfo.add(0, this.ubicacion);
+					horarios.add( claseinfo.toArray(new String[0]) );
+				}
+
+			}
+			horariosAsignados.put(dia,horarios);
+		}
+		return horariosAsignados;
 	}
 }
