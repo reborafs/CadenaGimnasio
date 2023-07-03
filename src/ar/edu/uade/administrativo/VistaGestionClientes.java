@@ -193,7 +193,7 @@ public class VistaGestionClientes extends JFrame {
             try {
                 int id = Integer.parseInt(txtID.getText());
                 controller.eliminarCliente(id);
-                dialogo.dispose(); // Cerrar el diálogo
+                dialogo.dispose();
             } catch (NumberFormatException ex) {
                 lblErrorMessage.setText("El numero no es valido.");
                 lblError.setVisible(true);

@@ -379,6 +379,22 @@ public class CadenaGimnasio {
 		return horariosAsignados;
 	}
 
+	public ArrayList<Clase> getClasesAsignadasProfesor(Profesor profesor) {
+		/// TOMA LA SIGUIENTE SEMANA Y RETORNA UN HASHMAP. CLAVE ES EL LOCALDATE Y LOS VALUES SON ARRAYS DE LOCALTIME
+		//  QUE SON EL HORARIO DE INICIO DE LA CLASE.
+		ArrayList<Sede> sedes = getListaSedes();
+		ArrayList<Clase> listaClasesAsignadas = new ArrayList<>();
+
+		for (Sede sede: sedes) {
+			for (Clase clase: sede.getListaClases()){
+				if (clase.getProfesor() == profesor)
+					listaClasesAsignadas.add(clase);
+			}
+		}
+
+		return listaClasesAsignadas;
+	}
+
 	public HashMap<LocalDate, ArrayList<LocalTime>> getHorariosClasesAsignadasClientes(String ubicacionSede, Cliente cliente) {
 		/// TOMA LA SIGUIENTE SEMANA Y RETORNA UN HASHMAP. CLAVE ES EL LOCALDATE Y LOS VALUES SON ARRAYS DE LOCALTIME
 		//  QUE SON EL HORARIO DE INICIO DE LA CLASE.
@@ -854,15 +870,23 @@ public class CadenaGimnasio {
 		return niveles;
 	}
 
-	public void modificarProfesor(int id, String nombre, String contrasena, Double sueldo) throws GymException {
+	public void modificarProfesor(int id, String nombre, String contrasena, String sueldo) throws GymException {
 		Profesor profe = getProfesor(id);
-		if (nombre != null && !nombre.equals("")) { profe.setNombre(nombre); };
-		if (contrasena != null && !contrasena.equals("")) { profe.setContrasenia(contrasena); };
-		if (sueldo != null) { profe.setSueldo(sueldo); };
+		if (nombre != null && !nombre.equals("")) { profe.setNombre(nombre); }
+		if (contrasena != null && !contrasena.equals("")) { profe.setContrasenia(contrasena); }
+		if (sueldo != null && !sueldo.equals("")) { profe.setSueldo(Double.valueOf(sueldo)); }
 	}
 
 	public void eliminarProfesor(int id) throws GymException {
 		Profesor profesor = getProfesor(id);
+		ArrayList<Clase> listaClasesAsignadas = getClasesAsignadasProfesor(profesor);
+
+
+		// Si el profesor tiene clases agendadas o confirmadas no puede ser eliminado.
+		for (Clase clase : listaClasesAsignadas)
+			if (!(clase.getEstado() == EstadoClase.FINALIZADA))
+				throw new GymException("No se puede eliminar un profesor con clases agendadas.");
+
 		this.usuariosProfesores.remove(profesor);
 	}
 
@@ -914,7 +938,7 @@ public class CadenaGimnasio {
 		Usuario user = getUsuario(id);
 		if (user.soyAdministrativo()) {this.usuariosAdministrativo.remove(user);}
 		if (user.soyCliente()) {this.usuariosClientes.remove(user);}
-		if (user.soyProfesor()) {this.usuariosProfesores.remove(user);}
+		if (user.soyProfesor()) {this.eliminarProfesor(id);}
 		if (user.soySoporteTecnico()) {this.usuariosSoporteTecnico.remove(user);}
 	}
 
@@ -1004,8 +1028,6 @@ public class CadenaGimnasio {
 
 		return tipos;
 	}
-
-
 
 	public void cambiarEstadoClase(String nombreSede, int claseId, String estado) throws GymException {
 		Sede sede = getSede(nombreSede);

@@ -169,7 +169,7 @@ public class ControladorAdministrativo {
         gym.agregarProfesor(nombre, contrasena, sueldo);
     }
 
-    public void modificarProfesor(int id, String nombre, String contrasena, Double sueldo) throws GymException {
+    public void modificarProfesor(int id, String nombre, String contrasena, String sueldo) throws GymException {
         gym.modificarProfesor(id, nombre, contrasena, sueldo);
     }
 
