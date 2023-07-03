@@ -138,16 +138,13 @@ public class VistaGestionClientes extends JFrame {
                 String contrasena = txtContrasena.getText();
                 String nivel = txtTipoUsuario.getSelectedItem().toString();
                 controller.agregarCliente(nombre, contrasena, nivel);
-
-                // Cerrar el diálogo
                 lblError.setVisible(false);
                 lblErrorMessage.setVisible(false);
                 dialogo.dispose();
             } catch (Exception ex) {
-                lblErrorMessage.setText("Error.");
+                lblErrorMessage.setText(ex.getMessage());
                 lblError.setVisible(true);
                 lblErrorMessage.setVisible(true);
-                return; // Exit the method without processing the information
             }
         });
 
@@ -197,7 +194,11 @@ public class VistaGestionClientes extends JFrame {
                 int id = Integer.parseInt(txtID.getText());
                 controller.eliminarCliente(id);
                 dialogo.dispose(); // Cerrar el diálogo
-            } catch (Exception ex) {
+            } catch (NumberFormatException ex) {
+                lblErrorMessage.setText("El numero no es valido.");
+                lblError.setVisible(true);
+                lblErrorMessage.setVisible(true);
+            } catch (GymException ex) {
                 lblErrorMessage.setText(ex.getMessage());
                 lblError.setVisible(true);
                 lblErrorMessage.setVisible(true);

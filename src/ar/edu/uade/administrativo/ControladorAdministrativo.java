@@ -111,12 +111,8 @@ public class ControladorAdministrativo {
     }
 
 
-    public void agregarCliente(String nombre, String contrasena, String nivel) {
-        try {
-            gym.agregarCliente(nombre,contrasena,nivel);
-        } catch (GymException e) {
-            e.printStackTrace();
-        }
+    public void agregarCliente(String nombre, String contrasena, String nivel) throws GymException {
+        gym.agregarCliente(nombre,contrasena,nivel);
     }
 
     public ArrayList<String[]> getListaClientes() {
