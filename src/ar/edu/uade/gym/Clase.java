@@ -27,26 +27,25 @@ public class Clase {
     private ArrayList<Cliente> listaAlumnos;
     private final Emplazamiento emplazamiento;
     private ArrayList<Articulo> listaArticulos;
-    private boolean esVirtual = false;
+    private boolean esVirtual;
 
     public Clase(Profesor profesor, Ejercicio ejercicio, ArrayList<Cliente> listaAlumnos, TipoNivel tipoNivel,
 				 LocalDate fecha, LocalTime horarioInicio, Emplazamiento emplazamiento,
-				 ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
+				 ArrayList<Articulo> listaArticulos, boolean flagVirtual) throws GymException {
 
 		this.id = nextID++;
     	asignarProfesor(profesor);
         this.ejercicio = ejercicio;
         setEstadoAgendada();
         this.emplazamiento = emplazamiento;
-        this.esVirtual = esVirtual;
+		this.esVirtual = flagVirtual;
 		this.fecha = fecha;
 		this.horarioInicio = horarioInicio;
-		//this.horarioFin = horarioFin;
 
-        if (listaAlumnos == null) {this.listaAlumnos = new ArrayList<Cliente>();}
+        if (listaAlumnos == null) {this.listaAlumnos = new ArrayList<>();}
         else { agregarAlumnos(listaAlumnos, tipoNivel); }
 
-        if (listaArticulos == null) {this.listaArticulos = new ArrayList<Articulo>();}
+        if (listaArticulos == null) {this.listaArticulos = new ArrayList<>();}
         else { this.listaArticulos = listaArticulos; }
     }
 
@@ -191,7 +190,7 @@ public class Clase {
 	}
 
 	public ArrayList<Articulo> getListaArticulos() {
-		return listaArticulos;
+		return this.listaArticulos;
 	}
 
 	public int getClaseID() {
@@ -222,7 +221,7 @@ public class Clase {
 		array.add(String.valueOf(listaAlumnos.size()));
 		array.add(emplazamiento.getTipoEmplazamiento().toString());
 		array.add(String.valueOf(listaArticulos.size()));
-		if (esVirtual) {array.add("Si");} else {array.add("no");};
+		if (esVirtual) {array.add("Si");} else {array.add("No");};
 
 		return array;
 	}

@@ -95,13 +95,15 @@ public class Articulo {
     }
 
     public String[] getInfo() {
-        String[] array = new String[7];
+        String[] array = new String[8];
         array[0] = String.valueOf(id);
         array[1] = this.tipoArticulo.getInfo()[1];
         array[2] = String.valueOf(this.fechaCompra);
         array[3] = String.valueOf(this.fechaFabricacion);
         array[4] = String.valueOf(this.usos);
         array[5] = String.valueOf(this.flagDesgastado);
+        array[6] = String.valueOf(this.getFormaAmortizacion());
+        array[7] = String.valueOf(this.getDesgaste());
         return array;
     }
 

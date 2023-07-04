@@ -119,10 +119,8 @@ public class VistaPrincipalGestionClases extends JFrame{
 			txtSede.addItem(sede);
 		}
 
-
 		JLabel lblEjercicio = new JLabel("Ingrese el tipo de ejercicio:");
 		JComboBox<String> txtEjercicio = new JComboBox<>();
-		txtEjercicio.addItem("---");
 		ArrayList<String> listaEjercicios = controller.getListaEjercicios(txtSede.getSelectedItem().toString());
 		for (String ejercicio : listaEjercicios) {
 			if (!estaEnLista(txtEjercicio, ejercicio)){
@@ -144,47 +142,54 @@ public class VistaPrincipalGestionClases extends JFrame{
 				txtEmplazamiento.addItem(tipoEmplazamiento.toString());
 			}
 
-		JLabel lblHorarioInicio = new JLabel("Horario de Inicio:");
-		JTextField txtHorarioInicio = new JTextField();
+		JLabel lblHorarioInicio = new JLabel("Horario de Inicio (HH):");
+		JTextField txtHorarioInicio = new JFormattedTextField(NumberFormat.getNumberInstance());
 
-		JLabel lblEsVirtual = new JLabel("Cantidad de Usos hasta renovar:");
-		JTextField txtEsVirtual = new JTextField();
+		JRadioButton btnPresencial = new JRadioButton("Presencial");
+		JRadioButton btnVirtual = new JRadioButton("Virtual");
+		ButtonGroup buttonGroup = new ButtonGroup();
+		btnPresencial.setSelected(true);
+		buttonGroup.add(btnPresencial);
+		buttonGroup.add(btnVirtual);
 
 		JLabel lblError = new JLabel("ERROR");
 		JLabel lblErrorMessage = new JLabel("ERROR");
 		lblError.setForeground(Color.RED);
 		lblErrorMessage.setForeground(Color.RED);
 
+
 		JButton btnAceptar = new JButton("Aceptar");
-		btnAceptar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					String sede = txtSede.getItemAt(txtSede.getSelectedIndex());
-					String ejercicio = txtEjercicio.getItemAt(txtEjercicio.getSelectedIndex());
-					String idProfesor = txtIdProfesor.getText();
-					String fecha = txtFecha.getText();
-					String emplazamiento = txtEmplazamiento.getItemAt(txtEmplazamiento.getSelectedIndex());
-					ArrayList<Articulo> listaArticulos = null;// txtListaArticulos.getText();
-					String horarioInicio = txtHorarioInicio.getText();
-					boolean esVirtual = false;
-					// Lógica para procesar la información capturada
+		btnAceptar.addActionListener(e -> {
+			try {
+				String sede = txtSede.getItemAt(txtSede.getSelectedIndex());
+				String ejercicio = txtEjercicio.getItemAt(txtEjercicio.getSelectedIndex());
+				String idProfesor = txtIdProfesor.getText();
+				String fecha = txtFecha.getText();
+				String emplazamiento = txtEmplazamiento.getItemAt(txtEmplazamiento.getSelectedIndex());
+				ArrayList<Articulo> listaArticulos = null;// txtListaArticulos.getText();
+				String horarioInicio = txtHorarioInicio.getText();
+				boolean flagVirtual = btnVirtual.isSelected();
 
-					controller.agregarClase(sede, idProfesor, ejercicio, null, fecha, horarioInicio,
-							emplazamiento, listaArticulos, esVirtual);
-
-					// Cerrar el diálogo
-					lblError.setVisible(false);
-					lblErrorMessage.setVisible(false);
-					dialogo.dispose();
-				} catch (NumberFormatException ex) {
-					lblErrorMessage.setText("Se debe ingresar un numero entero.");
-					lblError.setVisible(true);
-					lblErrorMessage.setVisible(true);
-					return; // Exit the method without processing the information
-				} catch (GymException ex) {
-					throw new RuntimeException(ex);
+				if (Integer.parseInt(horarioInicio) < 8 || Integer.parseInt(horarioInicio) > 23) {
+					throw new GymException("El horario debe ser un número entre 8 y 23.");
 				}
+
+				asignarArticulos(sede, idProfesor, ejercicio, fecha, horarioInicio,
+						emplazamiento, flagVirtual);
+
+				// Cerrar el diálogo
+				lblError.setVisible(false);
+				lblErrorMessage.setVisible(false);
+				JOptionPane.showMessageDialog(panel, "Clase creada exitosamente");
+				dialogo.dispose();
+			} catch (NumberFormatException ex) {
+				lblErrorMessage.setText("Se debe ingresar un numero entero.");
+				lblError.setVisible(true);
+				lblErrorMessage.setVisible(true);
+			} catch (GymException ex) {
+				lblErrorMessage.setText(ex.getMessage());
+				lblError.setVisible(true);
+				lblErrorMessage.setVisible(true);
 			}
 		});
 
@@ -193,17 +198,22 @@ public class VistaPrincipalGestionClases extends JFrame{
 
 		// Agrego updates a txtSede
 		txtSede.addActionListener(e -> {
-			String selectedSede = (String) txtSede.getSelectedItem();
+			String selectedSede = txtSede.getItemAt(txtSede.getSelectedIndex());
 			txtEjercicio.removeAllItems();
+			txtEmplazamiento.removeAllItems();
 
 			if (selectedSede != null && !selectedSede.equals("---")) {
 				ArrayList<String> ejercicios = controller.getListaEjercicios(selectedSede);
+				ArrayList<Emplazamiento> emplazamientos = controller.getEmplazamiento(selectedSede);
+
 				for (String ejercicio : ejercicios) {
-					System.out.println(ejercicio);
 					txtEjercicio.addItem(ejercicio);
 				}
+
+				for (Emplazamiento tipoEmplazamiento : emplazamientos) {
+					txtEmplazamiento.addItem(tipoEmplazamiento.toString());
+				}
 			}
-			txtEjercicio.addItem("---");
 		});
 
 
@@ -219,8 +229,8 @@ public class VistaPrincipalGestionClases extends JFrame{
 		panel.add(txtEmplazamiento);
 		panel.add(lblHorarioInicio);
 		panel.add(txtHorarioInicio);
-		panel.add(lblEsVirtual);
-		panel.add(txtEsVirtual);
+		panel.add(btnPresencial);
+		panel.add(btnVirtual);
 		panel.add(lblError);
 		panel.add(lblErrorMessage);
 		panel.add(btnAceptar);
@@ -232,11 +242,72 @@ public class VistaPrincipalGestionClases extends JFrame{
 		dialogo.pack();
 		dialogo.setLocationRelativeTo(this);
 		dialogo.setVisible(true);
-
-
-
-		JOptionPane.showMessageDialog(this, "Clase creada exitosamente");
     }
+
+	private void asignarArticulos(String sede, String idProfesor, String ejercicio, String fecha, String horarioInicio,
+								  String emplazamiento, boolean flagVirtual) {
+
+		JDialog dialogo = new JDialog(this, "Asignar Articulos", true);
+		dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		JPanel panel = new JPanel();
+		ArrayList<String[]> listaArticulos= controller.getListaArticulos().get(sede);
+		panel.setLayout(new GridLayout(2+listaArticulos.size(), 2));
+
+		JLabel lblArtTitulo = new JLabel("Articulos en Stock:");
+		JLabel lblEspacio = new JLabel(" ");
+		panel.add(lblArtTitulo);
+		panel.add(lblEspacio);
+
+		ArrayList<JCheckBox> checkBoxesArticulos = new ArrayList<>();
+
+		for (String[] articulo : listaArticulos){
+			JCheckBox checkBox = new JCheckBox(articulo[0] + ":" + articulo[1]);
+			panel.add(checkBox);
+			checkBoxesArticulos.add(checkBox);
+		}
+
+		JLabel lblError = new JLabel("ERROR");
+		JLabel lblErrorMessage = new JLabel("ERROR");
+		lblError.setForeground(Color.RED);
+		lblErrorMessage.setForeground(Color.RED);
+
+		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(e -> {
+			try {
+				ArrayList<String> articulosSeleccionados = new ArrayList<>();
+				for (JCheckBox check : checkBoxesArticulos)
+					if (check.isSelected())
+						articulosSeleccionados.add(check.getText());
+
+
+				controller.agregarClase(sede, idProfesor, ejercicio, null, fecha, horarioInicio,
+						emplazamiento, articulosSeleccionados, flagVirtual);
+				lblError.setVisible(false);
+				lblErrorMessage.setVisible(false);
+				dialogo.dispose();
+				JOptionPane.showMessageDialog(panel, "Clase creada exitosamente");
+			} catch ( Exception ex ) {
+				lblErrorMessage.setText(ex.getMessage());
+				lblError.setVisible(true);
+				lblErrorMessage.setVisible(true);
+			}
+		});
+
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(e -> dialogo.dispose());
+
+		panel.add(lblError);
+		panel.add(lblErrorMessage);
+		panel.add(btnAceptar);
+		panel.add(btnCancelar);
+		lblError.setVisible(false);
+		lblErrorMessage.setVisible(false);
+		dialogo.add(panel);
+		dialogo.pack();
+		dialogo.setLocationRelativeTo(this);
+		dialogo.setVisible(true);
+
+	}
 
 
 	private void cambiarEstadoClase() {
@@ -266,11 +337,11 @@ public class VistaPrincipalGestionClases extends JFrame{
 						controller.cambiarEstadoClase(clase[0],claseId,estado);
 					}
 
-				if (!flagFound) {throw new GymException("No existe la clase.");}
+				if (!flagFound) {throw new GymException("No existe la clase de ID " + claseId + ".");}
 				JOptionPane.showMessageDialog(null, "Estado de la clase cambiado a: " + estado);
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
 			ex.printStackTrace();
 		}
 
@@ -288,7 +359,6 @@ public class VistaPrincipalGestionClases extends JFrame{
 		int cantColumnas = columnas.length;
 
 		modelo.setColumnIdentifiers(columnas);
-
 		for (String[] infoClasePorSede : listaClasesPorSede) {
 			String[] fila = new String[cantColumnas+1];
 			fila[0] = infoClasePorSede[0];
@@ -302,6 +372,7 @@ public class VistaPrincipalGestionClases extends JFrame{
 			fila[8] = infoClasePorSede[8];
 			fila[9] = infoClasePorSede[9];
 			fila[10] = infoClasePorSede[10];
+			fila[11] = infoClasePorSede[11];
 			modelo.addRow(fila);
 		}
 
