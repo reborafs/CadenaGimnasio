@@ -17,7 +17,7 @@ public class Login extends JFrame{
 
 
     public Login() {
-        super("Login");
+        super("Login Gimnasio");
         this.controladorLogin = ControladorLogin.getInstance();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 300);
@@ -32,7 +32,7 @@ public class Login extends JFrame{
         gbc.insets = new Insets(5, 5, 5, 5);
 
         // Agregar el título
-        JLabel labelTitulo = new JLabel("GIMNASIO");
+        JLabel labelTitulo = new JLabel("SUPERTLON");
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 32));
         gbc.gridx = 0;
         gbc.gridy = 0;
