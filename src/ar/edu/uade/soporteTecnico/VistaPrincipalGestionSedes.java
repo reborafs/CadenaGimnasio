@@ -51,7 +51,7 @@ public class VistaPrincipalGestionSedes extends JFrame{
 		gbc.gridx = 7;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		JButton btnArticulos = new JButton("Gestion de Articulos");
+		JButton btnArticulos = new JButton("Gestion de Tipo de Articulos");
 		panelMenu.add(btnArticulos, gbc);
 
 		/* Agendar Sedes */
@@ -121,6 +121,9 @@ public class VistaPrincipalGestionSedes extends JFrame{
 
 		JLabel lblEjerciciosDisponibles = new JLabel("Ejercicios Disponibles");
 
+		JLabel lblEspacioVacio = new JLabel("   ");
+		JLabel lblEspacioVacio2 = new JLabel("   ");
+
 		panel.add(lblUbicacion);
 		panel.add(txtUbicacion);
 		panel.add(lblTipoNivel);
@@ -128,6 +131,7 @@ public class VistaPrincipalGestionSedes extends JFrame{
 		panel.add(lblCantEmplazamientos);
 		panel.add(txtCantEmplazamientos);
 		panel.add(lblEjerciciosDisponibles);
+		panel.add(lblEspacioVacio);
 
 		ArrayList<JCheckBox> checkBoxesEjercicios = new ArrayList<>();
 
@@ -137,6 +141,9 @@ public class VistaPrincipalGestionSedes extends JFrame{
 			checkBoxesEjercicios.add(checkBox);
 		}
 
+		if(checkBoxesEjercicios.size() % 2 == 1)
+			panel.add(lblEspacioVacio2);
+
 		JLabel lblAlquilerSede = new JLabel("Alquiler Sede");
 		JTextField txtAlquilerSede = new JTextField();
 
@@ -144,6 +151,8 @@ public class VistaPrincipalGestionSedes extends JFrame{
 		JLabel lblErrorMessage = new JLabel("ERROR");
 		lblError.setForeground(Color.RED);
 		lblErrorMessage.setForeground(Color.RED);
+
+
 
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(e -> {
@@ -154,17 +163,26 @@ public class VistaPrincipalGestionSedes extends JFrame{
 				ArrayList<String> ejerciciosDisponibles = new ArrayList<>();
 				double alquilerSede = Double.parseDouble(txtAlquilerSede.getText());
 
-				for (JCheckBox check : checkBoxesEjercicios)
-					if (check.isSelected())
-						ejerciciosDisponibles.add(check.getText());
+				boolean flag = false;
+				for (JCheckBox check : checkBoxesEjercicios){
 
+					if (check.isSelected()) {
+						ejerciciosDisponibles.add(check.getText());
+						flag = true;
+					}
+				}
+
+				if(!flag){
+					String error = "Debe completar todos los campos";
+					throw new Exception(error);
+				}
 
 				crearEmplazamientos(ubicacion, tipoNivel, cantEmplazamientos, ejerciciosDisponibles, alquilerSede);
 				lblError.setVisible(false);
 				lblErrorMessage.setVisible(false);
 				dialogo.dispose();
-			} catch ( Exception ex ) {
-				lblErrorMessage.setText(ex.getMessage());
+			} catch (Exception ex) {
+				lblErrorMessage.setText("Debe completar todos los campos");
 				lblError.setVisible(true);
 				lblErrorMessage.setVisible(true);
 			}

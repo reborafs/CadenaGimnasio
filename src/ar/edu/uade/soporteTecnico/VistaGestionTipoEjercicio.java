@@ -48,7 +48,7 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		gbc.gridx = 7;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		JButton btnArticulos = new JButton("Gestion de Articulos");
+		JButton btnArticulos = new JButton("Gestion de Tipo de Articulos");
 		panelMenu.add(btnArticulos, gbc);
 
 		/* Crear Profesor */
@@ -120,7 +120,7 @@ public class VistaGestionTipoEjercicio extends JFrame{
 		buttonGroup.add(btnPresencial);
 		buttonGroup.add(btnVirtual);
 
-		JLabel lblArticulos = new JLabel("Articulos Necesarios");
+		JLabel lblArticulos = new JLabel("Articulos Necesarios (№ id, № id)");
 		JTextField txtArticulos = new JTextField();
 
 		JLabel lblError = new JLabel("ERROR");
@@ -142,7 +142,7 @@ public class VistaGestionTipoEjercicio extends JFrame{
 				lblErrorMessage.setVisible(false);
 				dialogo.dispose();
 			} catch (Exception ex) {
-				lblErrorMessage.setText("Error.");
+				lblErrorMessage.setText("Error: Debe completar todos los campos.");
 				lblError.setVisible(true);
 				lblErrorMessage.setVisible(true);
 				return; // Exit the method without processing the information

@@ -46,7 +46,7 @@ public class VistaGestionUsuarios extends JFrame {
         gbc.gridx = 7;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        JButton btnArticulos = new JButton("Gestion de Articulos");
+        JButton btnArticulos = new JButton("Gestion de Tipo de Articulos");
         panelMenu.add(btnArticulos, gbc);
 
 		/* Crear Usuario */
@@ -438,7 +438,7 @@ public class VistaGestionUsuarios extends JFrame {
                 controller.eliminarUsuario(id);
                 dialogo.dispose(); // Cerrar el diálogo
             } catch (Exception ex) {
-                lblErrorMessage.setText(ex.getMessage());
+                lblErrorMessage.setText("Debe ingresar un ID valido.");
                 lblError.setVisible(true);
                 lblErrorMessage.setVisible(true);
             }
@@ -477,6 +477,12 @@ public class VistaGestionUsuarios extends JFrame {
 
         JLabel lblSedes = new JLabel("Sedes Asignadas:");
         panel.add(lblSedes);
+
+        JLabel lblEspacioVacio = new JLabel("   ");
+        panel.add(lblEspacioVacio);
+
+        JLabel lblEspacioVacio2 = new JLabel("   ");
+
         ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
 
         for (String sede : listaSedes) {
@@ -484,6 +490,9 @@ public class VistaGestionUsuarios extends JFrame {
             panel.add(checkBox);
             checkBoxes.add(checkBox);
         }
+
+        if(checkBoxes.size() % 2 == 1)
+            panel.add(lblEspacioVacio2);
 
         JLabel lblError = new JLabel("ERROR");
         JLabel lblErrorMessage = new JLabel("ERROR");
@@ -534,7 +543,7 @@ public class VistaGestionUsuarios extends JFrame {
         ArrayList<String[]> listaUsuarios = controller.getListaUsuarios();
 
         // Definicion de columnas
-        String[] columnas = {"ID","Tipo de Usuario","Nombre"};
+        String[] columnas = {"ID","Tipo de Usuario","Nombre", "Sedes Asignadas(Administrativo)", "Nivel de Cliente"};
         int cantColumnas = columnas.length;
 
         modelo.setColumnIdentifiers(columnas);
@@ -544,6 +553,8 @@ public class VistaGestionUsuarios extends JFrame {
             fila[0] = infoUsuario[0];
             fila[1] = infoUsuario[1];
             fila[2] = infoUsuario[2];
+            fila[3] = infoUsuario[3];
+            fila[4] = infoUsuario[4];
             modelo.addRow(fila);
         }
 
