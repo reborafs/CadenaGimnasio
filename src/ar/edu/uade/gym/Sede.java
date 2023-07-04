@@ -130,6 +130,11 @@ public class Sede {
 		validarYConfirmarClase(this.listaClases.get(idClase));
 	}
 
+	public void eliminarAlumno(int idClase, Cliente cliente) throws GymException {
+		this.listaClases.get(idClase).agregarAlumno(cliente, this.tipoNivel);
+		validarYConfirmarClase(this.listaClases.get(idClase));
+	}
+
 	public ArrayList<Clase> getClasesCliente(Cliente cliente) {
 		ArrayList<Clase> clasesAsignadas = new ArrayList<Clase>();
 		for (Clase clase: this.listaClases) {
@@ -188,7 +193,7 @@ public class Sede {
 		if (articulosClase.size() == 0) {
 			return true;
 		} else {
-			System.out.println("No se encuentran los articulos necesarios para confirmar esta clase.");
+			//System.out.println("No se encuentran los articulos necesarios para confirmar esta clase.");
 			return false;
 		}
 	}
@@ -258,11 +263,11 @@ public class Sede {
 	}
 
 	private void calcularDesgasteArticulos(Clase clase) {
-		System.out.println("PRE DESGASTE" + this.stockArticulos);
+		//System.out.println("PRE DESGASTE" + this.stockArticulos);
 		for (Articulo articulo : clase.getListaArticulos())
 			articulo.setDesgaste();
 
-		System.out.println("POST DESGASTE" + this.stockArticulos);
+		//System.out.println("POST DESGASTE" + this.stockArticulos);
 
 	}
 

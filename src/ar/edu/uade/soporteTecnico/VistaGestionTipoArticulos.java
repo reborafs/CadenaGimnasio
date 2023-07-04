@@ -1,5 +1,7 @@
 package ar.edu.uade.soporteTecnico;
 
+import ar.edu.uade.gym.GymException;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -11,7 +13,7 @@ public class VistaGestionTipoArticulos extends JFrame {
 	private ControladorSoporteTecnico controller;
 
 	public VistaGestionTipoArticulos() {
-		super("Soporte Tecnico: Gestion de articulos");
+		super("Soporte Tecnico: Gestion de tipos de articulos");
 		this.controller = ControladorSoporteTecnico.getInstance();
 		this.setLayout(new BorderLayout());
 
@@ -47,15 +49,22 @@ public class VistaGestionTipoArticulos extends JFrame {
 		gbc.gridx = 7;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
-		JButton btnArticulos = new JButton("Gestion de Articulos");
+		JButton btnArticulos = new JButton("Gestion de Tipo de Articulos");
 		panelMenu.add(btnArticulos, gbc);
 
-		/* Incorporar Articulos */
+		/* Agregar Tipo de Articulos */
 		gbc.gridx = 3;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
-		JButton btnIncorporar = new JButton("Incorporar Articulos");
-		panelMenu.add(btnIncorporar, gbc);
+		JButton btnAgregar = new JButton("Agregar Tipo de Articulo");
+		panelMenu.add(btnAgregar, gbc);
+
+		/* Eliminar Tipo de Articulos */
+		gbc.gridx = 5;
+		gbc.gridy = 1;
+		gbc.gridwidth = 2;
+		JButton btnEliminar = new JButton("Eliminar Tipo de Articulo");
+		panelMenu.add(btnEliminar, gbc);
 
 		this.setSize(800, 600);
 		setLocationRelativeTo(null);
@@ -64,7 +73,8 @@ public class VistaGestionTipoArticulos extends JFrame {
 
 
 		/* ASIGNACION DE LOS BOTONES */
-		btnIncorporar.addActionListener(actionEvent -> mostrarDialogoIncorporarArticulos());
+		btnAgregar.addActionListener(actionEvent -> mostrarDialogoAgregarArticulos());
+		btnEliminar.addActionListener(actionEvent -> mostrarDialogoEliminarArticulos());
 		btnUsuarios.addActionListener(actionEvent -> abrirVistaUsuarios());
 		btnSedes.addActionListener(actionEvent -> abrirVistaClases());
 		btnProfesor.addActionListener(actionEvent -> abrirVistaProfesores());
@@ -87,8 +97,8 @@ public class VistaGestionTipoArticulos extends JFrame {
 		controller.abrirVistaUsuarios();
 	}
 
-	private void mostrarDialogoIncorporarArticulos() {
-        JDialog dialogo = new JDialog(this, "Incorporar Articulos", true);
+	private void mostrarDialogoAgregarArticulos() {
+        JDialog dialogo = new JDialog(this, "Agregar Tipo de Articulos", true);
         dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
@@ -108,7 +118,7 @@ public class VistaGestionTipoArticulos extends JFrame {
 		JTextField txtDescripcion = new JTextField();
 
 		JLabel lblUsosAmortizacion = new JLabel("Cantidad de Usos/Dias hasta renovar:");
-		JTextField txtUsosAmortizacion = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		JTextField txtUsosAmortizacion = new JTextField();
 
 		JRadioButton btnPorUsos = new JRadioButton("Amortizacion por Usos");
 		JRadioButton btnPorFecha = new JRadioButton("Amortizacion por Fecha");
@@ -132,6 +142,12 @@ public class VistaGestionTipoArticulos extends JFrame {
 				String descripcion = txtDescripcion.getText();
 				int usosAmortizacion = Integer.parseInt(txtUsosAmortizacion.getText());
 				boolean flagFecha = btnPorFecha.isSelected();
+
+				if(nombre.isEmpty() || marca.isEmpty() || descripcion.isEmpty() || usosAmortizacion == 0){
+					String error = "Debe completar todos los campos";
+					throw new IllegalArgumentException(error);
+				}
+
 				// Lógica para procesar la información capturada
 				controller.agregarTipoArticulo(nombre, categoriaArticulo, marca, descripcion, usosAmortizacion, btnPorUsos.isSelected());
 
@@ -140,10 +156,15 @@ public class VistaGestionTipoArticulos extends JFrame {
 				lblErrorMessage.setVisible(false);
 				dialogo.dispose();
 			} catch (NumberFormatException ex) {
-				lblErrorMessage.setText("Se debe ingresar un numero entero.");
+				lblErrorMessage.setText("Se debe ingresar un número entero en el campo \"Cantidad de Usos/Dias hasta renovar\".");
 				lblError.setVisible(true);
 				lblErrorMessage.setVisible(true);
-				return; // Exit the method without processing the information
+				return; // Salir del método sin procesar la información
+			} catch (IllegalArgumentException ex) {
+				lblErrorMessage.setText(ex.getMessage());
+				lblError.setVisible(true);
+				lblErrorMessage.setVisible(true);
+				throw new RuntimeException(ex);
 			}
 		});
 
@@ -176,6 +197,54 @@ public class VistaGestionTipoArticulos extends JFrame {
         dialogo.setVisible(true);
 
     }
+
+	private void mostrarDialogoEliminarArticulos() {
+		JDialog dialogo = new JDialog(this, "Eliminar Tipo de Articulos", true);
+		dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(3, 2));
+		JLabel lblIdArticulo = new JLabel("ID del articulo:");
+		JTextField txtIdArticulo = new JTextField();
+
+		JLabel lblError = new JLabel("ERROR");
+		JLabel lblErrorMessage = new JLabel("ERROR");
+		lblError.setForeground(Color.RED);
+		lblErrorMessage.setForeground(Color.RED);
+
+		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(e -> {
+			try {
+				int idArticulo = Integer.parseInt(txtIdArticulo.getText());
+				controller.eliminarTipoArticulo(idArticulo);
+				dialogo.dispose();
+			} catch (Exception ex) {
+				lblErrorMessage.setText(ex.getMessage());
+				lblError.setVisible(true);
+				lblErrorMessage.setVisible(true);
+			}
+		});
+
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(e -> dialogo.dispose());
+
+
+		panel.add(lblIdArticulo);
+		panel.add(txtIdArticulo);
+		panel.add(lblError);
+		panel.add(lblErrorMessage);
+		panel.add(btnAceptar);
+		panel.add(btnCancelar);
+		lblError.setVisible(false);
+		lblErrorMessage.setVisible(false);
+
+		dialogo.add(panel);
+		//dialogo.setSize(800, 300);
+		dialogo.pack();
+		dialogo.setLocationRelativeTo(this);
+		dialogo.setVisible(true);
+
+	}
 
 	private void mostrarTablaTiposArticulos() {
 		JTable tabla = new JTable();

@@ -14,6 +14,8 @@ import ar.edu.uade.usuarios.Administrativo;
 import ar.edu.uade.gym.articulos.Articulo;
 import ar.edu.uade.gym.articulos.TipoArticulo;
 
+import static ar.edu.uade.gym.EstadoClase.FINALIZADA;
+
 public class CadenaGimnasio {
     public CadenaGimnasio(String nombre, ArrayList<SoporteTecnico> usuariosSoporteTecnico,
 			ArrayList<Administrativo> usuariosAdministrativo, ArrayList<Cliente> usuariosClientes,
@@ -445,7 +447,7 @@ public class CadenaGimnasio {
 		HashMap<String,ArrayList<String[]>> articulosSede= new HashMap<String,ArrayList<String[]>>();
 		for (Sede sede: sedes ) {
 			ArrayList<String[]> listaArticulos = new ArrayList<>();
-			System.out.println(sede.getStockArticulos());
+			//System.out.println(sede.getStockArticulos());
 			for(Articulo articulo: sede.getStockArticulos()) {
 				listaArticulos.add(articulo.getInfo());
 			}
@@ -768,7 +770,7 @@ public class CadenaGimnasio {
 			this.agendarClase(sedePalermo, profesor3, ejercicio7, listaAlumnos2, LocalDate.of(2023,7,1), LocalTime.of(10,0,0), emplazamiento, listaArticulosPalermo, esVirtual);
 			this.agendarClase(sedePalermo, profesor3, ejercicio11, listaAlumnos2, LocalDate.of(2023,7,2), LocalTime.of(15,0,0), emplazamiento, listaArticulosPalermo, true);
 
-
+			//sede
 
 			//ALMACENAR CLASE EN BBDD
 			ArrayList<Clase> listaClases = sedeBelgrano.getListaClases();
@@ -842,6 +844,39 @@ public class CadenaGimnasio {
 		sede.agregarAlumno(idClase, cliente);
 	}
 
+//	public void eliminarAlumnoClase(Usuario user) throws GymException {
+//		int id = user.getID();
+//		if(user.soyCliente()){
+//			for(Sede sede: sedes){
+//				for(Clase clase : sede.getListaClases()){
+//					//System.out.println("antes"+clase.getListaAlumnos());
+//					int i = 0;
+//					for(Cliente cliente : clase.getListaAlumnos()){
+//						if(user.soyCliente() && Objects.equals(user.getNombre(), cliente.getNombre()) && Objects.equals(cliente.getContrasenia(), cliente.getContrasenia()) && !clase.getEstado().equals(FINALIZADA)){
+//							//System.out.println(clase.getListaAlumnos().size());
+//							clase.getListaAlumnos().remove(1);
+//							System.out.println("indice i: " +i+ " - alumno: "+clase.getListaAlumnos());
+//						}
+//						i++;
+//					}
+////					for(Cliente cliente : usuariosClientes){
+////						if(user.soyCliente() && Objects.equals(user.getNombre(), cliente.getNombre()) && Objects.equals(cliente.getContrasenia(), cliente.getContrasenia()) && !clase.getEstado().equals(FINALIZADA)){
+////							clase.getListaAlumnos().remove(cliente.getID());
+////						}
+////					}
+//
+//					//System.out.println("despues"+clase.getListaAlumnos());
+////					for(Cliente cliente : clase.getListaAlumnos()){
+////						if(cliente.getID() == user.getID()){
+////							clase.getListaAlumnos().remove(cliente.getID());
+////
+////						}
+////					}
+//				}
+//			}
+//		}
+//	}
+
 
 
 	public ArrayList<String[]> getListaClientes() {
@@ -887,7 +922,7 @@ public class CadenaGimnasio {
 
 		// Si el profesor tiene clases agendadas o confirmadas no puede ser eliminado.
 		for (Clase clase : listaClasesAsignadas)
-			if (!(clase.getEstado() == EstadoClase.FINALIZADA))
+			if (!(clase.getEstado() == FINALIZADA))
 				throw new GymException("No se puede eliminar un profesor con clases agendadas.");
 
 		this.usuariosProfesores.remove(profesor);
@@ -928,10 +963,26 @@ public class CadenaGimnasio {
 		ArrayList<Usuario> usuarios = getListaUsuarios();
 		ArrayList<String[]> listaStringUsuarios = new ArrayList<>();
 		for (Usuario usuario : usuarios) {
-			String[] info = new String[3];
+			String[] info = new String[5];
 			info[0] = String.valueOf(usuario.getID());
 			info[1] = usuario.getStringTipoUsuario();
 			info[2] = usuario.getNombre();
+			String sedeNombre = "";
+			for(Administrativo admin : usuariosAdministrativo){
+				if(usuario.soyAdministrativo() && usuario.getNombre() == admin.getNombre() && usuario.getContrasenia() == admin.getContrasenia()){
+					info[3] = admin.getSedesAsignadas().toString();
+				}
+			}
+			if (!usuario.soyAdministrativo()) {
+				info[3] = "";
+			}
+			for(Cliente cliente : usuariosClientes){
+				if(usuario.soyCliente()){
+					info[4] = cliente.getTipoNivel().toString();
+				} else {
+					info[4] = "";
+				}
+			}
 			listaStringUsuarios.add(info);
 		}
 		return listaStringUsuarios;
@@ -969,7 +1020,7 @@ public class CadenaGimnasio {
 
 		ArrayList<Ejercicio> listaEjercicios = new ArrayList<>();
 		for (String nombreEjercicio : ejerciciosDisponibles) {
-			System.out.println("QUIERO AGREGAR AL EJ " + nombreEjercicio);
+			//System.out.println("QUIERO AGREGAR AL EJ " + nombreEjercicio);
 			listaEjercicios.add(this.getEjercicio(nombreEjercicio));
 		}
 		if (!sedeYaExiste(ubicacion)) {
@@ -1010,14 +1061,27 @@ public class CadenaGimnasio {
 
 	public void eliminarSede(String ubicacion) throws GymException {
 		Sede sede = getSede(ubicacion);
-		if (sede == null)
+		if (sede == null) {
 			throw new GymException("No existe la sede.");
-		else
+		} else{
+			for(Clase clase: sede.getListaClases()){
+				if(clase.getEstado() == FINALIZADA){
+					throw new GymException("No se puede eliminar la sede porque aun tiene clases sin finalizar.");
+				}
+			}
 			this.sedes.remove(sede);
+		}
 	}
 
 	public void eliminarEjercicio(String nombreEjercicio) throws GymException {
 		Ejercicio ejercicio = getEjercicio(nombreEjercicio);
+		for(Sede sede: sedes){
+			for(Clase clase :sede.getListaClases()){
+				if(clase.getEjercicio().getNombre().equals(nombreEjercicio) && clase.getEstado() != FINALIZADA){
+					throw new GymException("No puede borrar el ejercicio porque aun hay clases sin finalizar con este ejercicio");
+				}
+			}
+		}
 		if (ejercicio == null)
 			throw new GymException("No existe el ejercicio.");
 		else
@@ -1040,5 +1104,23 @@ public class CadenaGimnasio {
 	public boolean validarNivelAlumnoSede(String sedeNombre, Cliente usuario) {
 		Sede sede = getSede(sedeNombre);
 		return (usuario.getTipoNivel().getValue() >= sede.getTipoNivel().getValue());
+	}
+
+	public void eliminarTipoArticulo(int idArticulo) throws GymException {
+		for(Ejercicio ejercicio: ejercicios){
+			for(TipoArticulo tipoArticulo : ejercicio.getArticuloNecesarios()){
+				if(tipoArticulo.getID() == idArticulo){
+					throw new GymException("No se puede borrar el tipo de articulo porque hay un ejercicio que lo usa.");
+				}
+			};
+		}
+		for(Sede sede: sedes){
+			for(Articulo articulo: sede.getStockArticulos()){
+				if(articulo.getTipoArticulo() == catalogoDeArticulos.get(idArticulo)){
+					throw new GymException("No se puede borrar el tipo de articulo porque hay stock de ese articulo en la sede " + sede.getUbicacion() + ".");
+				}
+			}
+		}
+		this.catalogoDeArticulos.remove(idArticulo);
 	}
 }

@@ -193,6 +193,10 @@ public class ControladorSoporteTecnico {
     public ArrayList<String> getListaTiposEmplazamientos() {
         return gym.getListaTiposEmplazamientos();
     }
+
+    public void eliminarTipoArticulo(int idArticulo) throws GymException {
+        gym.eliminarTipoArticulo(idArticulo);
+    }
 }
 
 
