@@ -4,6 +4,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
+
 import ar.edu.uade.gym.articulos.Articulo;
 import ar.edu.uade.gym.articulos.TipoArticulo;
 import ar.edu.uade.usuarios.Cliente;
@@ -16,7 +18,7 @@ public class Sede {
     private ArrayList<Articulo> stockArticulos;
     private ArrayList<Emplazamiento> emplazamientosDisponibles;
     private ArrayList<Clase> listaClases;
-    private ArrayList<Ejercicio> ejerciciosDisponibles;
+    private HashSet<Ejercicio> ejerciciosDisponibles;
 	private double alquilerSede;
 
 
@@ -35,9 +37,9 @@ public class Sede {
         	this.emplazamientosDisponibles = emplazamientos;
 
         if (ejercicios == null){
-			this.ejerciciosDisponibles = new ArrayList<>();}
+			this.ejerciciosDisponibles = new HashSet<>();}
         else
-        	this.ejerciciosDisponibles = ejercicios;
+        	this.ejerciciosDisponibles = new HashSet<>(ejercicios);
 
     }
 
@@ -56,7 +58,7 @@ public class Sede {
 		// Chequear que el profesor no tenga otra clase en el mismo horario.
 		for (Clase clase: listaClasesMismoDia) {
 			Profesor profeAsignado = clase.getProfesor();
-			if (profeAsignado.equals(profesor) && clase.getFecha() == clase.getFecha()
+			if (profeAsignado.equals(profesor) && clase.getFecha() == claseNueva.getFecha()
 					&& clase.getHorarioInicio() == claseNueva.getHorarioInicio()) {
 				throw new GymException("El profesor tiene una clase asignada en el mismo horario.");
 			}
@@ -331,7 +333,7 @@ public class Sede {
 	 *                    GETTERS / SETTERS
 	 * =======================================================
 	 */
-	public ArrayList<Ejercicio> getEjerciciosDisponibles() {
+	public HashSet<Ejercicio> getEjerciciosDisponibles() {
 		return this.ejerciciosDisponibles;
 	}
     

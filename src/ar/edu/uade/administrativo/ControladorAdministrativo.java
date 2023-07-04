@@ -132,19 +132,22 @@ public class ControladorAdministrativo {
     }
 
     public void agregarClase(String sede, String idProfesor, String ejercicio, ArrayList<Cliente> listaAlumnos, String fecha,
-                             String horarioInicio, String emplazamiento, ArrayList<Articulo> listaArticulos, boolean esVirtual) throws GymException {
+                             String horarioInicio, String emplazamiento, ArrayList<String> listaArticulos, boolean esVirtual) throws GymException {
         Sede sedeFormato = gym.getSede(sede);
         Profesor profesorFormato = gym.getProfesor(Integer.valueOf(idProfesor));
         Ejercicio ejercicioFormato = gym.getEjercicio(ejercicio);
         ArrayList<Cliente> listaAlumnosFormato = listaAlumnos;
         DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate fechaFormato = LocalDate.parse(fecha,formatoFecha);
-        DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH");
         LocalTime horarioInicioFormato = LocalTime.parse(horarioInicio, formatoHora);
         Emplazamiento emplazamientoFormato = getEmplazamiento(sedeFormato, emplazamiento);
-        ArrayList<Articulo> listaArticulosFormato = null;
-        //Boolean esVirtual = false;
 
+        ArrayList<Articulo> listaArticulosFormato = new ArrayList<>();
+        for (String art : listaArticulos) {
+            String id = art.split(":")[0];
+            gym.getArticulo(Integer.parseInt(id));
+        }
 
         gym.agendarClase(sedeFormato, profesorFormato, ejercicioFormato, listaAlumnosFormato, fechaFormato, horarioInicioFormato, emplazamientoFormato, listaArticulosFormato, esVirtual);
     }
