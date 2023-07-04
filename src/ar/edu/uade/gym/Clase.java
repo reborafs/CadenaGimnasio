@@ -190,7 +190,7 @@ public class Clase {
 	}
 
 	public ArrayList<Articulo> getListaArticulos() {
-		return listaArticulos;
+		return this.listaArticulos;
 	}
 
 	public int getClaseID() {

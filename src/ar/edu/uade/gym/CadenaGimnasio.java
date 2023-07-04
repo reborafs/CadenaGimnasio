@@ -2,7 +2,6 @@ package ar.edu.uade.gym;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import ar.edu.uade.gym.articulos.CategoriaArticulo;
@@ -446,7 +445,8 @@ public class CadenaGimnasio {
 		HashMap<String,ArrayList<String[]>> articulosSede= new HashMap<String,ArrayList<String[]>>();
 		for (Sede sede: sedes ) {
 			ArrayList<String[]> listaArticulos = new ArrayList<>();
-			for(Articulo articulo: sede.getListaArticulos()) {
+			System.out.println(sede.getStockArticulos());
+			for(Articulo articulo: sede.getStockArticulos()) {
 				listaArticulos.add(articulo.getInfo());
 			}
 			articulosSede.put(sede.getUbicacion(),listaArticulos);
@@ -456,7 +456,7 @@ public class CadenaGimnasio {
 
 	public Articulo getArticulo(int id) throws GymException{
 		for(Sede sede : getListaSedes()) {
-			for (Articulo articulo : sede.getListaArticulos())
+			for (Articulo articulo : sede.getStockArticulos())
 				if (id == articulo.getID())
 					return articulo;
 		}
@@ -465,7 +465,7 @@ public class CadenaGimnasio {
 
 	public void darDeBajaArticulo(int id) {
 		for(Sede sede : getListaSedes()) {
-			for (Articulo articulo : sede.getListaArticulos())
+			for (Articulo articulo : sede.getStockArticulos())
 				if (id == articulo.getID()){
 					sede.darDeBajaArticulo(articulo);
 				}
@@ -563,10 +563,10 @@ public class CadenaGimnasio {
 			 * =====================================================*/
 			ArrayList<Usuario> usuariosNuevos = new ArrayList<>();
 			usuariosNuevos.add(new Administrativo("admin","admin"));
-			usuariosNuevos.add(new Administrativo("admin2","admin"));
-			usuariosNuevos.add(new Administrativo("admin3","admin"));
-			usuariosNuevos.add(new Administrativo("admin4","admin"));
-			usuariosNuevos.add(new Administrativo("admin5","admin"));
+			usuariosNuevos.add(new Administrativo("adminPalermo","admin"));
+			usuariosNuevos.add(new Administrativo("adminBelgrano","admin"));
+			usuariosNuevos.add(new Administrativo("adminCaballito","admin"));
+			usuariosNuevos.add(new Administrativo("admin1","admin"));
 
 			usuariosNuevos.add(new Cliente("cliente","cliente", TipoNivel.PLATINUM));
 			usuariosNuevos.add(new Cliente("cliente2","cliente", TipoNivel.ORO));
@@ -605,6 +605,9 @@ public class CadenaGimnasio {
 			asignarSede(usuariosAdministrativo.get(0).getID(), sedeBelgrano.getUbicacion());
 			asignarSede(usuariosAdministrativo.get(0).getID(), sedeCaballito.getUbicacion());
 			asignarSede(usuariosAdministrativo.get(0).getID(), sedePalermo.getUbicacion());
+			asignarSede(usuariosAdministrativo.get(1).getID(), sedePalermo.getUbicacion());
+			asignarSede(usuariosAdministrativo.get(2).getID(), sedeBelgrano.getUbicacion());
+			asignarSede(usuariosAdministrativo.get(3).getID(), sedeCaballito.getUbicacion());
 
 
 			/* =======================================================
@@ -746,12 +749,13 @@ public class CadenaGimnasio {
 			LocalDate fecha = LocalDate.now();
 			ArrayList<Emplazamiento> listaEmplazamientos = this.getListaEmplazamientos(sedeBelgrano, TipoEmplazamiento.SALON);
 			Emplazamiento emplazamiento = listaEmplazamientos.get(0);
-			ArrayList<Articulo> listaArticulosBelgrano = sedeBelgrano.getListaArticulos();
-			ArrayList<Articulo> listaArticulosCaballito = sedeCaballito.getListaArticulos();
-			ArrayList<Articulo> listaArticulosPalermo = sedePalermo.getListaArticulos();
+			ArrayList<Articulo> listaArticulosBelgrano = sedeBelgrano.getStockArticulos();
+			ArrayList<Articulo> listaArticulosCaballito = sedeCaballito.getStockArticulos();
+			ArrayList<Articulo> listaArticulosPalermo = sedePalermo.getStockArticulos();
 			boolean esVirtual = false;
-			//System.out.print("listaAlumnos "+listaAlumnos.toString()+" \n");
-			//System.out.print("listaAlumnos2 "+listaAlumnos2.toString()+" \n");
+			//System.out.print("listaArticulosBelgrano "+ listaArticulosBelgrano.toString()+" \n");
+			//System.out.print("listaArticulosCaballito "+ listaArticulosCaballito.toString()+" \n");
+			//System.out.print("listaArticulosPalermo "+ listaArticulosPalermo.toString()+" \n");
 			this.agendarClase(sedeBelgrano, profesor2, ejercicio, listaAlumnos2,    fecha.plusDays(0), LocalTime.of(19,0,0), emplazamiento, listaArticulosBelgrano, esVirtual);
 			this.agendarClase(sedeBelgrano, profesor2, ejercicio8, listaAlumnos,   fecha.plusDays(1), LocalTime.of(12,0,0), emplazamiento, listaArticulosBelgrano, true);
 			this.agendarClase(sedeBelgrano, profesor, ejercicio9, listaAlumnos,   fecha.plusDays(2), LocalTime.of(21,0,0), emplazamiento, listaArticulosBelgrano, esVirtual);
@@ -770,7 +774,16 @@ public class CadenaGimnasio {
 			ArrayList<Clase> listaClases = sedeBelgrano.getListaClases();
 			Clase clase = listaClases.get(0);
 			this.finalizarClase(sedeBelgrano, clase);
-			
+
+
+
+			//ArrayList<Articulo> listaArticulosBelgrano1 = sedeBelgrano.getStockArticulos();
+			//ArrayList<Articulo> listaArticulosCaballito1 = sedeCaballito.getStockArticulos();
+			//ArrayList<Articulo> listaArticulosPalermo1 = sedePalermo.getStockArticulos();
+			//System.out.print("listaArticulosBelgrano1 "+ listaArticulosBelgrano1.toString()+" \n");
+			//System.out.print("listaArticulosCaballito1 "+ listaArticulosCaballito1.toString()+" \n");
+			//System.out.print("listaArticulosPalermo1 "+ listaArticulosPalermo1.toString()+" \n");
+
 			ArrayList<Clase> clasesVirtuales = this.getClasesVirtualesAlmacenadas();
 			
 
