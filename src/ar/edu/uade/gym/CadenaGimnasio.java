@@ -889,7 +889,14 @@ public class CadenaGimnasio {
 
     public void eliminarCliente(int id) throws GymException {
 		Cliente cliente = getCliente(id);
+		//Se borra de cadena gym
 		this.usuariosClientes.remove(cliente);
+
+		//Se borra de las clases
+		for (Sede sede : sedes) {
+			for (Clase clase : sede.getListaClases())
+				clase.getListaAlumnos().remove(cliente);
+		}
     }
 
 	public void modificarCliente(int id, String nombre, String contrasenia, String nivel) throws GymException {
