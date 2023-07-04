@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.swing.*;
 
@@ -91,8 +92,8 @@ public class ControladorCliente {
         HashMap<String, ArrayList<String>> ejerciciosPorSede = new HashMap<String, ArrayList<String>>();
         ArrayList<Sede> sedes = gym.getListaSedes();
         for(Sede sede : sedes){
-            ArrayList<Ejercicio> ejercicios = sede.getEjerciciosDisponibles();
-            System.out.print("aqui -->" +ejercicios.toString());
+            HashSet<Ejercicio> ejercicios = sede.getEjerciciosDisponibles();
+            //System.out.print("aqui -->" +ejercicios.toString());
             ArrayList<String> ejerciciosDisponibles = new ArrayList<>();
             for(Ejercicio ejercicio: ejercicios) {
                 if (ejercicio != null) {

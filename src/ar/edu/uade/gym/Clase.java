@@ -222,7 +222,7 @@ public class Clase {
 		array.add(String.valueOf(listaAlumnos.size()));
 		array.add(emplazamiento.getTipoEmplazamiento().toString());
 		array.add(String.valueOf(listaArticulos.size()));
-		if (esVirtual) {array.add("Si");} else {array.add("no");};
+		if (esVirtual) {array.add("Si");} else {array.add("No");};
 
 		return array;
 	}

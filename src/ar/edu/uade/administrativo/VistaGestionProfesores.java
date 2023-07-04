@@ -1,5 +1,7 @@
 package ar.edu.uade.administrativo;
 
+import ar.edu.uade.gym.GymException;
+
 import java.awt.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -138,12 +140,16 @@ public class VistaGestionProfesores extends JFrame{
 				lblError.setVisible(false);
 				lblErrorMessage.setVisible(false);
 				dialogo.dispose();
-			} catch (Exception ex) {
-				lblErrorMessage.setText("Error.");
+			} catch (NumberFormatException ex) {
+				lblErrorMessage.setText("El sueldo no es valido.");
 				lblError.setVisible(true);
 				lblErrorMessage.setVisible(true);
-				return; // Exit the method without processing the information
+			} catch (GymException ex) {
+				lblErrorMessage.setText(ex.getMessage());
+				lblError.setVisible(true);
+				lblErrorMessage.setVisible(true);
 			}
+
 		});
 
 		JButton btnCancelar = new JButton("Cancelar");
@@ -190,8 +196,12 @@ public class VistaGestionProfesores extends JFrame{
 			try {
 				int id = Integer.parseInt(txtID.getText());
 				controller.eliminarProfesor(id);
-				dialogo.dispose(); // Cerrar el diálogo
-			} catch (Exception ex) {
+				dialogo.dispose();
+			} catch (NumberFormatException ex) {
+				lblErrorMessage.setText("El numero no es valido.");
+				lblError.setVisible(true);
+				lblErrorMessage.setVisible(true);
+			} catch (GymException ex) {
 				lblErrorMessage.setText(ex.getMessage());
 				lblError.setVisible(true);
 				lblErrorMessage.setVisible(true);
@@ -233,7 +243,7 @@ public class VistaGestionProfesores extends JFrame{
 		JTextField txtContrasena = new JTextField();
 
 		JLabel lblSueldo = new JLabel("Sueldo:");
-		JTextField txtSueldo = new JTextField();
+		JTextField txtSueldo = new JFormattedTextField(NumberFormat.getIntegerInstance());
 
 		JLabel lblError = new JLabel("ERROR");
 		JLabel lblErrorMessage = new JLabel("ERROR");
@@ -246,8 +256,7 @@ public class VistaGestionProfesores extends JFrame{
 				int id = Integer.parseInt(txtID.getText());
 				String nombre = txtNombre.getText();
 				String contrasena = txtContrasena.getText();
-				Double sueldo = Double.valueOf(txtSueldo.getText());
-				System.out.print(sueldo);
+				String sueldo = txtSueldo.getText();
 				controller.modificarProfesor(id,nombre,contrasena,sueldo);
 				dialogo.dispose(); // Cerrar el diálogo
 			} catch (Exception ex) {
@@ -256,6 +265,7 @@ public class VistaGestionProfesores extends JFrame{
 				lblErrorMessage.setVisible(true);
 			}
 		});
+
 
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(e -> dialogo.dispose());

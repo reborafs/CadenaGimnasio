@@ -71,7 +71,7 @@ public class VistaGestionArticulos extends JFrame {
 		gbc.gridx = 5;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
-		JButton btnDesincorporar = new JButton("Desincorporar Articulos");
+		JButton btnDesincorporar = new JButton("Dar de baja Articulos");
 		panelMenu.add(btnDesincorporar, gbc);
 
 		this.setSize(800, 600);
@@ -125,7 +125,7 @@ public class VistaGestionArticulos extends JFrame {
 		for (String[] tipoArticulo : controller.getListaTiposArticulos())
 			txtTipoArticulo.addItem(tipoArticulo[1]);
 
-		JLabel lblPrecio = new JLabel("Precio:");
+		JLabel lblPrecio = new JLabel("Precio unitario:");
 		JTextField txtPrecio = new JTextField();
 
 		JLabel lblFechaCompra = new JLabel("Fecha de la compra (dd-MM-yyyy):");
@@ -198,23 +198,32 @@ public class VistaGestionArticulos extends JFrame {
 		HashMap<String,ArrayList<String[]>> listaArticulosSede = controller.getListaArticulos();
 
 		// Definicion de columnas
-		String[] columnas = {"ID", "Sede","tipoArticulo","Fecha Compra","Fecha Fabricacion","Usos"};
+		String[] columnas = {"ID", "Sede","tipoArticulo","Fecha Compra","Fecha Fabricacion","Usos", "Esta desgastado?",
+				"Forma Amortizacion", "Cantidad"};
 		int cantColumnas = columnas.length;
 
 		modelo.setColumnIdentifiers(columnas);
 
 		for(String sede : listaArticulosSede.keySet()) {
 			for(String[] infoTipoArticulo: listaArticulosSede.get(sede)) {
-				if(infoTipoArticulo[5].equals("false")) {
-					String[] fila = new String[cantColumnas + 1];
-					fila[0] = infoTipoArticulo[0];
-					fila[1] = sede;
-					fila[2] = infoTipoArticulo[1];
-					fila[3] = infoTipoArticulo[2];
-					fila[4] = infoTipoArticulo[3];
-					fila[5] = infoTipoArticulo[4];
-					modelo.addRow(fila);
-				}
+				String[] fila = new String[cantColumnas + 1];
+				fila[0] = infoTipoArticulo[0];
+				fila[1] = sede;
+				fila[2] = infoTipoArticulo[1];
+				fila[3] = infoTipoArticulo[2];
+				fila[4] = infoTipoArticulo[3];
+				fila[5] = infoTipoArticulo[4];
+				if (infoTipoArticulo[5].equals("false")) {fila[6] = "No";}
+				else{fila[6] = "Si";}
+				fila[7] = infoTipoArticulo[6];
+
+				if (infoTipoArticulo[6].equals("FECHA_FABRICACION")) {fila[7] = "Por Fecha";}
+				else{fila[7] = "Por usos";}
+
+				if (infoTipoArticulo[6].equals("FECHA_FABRICACION")) {fila[8] = infoTipoArticulo[7] + " dias.";}
+				else{fila[8] = infoTipoArticulo[7] + " usos.";}
+				modelo.addRow(fila);
+
 			}
 		}
 
@@ -231,7 +240,7 @@ public class VistaGestionArticulos extends JFrame {
 
 	private void eliminarArticulos() {
 		// Implementación de la funcionalidad de creación de cliente
-		JDialog dialogo = new JDialog(this, "Eliminar Articulo", true);
+		JDialog dialogo = new JDialog(this, "Dar de Baja Articulo", true);
 		dialogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JPanel panel = new JPanel();

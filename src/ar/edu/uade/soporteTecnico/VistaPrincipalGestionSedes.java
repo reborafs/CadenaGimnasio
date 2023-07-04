@@ -129,12 +129,12 @@ public class VistaPrincipalGestionSedes extends JFrame{
 		panel.add(txtCantEmplazamientos);
 		panel.add(lblEjerciciosDisponibles);
 
-		ArrayList<JCheckBox> checkBoxesEjecicios = new ArrayList<>();
+		ArrayList<JCheckBox> checkBoxesEjercicios = new ArrayList<>();
 
 		for (String sede : listaEjercicios) {
 			JCheckBox checkBox = new JCheckBox(sede);
 			panel.add(checkBox);
-			checkBoxesEjecicios.add(checkBox);
+			checkBoxesEjercicios.add(checkBox);
 		}
 
 		JLabel lblAlquilerSede = new JLabel("Alquiler Sede");
@@ -154,12 +154,11 @@ public class VistaPrincipalGestionSedes extends JFrame{
 				ArrayList<String> ejerciciosDisponibles = new ArrayList<>();
 				double alquilerSede = Double.parseDouble(txtAlquilerSede.getText());
 
-				for (JCheckBox check : checkBoxesEjecicios)
+				for (JCheckBox check : checkBoxesEjercicios)
 					if (check.isSelected())
 						ejerciciosDisponibles.add(check.getText());
 
 
-				// Lógica para procesar la información capturada
 				crearEmplazamientos(ubicacion, tipoNivel, cantEmplazamientos, ejerciciosDisponibles, alquilerSede);
 				lblError.setVisible(false);
 				lblErrorMessage.setVisible(false);
