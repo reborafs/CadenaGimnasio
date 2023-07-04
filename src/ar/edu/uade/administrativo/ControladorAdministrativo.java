@@ -148,7 +148,6 @@ public class ControladorAdministrativo {
             String id = art.split(":")[0];
             gym.getArticulo(Integer.parseInt(id));
         }
-
         gym.agendarClase(sedeFormato, profesorFormato, ejercicioFormato, listaAlumnosFormato, fechaFormato, horarioInicioFormato, emplazamientoFormato, listaArticulosFormato, esVirtual);
     }
 
