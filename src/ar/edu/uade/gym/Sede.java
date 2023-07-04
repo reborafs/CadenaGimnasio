@@ -185,7 +185,7 @@ public class Sede {
 		}
 
 		if (articulosClase.size() == 0) {
-				return true;
+			return true;
 		} else {
 			System.out.println("No se encuentran los articulos necesarios para confirmar esta clase.");
 			return false;

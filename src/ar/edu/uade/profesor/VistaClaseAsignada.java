@@ -3,15 +3,11 @@ package ar.edu.uade.profesor;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
 
 public class VistaClaseAsignada extends JFrame {
@@ -68,14 +64,16 @@ public class VistaClaseAsignada extends JFrame {
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
-	
-    private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<LocalTime>> horariosOcupados,LocalDate dia, LocalTime hora) {
+
+    private boolean contieneEjercicio(HashMap<LocalDate, ArrayList<String[]>> horariosOcupados, LocalDate dia, LocalTime hora) {
 		boolean flagOcupado = false;
-		for (LocalTime horarioOcupado : horariosOcupados.get(dia)) {
-            if (horarioOcupado.equals(hora)) {
-                flagOcupado = true;
-            }
-        }
+		for (String[] horarioOcupado : horariosOcupados.get(dia)) {
+			if (horarioOcupado[5].equals(hora.toString())) {
+				flagOcupado = true;
+				break;
+			}
+
+		}
         return flagOcupado;
     }
 
@@ -132,19 +130,20 @@ public class VistaClaseAsignada extends JFrame {
 		int cantColumnas = header.length;
 		int cantFilas = horas.length;
 
-		HashMap<LocalDate, ArrayList<LocalTime>>
-				horariosOcupados = controller.getClasesAsignadas("belgrano");
 
-		DateTimeFormatter horasFormatter = DateTimeFormatter.ofPattern("HH");
+		HashMap<LocalDate, ArrayList<String[]>>
+				horariosOcupados = controller.getClasesAsignadas();
+
+		DateTimeFormatter horasFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
 		for (int i = 1; i <= cantFilas-1; i++) {
 			String[] horarioDisponible = new String[cantColumnas+1];
-			horarioDisponible[0] = horas[i].format(horasFormatter) + "-" + horas[i].plusHours(1).format(horasFormatter);
+			horarioDisponible[0] = horas[i].format(horasFormatter) + " - " + horas[i].plusHours(1).format(horasFormatter);
 			for (int j = 1; j <= cantColumnas-1; j++) {
 				LocalDate dia = semana.get(j - 1);
 				LocalTime horarioClase = horas[i];
 				if (horarioClase != null && contieneEjercicio(horariosOcupados, dia, horarioClase)) {
-					horarioDisponible[j] = "Ocupado";
+					horarioDisponible[j] = getSedesYEjercicios(horariosOcupados, dia, horarioClase);
 				} else {
 					horarioDisponible[j] = "Libre";
 				}
@@ -162,6 +161,34 @@ public class VistaClaseAsignada extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(tabla);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
+	}
+
+	/**
+	 *
+	 nombreSede;
+	 String.valueOf(getClaseID()));
+	 String.valueOf(profesorAsignado.getID()));
+	 profesorAsignado.getNombre());
+	 fecha.toString());
+	 horarioInicio.toString());
+	 ejercicio.getNombre());
+	 estado.toString());
+	 String.valueOf(listaAlumnos.size()));
+	 emplazamiento.getTipoEmplazamiento().toString())
+	 listaArticulos.size()
+	 esVirtual
+	 */
+	private String getSedesYEjercicios(HashMap<LocalDate, ArrayList<String[]>> horariosOcupados,
+									   LocalDate dia, LocalTime hora) {
+		String message = "";
+		for (String[] claseInfo : horariosOcupados.get(dia)) {
+			if (claseInfo[5].equals(hora.toString())) {
+				System.out.println(claseInfo);
+				if (message.isBlank()){	message = claseInfo[0] + " - " + claseInfo[6];}
+				else {message = message + " / " + claseInfo[0] + " - " + claseInfo[6];}
+			}
+		}
+		return message;
 	}
 
 	private void abrirVistaSueldo() {

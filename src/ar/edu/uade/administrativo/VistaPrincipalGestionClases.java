@@ -337,11 +337,11 @@ public class VistaPrincipalGestionClases extends JFrame{
 						controller.cambiarEstadoClase(clase[0],claseId,estado);
 					}
 
-				if (!flagFound) {throw new GymException("No existe la clase.");}
+				if (!flagFound) {throw new GymException("No existe la clase de ID " + claseId + ".");}
 				JOptionPane.showMessageDialog(null, "Estado de la clase cambiado a: " + estado);
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
 			ex.printStackTrace();
 		}
 

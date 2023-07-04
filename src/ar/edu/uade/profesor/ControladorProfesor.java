@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import ar.edu.uade.cliente.VistaEjerciciosPorSede;
 import ar.edu.uade.gym.CadenaGimnasio;
 import ar.edu.uade.usuarios.Profesor;
 
@@ -81,8 +80,13 @@ public class ControladorProfesor {
 		this.usuario = usuario;
 	}
 
-	public HashMap<LocalDate, ArrayList<LocalTime>> getClasesAsignadas(String ubicacionSede) {
-		return gym.getHorariosClasesAsignadasProfesor(ubicacionSede, this.usuario);
+	public ArrayList<String> getListaNombresSedes() {
+		return gym.getListaNombresSedes();
+	}
+
+
+	public HashMap<LocalDate, ArrayList<String[]>> getClasesAsignadas() {
+		return gym.getHorariosClasesAsignadasProfesor(this.usuario);
 	}
 }
 
